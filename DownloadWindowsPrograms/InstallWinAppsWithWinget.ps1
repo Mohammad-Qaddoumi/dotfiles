@@ -58,7 +58,8 @@ function Install-Program {
     param (
         [string]$program
     )
-    if (Test-ProgramInstalled -program $program) {
+    $isInstalled = Test-ProgramInstalled -program $program
+    if ($isInstalled) {
         Write-Output "Skipping installation of $program as it is already installed."
     } else {
         Write-Output "Attempting to install $program..."
