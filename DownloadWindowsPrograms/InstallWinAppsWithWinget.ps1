@@ -1,10 +1,10 @@
 # Enable detailed script tracing
-Set-PSDebug -Trace 2
+# Set-PSDebug -Trace 2
 
 # Path to the file containing the list of programs
 $filePath = ".\WINGET_Programs.txt"
 
-# Function to check if winget is installed
+# Function to test if winget is installed
 function Test-Winget {
     Write-Output "Checking if winget is installed..."
     $wingetPath = (Get-Command winget -ErrorAction SilentlyContinue).Path
@@ -63,7 +63,7 @@ function Install-Program {
     } else {
         Write-Output "Attempting to install $program..."
         try {
-            $installResult = winget install --id $program --silent --accept-package-agreements --accept-source-agreements -Wait
+            $installResult = winget install --name $program --silent --accept-package-agreements --accept-source-agreements -Wait
             if ($installResult.ExitCode -eq 0) {
                 Write-Output "$program installed successfully."
             } else {
@@ -93,4 +93,4 @@ foreach ($program in $programs) {
 Write-Output "Script execution completed."
 
 # Disable detailed script tracing
-Set-PSDebug -Off
+# Set-PSDebug -Off
