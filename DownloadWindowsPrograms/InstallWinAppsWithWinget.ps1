@@ -2,7 +2,8 @@
 # Set-PSDebug -Trace 2
 
 # Path to the file containing the list of programs
-$filePath = ".\WINGET_Programs.txt"
+# $filePath = ".\WINGET_Programs.txt"
+$filePath = ".\test.txt"
 
 # Function to test if winget is installed
 function Test-Winget {
@@ -61,7 +62,7 @@ function Install-Program {
     )
     Write-Output "Starting installation check for $program...`n"
     $isInstalled = Test-ProgramInstalled -program $program
-    Write-Output "Test-ProgramInstalled Result : $isInstalled `n"
+    Write-Output "Test-ProgramInstalled Result : " , $isInstalled , "`n"
     if ($isInstalled) {
         Write-Output "Skipping installation of $program as it is already installed.`n"
     } else {
