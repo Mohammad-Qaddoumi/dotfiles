@@ -42,14 +42,14 @@ function Test-ProgramInstalled {
     param (
         [string]$program
     )
-    Write-Output "Checking if $program is already installed...\n"
+    Write-Output "Checking if $program is already installed...`n"
     $installedPrograms = winget list | Select-String -Pattern $program
-    Write-Output "Output from winget list: $($installedPrograms -join '; ') \n"
+    Write-Output "Output from winget list: $($installedPrograms -join '; ') `n"
     if ($installedPrograms) {
-        Write-Output "$program is already installed.\n"
+        Write-Output "$program is already installed.`n"
         return $true
     } else {
-        Write-Output "$program is not installed.\n"
+        Write-Output "$program is not installed.`n"
         return $false
     }
 }
@@ -59,22 +59,22 @@ function Install-Program {
     param (
         [string]$program
     )
-    Write-Output "Starting installation check for $program..."
+    Write-Output "Starting installation check for $program...`n"
     $isInstalled = Test-ProgramInstalled -program $program
-    Write-Output "Test-ProgramInstalled Result : $isInstalled \n"
+    Write-Output "Test-ProgramInstalled Result : $isInstalled `n"
     if ($isInstalled) {
-        Write-Output "Skipping installation of $program as it is already installed.\n"
+        Write-Output "Skipping installation of $program as it is already installed.`n"
     } else {
-        Write-Output "Attempting to install $program...\n"
+        Write-Output "Attempting to install $program...`n"
         try {
             $installResult = winget install --name $program --silent --accept-package-agreements --accept-source-agreements -Wait
             if ($installResult.ExitCode -eq 0) {
-                Write-Output "$program installed successfully."
+                Write-Output "$program installed successfully.`n"
             } else {
-                Write-Output "Failed to install $program. Exit code: $($installResult.ExitCode)"
+                Write-Output "Failed to install $program. Exit code: $($installResult.ExitCode) `n"
             }
         } catch {
-            Write-Output "An error occurred while attempting to install $program. Error: $_"
+            Write-Output "An error occurred while attempting to install $program. Error: $_ `n"
         }
     }
 }
@@ -91,7 +91,7 @@ $programs = Get-Content -Path $filePath
 
 # Install each program
 foreach ($program in $programs) {
-    Write-Output "Processing program: $program \n"
+    Write-Output "Processing program: $program `n"
     Install-Program -program $program
 }
 
