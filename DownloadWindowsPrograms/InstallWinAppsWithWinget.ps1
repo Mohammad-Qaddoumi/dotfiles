@@ -5,7 +5,7 @@ Set-PSDebug -Trace 2
 $filePath = ".\WINGET_Programs.txt"
 
 # Function to check if winget is installed
-function Check-Winget {
+function Test-Winget {
     Write-Output "Checking if winget is installed..."
     $wingetPath = (Get-Command winget -ErrorAction SilentlyContinue).Path
     if ($null -eq $wingetPath) {
@@ -38,7 +38,7 @@ function Install-Winget {
 }
 
 # Function to check if a program is installed
-function Is-ProgramInstalled {
+function Test-ProgramInstalled {
     param (
         [string]$program
     )
@@ -58,7 +58,7 @@ function Install-Program {
     param (
         [string]$program
     )
-    if (Is-ProgramInstalled -program $program) {
+    if (Test-ProgramInstalled -program $program) {
         Write-Output "Skipping installation of $program as it is already installed."
     } else {
         Write-Output "Attempting to install $program..."
@@ -79,7 +79,7 @@ function Install-Program {
 Write-Output "Starting script execution..."
 
 # Ensure winget is installed
-Check-Winget
+Test-Winget
 
 # Read the list of programs from the file
 Write-Output "Reading list of programs from $filePath..."
