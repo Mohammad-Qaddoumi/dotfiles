@@ -42,14 +42,14 @@ function Test-ProgramInstalled {
     param (
         [string]$program
     )
-    Write-Output "Checking if $program is already installed..."
+    Write-Output "Checking if $program is already installed...\n"
     $installedPrograms = winget list | Select-String -Pattern $program
-    Write-Output "Output from winget list: $($installedPrograms -join '; ')"
+    Write-Output "Output from winget list: $($installedPrograms -join '; ') \n"
     if ($installedPrograms) {
-        Write-Output "$program is already installed."
+        Write-Output "$program is already installed.\n"
         return $true
     } else {
-        Write-Output "$program is not installed."
+        Write-Output "$program is not installed.\n"
         return $false
     }
 }
@@ -61,11 +61,11 @@ function Install-Program {
     )
     Write-Output "Starting installation check for $program..."
     $isInstalled = Test-ProgramInstalled -program $program
-    Write-Output "Test-ProgramInstalled Result : $isInstalled"
+    Write-Output "Test-ProgramInstalled Result : $isInstalled \n"
     if ($isInstalled) {
-        Write-Output "Skipping installation of $program as it is already installed."
+        Write-Output "Skipping installation of $program as it is already installed.\n"
     } else {
-        Write-Output "Attempting to install $program..."
+        Write-Output "Attempting to install $program...\n"
         try {
             $installResult = winget install --name $program --silent --accept-package-agreements --accept-source-agreements -Wait
             if ($installResult.ExitCode -eq 0) {
@@ -91,7 +91,7 @@ $programs = Get-Content -Path $filePath
 
 # Install each program
 foreach ($program in $programs) {
-    Write-Output "Processing program: $program"
+    Write-Output "Processing program: $program \n"
     Install-Program -program $program
 }
 
