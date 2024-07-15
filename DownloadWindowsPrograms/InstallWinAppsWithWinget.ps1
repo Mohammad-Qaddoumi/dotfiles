@@ -43,8 +43,8 @@ function Test-ProgramInstalled {
         [string]$program
     )
     Write-Output "Checking if $program is already installed..."
-    $installed = winget list --id $program --exact | Select-String -Pattern $program
-    if ($installed) {
+    $installedPrograms = winget list | Select-String -Pattern $program
+    if ($installedPrograms) {
         Write-Output "$program is already installed."
         return $true
     } else {
