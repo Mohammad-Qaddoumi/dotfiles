@@ -1,4 +1,4 @@
 Git.Git
 GitHub.cli
-Google.Drive
+Google.GoogleDrive
 Mozilla.Firefox
