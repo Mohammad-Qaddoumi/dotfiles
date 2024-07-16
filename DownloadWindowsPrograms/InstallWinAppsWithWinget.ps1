@@ -1,6 +1,3 @@
-# Enable detailed script tracing
-# Set-PSDebug -Trace 2
-
 # Path to the file containing the list of programs
 # $filePath = ".\WINGET_Programs.txt"
 $filePath = ".\test.txt"
@@ -39,21 +36,21 @@ function Install-Winget {
 }
 
 # Function to check if a program is installed
-function Test-ProgramInstalled {
-    param (
-        [string]$program
-    )
-    Write-Output "Checking if $program is already installed..."
-    $installedPrograms = winget list | Select-String -Pattern $program
-    if ($null -ne $installedPrograms) {
-        Write-Output "Output from winget list:`n$($installedPrograms -join '; ')"
-        Write-Output "$program is already installed."
-        return $true
-    } else {
-        Write-Output "$program is not installed."
-        return $false
-    }
-}
+# function Test-ProgramInstalled {
+#     param (
+#         [string]$program
+#     )
+#     Write-Output "Checking if $program is already installed..."
+#     $installedPrograms = winget list | Select-String -Pattern $program
+#     if ($null -ne $installedPrograms) {
+#         Write-Output "Output from winget list:`n$($installedPrograms -join '; ')"
+#         Write-Output "$program is already installed."
+#         return $true
+#     } else {
+#         Write-Output "$program is not installed."
+#         return $false
+#     }
+# }
 
 # Function to install a program using winget
 function Install-Program {
@@ -62,6 +59,7 @@ function Install-Program {
     )
     Write-Output "Starting installation check for $program..."
     # $isInstalled = Test-ProgramInstalled -program $program
+
     $isInstalled = $false
     Write-Output "Checking if $program is already installed..."
     $installedPrograms = winget list | Select-String -Pattern $program
@@ -72,16 +70,16 @@ function Install-Program {
     } else {
         Write-Output "$program is not installed."
     }
+    Write-Output "$isInstalled Result : $isInstalled"
 
 
-
-    Write-Output "Test-ProgramInstalled Result : $isInstalled"
+    #Write-Output "Test-ProgramInstalled Result : $isInstalled"
     if ($isInstalled) {
         Write-Output "Skipping installation of $program as it is already installed."
     } else {
         Write-Output "Attempting to install $program..."
         try {
-            $installResult = winget install --name $program --silent --accept-package-agreements --accept-source-agreements -Wait
+            $installResult = winget install --id $program --accept-package-agreements --accept-source-agreements
             if ($installResult.ExitCode -eq 0) {
                 Write-Output "$program installed successfully."
             } else {
@@ -112,6 +110,3 @@ foreach ($program in $programs) {
 
 Write-Output "`n================================================================"
 Write-Output "Script execution completed.`n"
-
-# Disable detailed script tracing
-# Set-PSDebug -Off
