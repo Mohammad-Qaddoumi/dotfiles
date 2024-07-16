@@ -61,7 +61,20 @@ function Install-Program {
         [string]$program
     )
     Write-Output "Starting installation check for $program..."
-    $isInstalled = Test-ProgramInstalled -program $program
+    # $isInstalled = Test-ProgramInstalled -program $program
+    $isInstalled = $false
+    Write-Output "Checking if $program is already installed..."
+    $installedPrograms = winget list | Select-String -Pattern $program
+    if ($null -ne $installedPrograms) {
+        Write-Output "Output from winget list:`n$($installedPrograms -join '; ')"
+        Write-Output "$program is already installed."
+        $isInstalled = $true
+    } else {
+        Write-Output "$program is not installed."
+    }
+
+
+
     Write-Output "Test-ProgramInstalled Result : $isInstalled"
     if ($isInstalled) {
         Write-Output "Skipping installation of $program as it is already installed."
