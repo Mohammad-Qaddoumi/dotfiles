@@ -52,7 +52,6 @@ function Install-Program {
     } else {
         Write-Output "$program is not installed."
     }
-    # Write-Output "`$isInstalled Result : $isInstalled"
 
     if ($isInstalled) {
         Write-Output "Skipping installation of $program as it is already installed."
