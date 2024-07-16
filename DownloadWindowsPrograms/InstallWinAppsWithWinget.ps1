@@ -35,30 +35,12 @@ function Install-Winget {
     }
 }
 
-# Function to check if a program is installed
-# function Test-ProgramInstalled {
-#     param (
-#         [string]$program
-#     )
-#     Write-Output "Checking if $program is already installed..."
-#     $installedPrograms = winget list | Select-String -Pattern $program
-#     if ($null -ne $installedPrograms) {
-#         Write-Output "Output from winget list:`n$($installedPrograms -join '; ')"
-#         Write-Output "$program is already installed."
-#         return $true
-#     } else {
-#         Write-Output "$program is not installed."
-#         return $false
-#     }
-# }
-
 # Function to install a program using winget
 function Install-Program {
     param (
         [string]$program
     )
     Write-Output "Starting installation check for $program..."
-    # $isInstalled = Test-ProgramInstalled -program $program
 
     $isInstalled = $false
     Write-Output "Checking if $program is already installed..."
@@ -70,10 +52,8 @@ function Install-Program {
     } else {
         Write-Output "$program is not installed."
     }
-    Write-Output "$isInstalled Result : $isInstalled"
+    # Write-Output "`$isInstalled Result : $isInstalled"
 
-
-    #Write-Output "Test-ProgramInstalled Result : $isInstalled"
     if ($isInstalled) {
         Write-Output "Skipping installation of $program as it is already installed."
     } else {
