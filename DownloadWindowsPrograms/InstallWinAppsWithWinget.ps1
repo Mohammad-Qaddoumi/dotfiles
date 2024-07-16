@@ -62,7 +62,7 @@ function Install-Program {
     )
     Write-Output "Starting installation check for $program..."
     $isInstalled = Test-ProgramInstalled -program $program
-    Write-Output "Test-ProgramInstalled Result : $isInstalled`n"
+    Write-Output "Test-ProgramInstalled Result : $isInstalled"
     if ($isInstalled) {
         Write-Output "Skipping installation of $program as it is already installed."
     } else {
@@ -92,7 +92,8 @@ $programs = Get-Content -Path $filePath
 
 # Install each program
 foreach ($program in $programs) {
-    Write-Output "Processing program: $program"
+    Write-Output "`n================================================================"
+    Write-Output "`nProcessing program: $program"
     Install-Program -program $program
 }
 
