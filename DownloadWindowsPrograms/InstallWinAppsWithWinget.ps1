@@ -42,20 +42,13 @@ function Install-Program {
     )
     Write-Output "Starting installation check for $program..."
 
-    $isInstalled = $false
     Write-Output "Checking if $program is already installed..."
     $installedPrograms = winget list | Select-String -Pattern $program
     if ($null -ne $installedPrograms) {
         Write-Output "Output from winget list:`n$($installedPrograms -join '; ')"
-        Write-Output "$program is already installed."
-        $isInstalled = $true
-    } else {
-        Write-Output "$program is not installed."
-    }
-
-    if ($isInstalled) {
         Write-Output "Skipping installation of $program as it is already installed."
     } else {
+        Write-Output "$program is not installed."
         Write-Output "Attempting to install $program..."
         try {
             $installResult = winget install --id $program --accept-package-agreements --accept-source-agreements
