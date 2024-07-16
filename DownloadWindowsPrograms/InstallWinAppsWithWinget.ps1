@@ -97,7 +97,8 @@ foreach ($program in $programs) {
     Install-Program -program $program
 }
 
-Write-Output "Script execution completed."
+Write-Output "`n================================================================"
+Write-Output "Script execution completed.`n"
 
 # Disable detailed script tracing
 # Set-PSDebug -Off
