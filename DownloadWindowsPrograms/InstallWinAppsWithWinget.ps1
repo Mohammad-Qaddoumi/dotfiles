@@ -52,7 +52,7 @@ function Install-Program {
         Write-Output "Attempting to install $program..."
         try {
             $installResult = winget install --id $program --accept-package-agreements --accept-source-agreements
-            if ($installResult.ExitCode -eq 0) {
+            if ($installResult -match "Successfully installed") {
                 Write-Output "$program installed successfully."
             } else {
                 Write-Output "Failed to install $program. Exit code: $($installResult.ExitCode)"
