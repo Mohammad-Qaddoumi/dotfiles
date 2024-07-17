@@ -81,4 +81,4 @@ foreach ($program in $programs) {
 }
 
 Write-Output "`n================================================================"
-Write-Output "Script execution completed.`n"
+Write-Output "Script execution Finished.`n"
