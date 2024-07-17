@@ -51,12 +51,16 @@ function Install-Program {
         Write-Output "$program is not installed."
         Write-Output "Attempting to install $program..."
         try {
-            $installResult = winget install --id $program --accept-package-agreements --accept-source-agreements
-            if ($installResult -match "Successfully installed") {
-                Write-Output "$program installed successfully."
-            } else {
-                Write-Output "Failed to install $program. Exit code: $($installResult.ExitCode)"
-            }
+            $installArgs = "install --id $program --accept-package-agreements --accept-source-agreements"
+            $process = Start-Process -FilePath "winget" -ArgumentList $installArgs -NoNewWindow -PassThru
+            $process.WaitForExit()
+
+            # $installResult = winget install --id $program --accept-package-agreements --accept-source-agreements
+            # if ($installResult -match "Successfully installed") {
+            #     Write-Output "$program installed successfully."
+            # } else {
+            #     Write-Output "Failed to install $program. Exit code: $($installResult.ExitCode)"
+            # }
         } catch {
             Write-Output "An error occurred while attempting to install $program. Error: $_"
         }
