@@ -56,7 +56,11 @@ function Install-Program {
             $process.WaitForExit()
             # Check the exit code of the process
             if ($process.ExitCode -eq 0) {
-                Write-Host "`b $program"
+                # Move the cursor up one line
+                Write-Host "`e[2A" -NoNewline
+                # Clear the bottom line
+                Write-Host "`e[K" -NoNewline  # Clear the current line from cursor to end of line
+                Write-Host "Successfully Installed (ID): $program"
             } else {
                 Write-Host "Failed to install $program. Exit code: $($process.ExitCode)"
             }
@@ -86,7 +90,7 @@ $programs = Get-Content -Path $filePath
 # Install each program
 foreach ($program in $programs) {
     Write-Output "`n================================================================"
-    Write-Output "`nProcessing program: $program"
+    Write-Output "`nProcessing program(ID): $program"
     Install-Program -program $program
 }
 
