@@ -57,7 +57,7 @@ function Install-Program {
             # Check the exit code of the process
             if ($process.ExitCode -eq 0) {
                 # Move the cursor up one line
-                Write-Host "`e[2A" -NoNewline
+                Write-Host "`e[1A" -NoNewline
                 # Clear the bottom line
                 Write-Host "`e[K" -NoNewline  # Clear the current line from cursor to end of line
                 Write-Host "Successfully Installed (ID): $program"
