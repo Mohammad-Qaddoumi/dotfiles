@@ -1,4 +1,2 @@
 Git.Git
 GitHub.cli
-Google.GoogleDrive
-Mozilla.Firefox

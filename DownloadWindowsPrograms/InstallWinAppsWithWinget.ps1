@@ -54,7 +54,13 @@ function Install-Program {
             $installArgs = "install --id $program --accept-package-agreements --accept-source-agreements"
             $process = Start-Process -FilePath "winget" -ArgumentList $installArgs -NoNewWindow -PassThru
             $process.WaitForExit()
-
+            # Check the exit code of the process
+            if ($process.ExitCode -eq 0) {
+                Write-Host "Successfully installed $program"
+            } else {
+                Write-Host "Failed to install $program. Exit code: $($process.ExitCode)"
+            }
+            
             # $installResult = winget install --id $program --accept-package-agreements --accept-source-agreements
             # if ($installResult -match "Successfully installed") {
             #     Write-Output "$program installed successfully."
