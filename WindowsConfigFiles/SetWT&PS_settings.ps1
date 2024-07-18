@@ -32,4 +32,4 @@ function Copy-ItemWithCheck {
 }
 
 Copy-ItemWithCheck -sourcePath ".\PowerShell" -destinationPath "%USERPROFILE%\Documents"
-Copy-ItemWithCheck -sourcePath ".\WindowsTerminal\settings.json" -destinationPath "%USERPROFILE%\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
+Copy-ItemWithCheck -sourcePath ".\WindowsTerminal\settings.json" -destinationPath "%USERPROFILE%\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
