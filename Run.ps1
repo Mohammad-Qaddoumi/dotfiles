@@ -1,3 +1,20 @@
+# Check if running with admin rights
+function Test-IsAdmin {
+    $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $currentPrincipal = New-Object Security.Principal.WindowsPrincipal($currentUser)
+    return $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+# Ensure the script runs with admin rights
+if (-not (Test-IsAdmin)) {
+    Write-Host "This script must be run as an administrator."
+    Start-Process powershell.exe "-File `"$PSCommandPath`"" -Verb RunAs
+    exit
+}
+
+# Set the execution policy for the current session
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
+
 # Define the scripts and their descriptions
 $scripts = @(
     @{ Name = ".\DownloadWindowsPrograms\InstallWinAppsWithWinget.ps1"; Description = "Bulk install windows progarm " },
