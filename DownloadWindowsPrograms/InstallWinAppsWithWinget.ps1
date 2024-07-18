@@ -1,6 +1,6 @@
 # Path to the file containing the list of programs
-# $filePath = ".\WINGET_Programs.txt"
-$filePath = ".\test.txt"
+$filePath = ".\WINGET_Programs.txt"
+# $filePath = ".\test.txt"
 
 # Function to test if winget is installed
 function Test-Winget {
