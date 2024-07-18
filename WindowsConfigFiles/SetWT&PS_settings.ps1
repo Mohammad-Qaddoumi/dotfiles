@@ -1,6 +1,9 @@
 Write-Output "Installing required fonts"
 & .\InstallFonts.ps1
 
+Write-Output "Change Default Terminal To Windows Terminal"
+& .\ChangeDefaultTerminal.ps1
+
 Write-Output "Installing Terminal-Icons Module"
 Install-Module -Name Terminal-Icons -AllowClobber -AcceptLicense -Force -Repository PSGallery
 Write-Output "Installing PSReadLine Module"
