@@ -1,6 +1,8 @@
 # Path to the file containing the list of programs
-$filePath = ".\WINGET_Programs.txt"
+# $filePath = ".\WINGET_Programs.txt"
 # $filePath = ".\test.txt"
+# Source the array definition script
+. ".\WINGET_Programs.ps1"
 
 # Function to test if winget is installed
 function Test-Winget {
@@ -84,11 +86,11 @@ Write-Output "Starting script execution...`n"
 Test-Winget
 
 # Read the list of programs from the file
-Write-Output "Reading list of programs from $filePath..."
-$programs = Get-Content -Path $filePath
+# Write-Output "Reading list of programs from $filePath..."
+# $programs = Get-Content -Path $filePath
 
 # Install each program
-foreach ($program in $programs) {
+foreach ($program in $WINGET_PROGRAMS_ID) {
     Write-Output "`n================================================================"
     Write-Output "`nProcessing program(ID): $program"
     Install-Program -program $program
