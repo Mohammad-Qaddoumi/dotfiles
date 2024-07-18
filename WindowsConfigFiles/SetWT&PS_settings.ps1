@@ -1,3 +1,5 @@
+& .\InstallFonts.ps1
+
 function Copy-ItemWithCheck {
     param (
         [string]$sourcePath,
