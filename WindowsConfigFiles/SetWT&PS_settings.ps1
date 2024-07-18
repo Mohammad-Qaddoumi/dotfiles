@@ -1,8 +1,8 @@
 & .\InstallFonts.ps1
 
-Install-Module -Name Terminal-Icons -Confirm -AllowClobber -AcceptLicense -Force -Repository PSGallery
-Install-Module -Name PSReadLine -Confirm -AllowClobber -AcceptLicense -Force -Repository PSGallery
-Install-Module -Name z -Confirm -AllowClobber -AcceptLicense -Force -Repository PSGallery
+Install-Module -Name Terminal-Icons -AllowClobber -AcceptLicense -Force -Repository PSGallery
+Install-Module -Name PSReadLine -AllowClobber -AcceptLicense -Force -Repository PSGallery
+Install-Module -Name z -AllowClobber -AcceptLicense -Force -Repository PSGallery
 
 function Copy-ItemWithCheck {
     param (
