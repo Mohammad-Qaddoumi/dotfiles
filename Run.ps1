@@ -8,12 +8,8 @@ function Test-IsAdmin {
 # Ensure the script runs with admin rights
 if (-not (Test-IsAdmin)) {
     Write-Host "This script must be run as an administrator."
-    Start-Process powershell.exe "-File `"$PSCommandPath`"" -Verb RunAs
     exit
 }
-
-# Set the execution policy for the current session
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
 
 # Define the scripts and their descriptions
 $scripts = @(
