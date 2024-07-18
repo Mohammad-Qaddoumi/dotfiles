@@ -14,8 +14,10 @@ if (-not (Test-IsAdmin)) {
 # Define the scripts and their descriptions
 $scripts = @(
     @{ Name = ".\DownloadWindowsPrograms\InstallWinAppsWithWinget.ps1"; Description = "Bulk install windows progarm " },
-    @{ Name = "Script2.ps1"; Description = "Description of Script 2" },
-    @{ Name = "Script3.ps1"; Description = "Description of Script 3" }
+    @{ Name = ".\WindowsConfigFiles\SetWT&PS_settings.ps1"; Description = "Set WindowsTerminal & PowerShell Settings " }
+    # @{ Name = "Script3.ps1"; Description = "Description of Script 3" },
+    # @{ Name = "Script4.ps1"; Description = "Description of Script 4" },
+    # @{ Name = "Script5.ps1"; Description = "Description of Script 5" }
 )
 
 # Function to display the menu and get user choice

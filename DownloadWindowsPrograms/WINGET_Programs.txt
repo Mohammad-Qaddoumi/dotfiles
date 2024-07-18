@@ -1,4 +1,7 @@
+Microsoft.PowerShell
+Microsoft.WindowsTerminal
 Git.Git
+JanDeDobbeleer.OhMyPosh
 GitHub.cli
 Google.GoogleDrive
 Mozilla.Firefox
