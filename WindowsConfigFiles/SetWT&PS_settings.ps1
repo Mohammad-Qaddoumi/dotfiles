@@ -1,8 +1,13 @@
+Write-Output "Installing required fonts"
 & .\InstallFonts.ps1
 
+Write-Output "Installing Terminal-Icons Module"
 Install-Module -Name Terminal-Icons -AllowClobber -AcceptLicense -Force -Repository PSGallery
+Write-Output "Installing PSReadLine Module"
 Install-Module -Name PSReadLine -AllowClobber -AcceptLicense -Force -Repository PSGallery
+Write-Output "Installing z Module"
 Install-Module -Name z -AllowClobber -AcceptLicense -Force -Repository PSGallery
+Write-Output "Installing Modules Finished"
 
 function Copy-ItemWithCheck {
     param (
