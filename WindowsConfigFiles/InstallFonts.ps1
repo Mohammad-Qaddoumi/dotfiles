@@ -7,7 +7,7 @@ function Get-LatestMesloLGSFontUrl {
 }
 
 # Function to check if the font is already installed
-function Is-FontInstalled {
+function Test-FontInstalled {
     $fontFiles = @("MesloLGS NF Regular.ttf", "MesloLGS NF Bold.ttf", "MesloLGS NF Italic.ttf", "MesloLGS NF Bold Italic.ttf")
     $fontsFolder = "$env:SystemRoot\\Fonts"
     
@@ -20,7 +20,7 @@ function Is-FontInstalled {
 }
 
 # Check if the font is already installed
-if (Is-FontInstalled) {
+if (Test-FontInstalled) {
     $userInput = Read-Host "The Meslo LG Nerd Font is already installed. Do you want to reinstall it? (y/n)"
     if ($userInput -ne "y") {
         Write-Output "Installation aborted."
