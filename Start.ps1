@@ -1,3 +1,8 @@
+Write-Output "================================================================`n"
+Write-Output "Change Excution Policy by running : `n"
+Write-Output "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine`n"
+Write-Output "================================================================`n"
+
 # Check if running with admin rights
 function Test-IsAdmin {
     $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -11,7 +16,7 @@ if (-not (Test-IsAdmin)) {
     exit
 }
 
-# Define the scripts and their descriptions
+# Define the scripts and their descriptions(optional)
 $scripts = @(
     @{ Name = ".\DownloadWindowsPrograms\InstallWinAppsWithWinget.ps1"; Description = "Bulk install windows progarm " },
     @{ Name = ".\WindowsConfigFiles\SetWT&PS_settings.ps1"; Description = "Set WindowsTerminal & PowerShell Settings " }
