@@ -6,6 +6,28 @@ function Get-LatestMesloLGSFontUrl {
     return $asset.browser_download_url
 }
 
+# Function to check if the font is already installed
+function Is-FontInstalled {
+    $fontFiles = @("MesloLGS NF Regular.ttf", "MesloLGS NF Bold.ttf", "MesloLGS NF Italic.ttf", "MesloLGS NF Bold Italic.ttf")
+    $fontsFolder = "$env:SystemRoot\\Fonts"
+    
+    foreach ($fontFile in $fontFiles) {
+        if (-not (Test-Path -Path (Join-Path -Path $fontsFolder -ChildPath $fontFile))) {
+            return $false
+        }
+    }
+    return $true
+}
+
+# Check if the font is already installed
+if (Is-FontInstalled) {
+    $userInput = Read-Host "The Meslo LG Nerd Font is already installed. Do you want to reinstall it? (y/n)"
+    if ($userInput -ne "y") {
+        Write-Output "Installation aborted."
+        exit
+    }
+}
+
 # Get the latest MesloLGS Nerd Font URL
 $fontUrl = Get-LatestMesloLGSFontUrl
 if (-not $fontUrl) {
@@ -14,9 +36,9 @@ if (-not $fontUrl) {
 }
 
 # Define the destination path for the downloaded zip file
-$zipFilePath = "$env:TEMP\Meslo.zip"
+$zipFilePath = "$env:TEMP\\Meslo.zip"
 # Define the extraction path
-$extractPath = "$env:TEMP\MesloNerdFont"
+$extractPath = "$env:TEMP\\MesloNerdFont"
 
 # Download the font zip file
 Invoke-WebRequest -Uri $fontUrl -OutFile $zipFilePath
@@ -33,7 +55,7 @@ Expand-Archive -Path $zipFilePath -DestinationPath $extractPath -Force
 $fontFiles = Get-ChildItem -Path $extractPath -Filter "*.ttf"
 
 # Define the system fonts directory
-$fontsFolder = "$env:SystemRoot\Fonts"
+$fontsFolder = "$env:SystemRoot\\Fonts"
 
 # Copy the font files to the system fonts directory
 foreach ($fontFile in $fontFiles) {
@@ -43,7 +65,7 @@ foreach ($fontFile in $fontFiles) {
     Copy-Item -Path $fontFilePath -Destination $destinationPath -Force
 
     # Register the font in the system
-    $fontRegKey = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts"
+    $fontRegKey = "HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts"
     $fontRegName = $fontFileName
     New-ItemProperty -Path $fontRegKey -Name $fontRegName -Value $fontFileName -PropertyType String -Force
 }
