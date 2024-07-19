@@ -28,3 +28,6 @@ $WINGET_PROGRAMS_ID = @(
     # "VideoLAN.VLC",
     # "Zoom.Zoom"
 )
+
+# Suppress the warning for this variable
+$WINGET_PROGRAMS_ID # PSScriptAnalyzer disable:PSUseDeclaredVarsMoreThanAssignments
