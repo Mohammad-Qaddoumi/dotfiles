@@ -79,14 +79,14 @@ Test-Winget
 # Main script execution
 Write-Output "`n === Start Installing Programs : ===`n"
 
-# Source the variable definition script
+# Source the variable definition script (List of Programs IDs)
 . ".\WINGET_Programs.ps1"
 
-# Read the list of programs from the Module
-# Install each program
-foreach ($program in $WINGET_PROGRAMS_ID) {
+# Installing each program
+for ($i = 0; $i -lt $WINGET_PROGRAMS_ID.Length; $i++) {
+    $program = $WINGET_PROGRAMS_ID[$i]
     Write-Output "`n================================================================"
-    Write-Output "`nProcessing program(ID): $program"
+    Write-Output "`nProcessing program(ID)($($i + 1)/$($WINGET_PROGRAMS_ID.Length)): $program"
     Install-Program -program $program
 }
 
