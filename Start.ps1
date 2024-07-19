@@ -1,5 +1,5 @@
 Write-Output "================================================================`n"
-Write-Output "Run the script in powershell_ise.exe`n"
+Write-Output "Run the script in powershell_ise.exe with Admin rights`n"
 Write-Output "Change Excution Policy by running : `n"
 Write-Output "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine`n"
 Write-Output "================================================================`n"
