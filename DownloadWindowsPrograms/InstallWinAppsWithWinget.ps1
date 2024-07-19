@@ -1,6 +1,3 @@
-# Source the variable definition script
-. ".\WINGET_Programs.ps1"
-
 # Function to test if winget is installed
 function Test-Winget {
     Write-Output "Checking if winget is installed..."
@@ -76,11 +73,14 @@ function Install-Program {
     }
 }
 
-# Main script execution
-Write-Output "Installing programs execution...`n"
-
 # Ensure winget is installed
 Test-Winget
+
+# Main script execution
+Write-Output "`n === Start Installing Programs : ===`n"
+
+# Source the variable definition script
+. ".\WINGET_Programs.ps1"
 
 # Read the list of programs from the Module
 # Install each program
