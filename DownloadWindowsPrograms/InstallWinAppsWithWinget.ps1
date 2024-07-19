@@ -1,4 +1,5 @@
-Import-Module -Name "WINGET_Programs"
+# Source the variable definition script
+. ".\WINGET_Programs.ps1"
 
 # Function to test if winget is installed
 function Test-Winget {
