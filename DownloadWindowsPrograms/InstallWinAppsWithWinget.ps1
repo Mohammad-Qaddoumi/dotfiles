@@ -77,7 +77,7 @@ function Install-Program {
 }
 
 # Main script execution
-Write-Output "Starting script execution...`n"
+Write-Output "Installing programs execution...`n"
 
 # Ensure winget is installed
 Test-Winget
@@ -91,4 +91,4 @@ foreach ($program in $WINGET_PROGRAMS_ID) {
 }
 
 Write-Output "`n================================================================"
-Write-Output "Script execution Finished.`n"
+Write-Output "Installing programs Finished.`n"

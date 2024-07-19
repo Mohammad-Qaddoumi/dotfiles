@@ -16,10 +16,6 @@
             "keys": "ctrl+v"
         },
         {
-            "command": "find",
-            "keys": "ctrl+shift+f"
-        },
-        {
             "command": 
             {
                 "action": "splitPane",
@@ -27,12 +23,16 @@
                 "splitMode": "duplicate"
             },
             "keys": "alt+shift+d"
+        },
+        {
+            "command": "find",
+            "keys": "ctrl+shift+f"
         }
     ],
     "copyFormatting": "none",
     "copyOnSelect": false,
     "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
-    "initialCols": 99,
+    "initialCols": 119,
     "initialRows": 23,
     "language": "en-US",
     "newTabMenu": 
@@ -43,7 +43,13 @@
     ],
     "profiles": 
     {
-        "defaults": {},
+        "defaults": 
+        {
+            "font": 
+            {
+                "face": "MesloLGL Nerd Font Mono"
+            }
+        },
         "list": 
         [
             {
@@ -60,7 +66,7 @@
             },
             {
                 "colorScheme": "Campbell",
-		"commandline": "\"%USERPROFILE%\\AppData\\Local\\Microsoft\\WindowsApps\\Microsoft.PowerShell_8wekyb3d8bbwe\\pwsh.exe\"",
+                "commandline": "\"%USERPROFILE%\\AppData\\Local\\Microsoft\\WindowsApps\\Microsoft.PowerShell_8wekyb3d8bbwe\\pwsh.exe\"",
                 "elevate": true,
                 "font": 
                 {
@@ -115,15 +121,49 @@
                 "hidden": true,
                 "name": "Azure Cloud Shell",
                 "source": "Windows.Terminal.Azure",
-                "opacity": 70
+                "opacity": 70,
+                "font": 
+                {
+                    "face": "MesloLGL Nerd Font Mono",
+                    "size": 9.0
+                }
             },
             {
                 "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
                 "elevate": false,
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "hidden": true,
+                "name": "Windows PowerShell",
                 "opacity": 70,
-                "name": "Windows PowerShell"
+                "font": 
+                {
+                    "face": "MesloLGL Nerd Font Mono",
+                    "size": 9.0
+                }
+            },
+            {
+                "guid": "{4f306dda-0246-5284-a394-f778bce5a439}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2022",
+                "source": "Windows.Terminal.VisualStudio",
+                "opacity": 70,
+                "font": 
+                {
+                    "face": "MesloLGL Nerd Font Mono",
+                    "size": 9.0
+                }
+            },
+            {
+                "guid": "{36b82863-eb56-5244-83da-856e5ef988f2}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2022",
+                "source": "Windows.Terminal.VisualStudio",
+                "opacity": 70,
+                "font": 
+                {
+                    "face": "MesloLGL Nerd Font Mono",
+                    "size": 9.0
+                }
             }
         ]
     },
