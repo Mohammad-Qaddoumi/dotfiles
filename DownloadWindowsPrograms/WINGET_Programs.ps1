@@ -1,29 +1,30 @@
 $WINGET_PROGRAMS_ID = @(
     "Microsoft.PowerShell",
     "Microsoft.WindowsTerminal",
-    "JanDeDobbeleer.OhMyPosh",
+    "JanDeDobbeleer.OhMyPosh", # powershell prompt
     "Git.Git",
     "GitHub.cli"
     # "PDFLabs.PDFtk.Free", # PDF merge
+    # "OpenJS.NodeJS",  # NodeJS
     # "Google.GoogleDrive",
     # "Mozilla.Firefox",
-    # "Avidemux.Avidemux",
+    # "Avidemux.Avidemux", # fast video split,cut ..
     # "Mega.MEGASync",
     # "Gyan.FFmpeg",
     # "Brave.Brave",
-    # "calibre.calibre",
-    # "HandBrake.HandBrake",
-    # "KDE.Kdenlive",
-    # "TheDocumentFoundation.LibreOffice",
-    # "Cyanfish.NAPS2",
-    # "OpenJS.NodeJS",
-    # "OBSProject.OBSStudio",
-    # "Oracle.VirtualBox",
-    # "Postman.Postman",
-    # "Python.Python.3.13",
-    # "RevoUninstaller.RevoUninstaller",
+    # "calibre.calibre", # open book files like epub .. 
+    # "HandBrake.HandBrake", # Video conversion
+    # "KDE.Kdenlive", # Video editor,production ..
+    # "ONLYOFFICE.DesktopEditors", # PDF Editor
+    # "TheDocumentFoundation.LibreOffice", # For Documents
+    # "Cyanfish.NAPS2", # OCR and merge for pdf
+    # "OBSProject.OBSStudio", # video stream and record 
+    # "Oracle.VirtualBox", # don't forgt to install VB Extenctions 
+    # "Postman.Postman", # for backend request tests
+    # "Python.Python.3.13",  # Python change the version
+    # "RevoUninstaller.RevoUninstaller", # fully uninstall windows programs 
     # "Telegram.TelegramDesktop",
-    # "CodeSector.TeraCopy",
+    # "CodeSector.TeraCopy", # file copy,paste
     # "TorProject.TorBrowser",
     # "qBittorrent.qBittorrent",
     # "VideoLAN.VLC",
