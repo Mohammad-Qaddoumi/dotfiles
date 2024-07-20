@@ -4,6 +4,7 @@ $WINGET_PROGRAMS_ID = @(
     "JanDeDobbeleer.OhMyPosh",
     "Git.Git",
     "GitHub.cli"
+    # "PDFLabs.PDFtk.Free", # PDF merge
     # "Google.GoogleDrive",
     # "Mozilla.Firefox",
     # "Avidemux.Avidemux",
