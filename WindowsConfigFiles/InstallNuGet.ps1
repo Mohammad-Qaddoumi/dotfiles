@@ -14,5 +14,6 @@ if ($isBuiltInWindowsPowerShell) {
         Write-Output "Failed to install the NuGet provider."
     }
 } else {
-    Write-Output "This is not the built-in Windows PowerShell."
+    Write-Output "`nThis is not the built-in Windows PowerShell"
+    Write-Output "No need to install NuGet"
 }

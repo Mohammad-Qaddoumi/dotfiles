@@ -1,5 +1,5 @@
 Write-Output "================================================================`n"
-Write-Output "Run the script in powershell_ise.exe with Admin rights`n"
+Write-Output "Run the script in any powershell with Admin rights`n"
 Write-Output "Change Excution Policy by running : `n"
 Write-Output "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine`n"
 Write-Output "================================================================`n"
@@ -52,7 +52,7 @@ do {
         $originalDirectory = Get-Location
 
         if ($scriptDirectory -ne '') {
-            Write-Host "Changing directory to $scriptDirectory"
+            Write-Host "`nChanging directory to $scriptDirectory"
             Set-Location $scriptDirectory
         }
 
@@ -69,9 +69,10 @@ do {
         if ($scriptDirectory -ne '') {
             Write-Host "`nReturning to original directory $originalDirectory`n"
             Set-Location $originalDirectory
+            Write-Output "================================================================`n"
         }
     } elseif ($choice -eq $scripts.Count + 1) {
-        Write-Host "Exiting..."
+        Write-Host "`nExiting..."
         break
     } else {
         Write-Host "Invalid choice. Please try again."

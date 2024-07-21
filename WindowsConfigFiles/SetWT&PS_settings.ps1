@@ -1,4 +1,4 @@
-Write-Output "`nInstalling required fonts`n"
+Write-Output "`nInstalling required fonts :`n"
 & .\InstallFonts.ps1
 
 Write-Output "`n================================================================"
@@ -13,12 +13,15 @@ Write-Output "`n================================================================
 
 Write-Output "`n================================================================"
 
+Write-Output "`nInstalling PowerShell Modules :"
+
 Write-Output "`nInstalling Terminal-Icons Module"
 Install-Module -Name Terminal-Icons -AllowClobber -Force -Repository PSGallery
 Write-Output "Installing PSReadLine Module"
 Install-Module -Name PSReadLine -AllowClobber -Force -Repository PSGallery
 Write-Output "Installing z Module"
 Install-Module -Name z -AllowClobber -Force -Repository PSGallery
+
 Write-Output "`nInstalling Modules Finished"
 
 Write-Output "`n================================================================"

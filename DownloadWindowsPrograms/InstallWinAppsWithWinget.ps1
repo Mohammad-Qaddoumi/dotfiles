@@ -1,6 +1,6 @@
 # Function to test if winget is installed
 function Test-Winget {
-    Write-Output "Checking if winget is installed..."
+    Write-Output "`nChecking if winget is installed..."
     $wingetPath = (Get-Command winget -ErrorAction SilentlyContinue).Path
     if ($null -eq $wingetPath) {
         Write-Output "winget is not installed. Installing winget..."
@@ -76,8 +76,9 @@ function Install-Program {
 # Ensure winget is installed
 Test-Winget
 
+Write-Output "`n================================================================"
 # Main script execution
-Write-Output "`n === Start Installing Programs : ==="
+Write-Output "`n   === Start Installing Programs : ==="
 
 # Source the variable definition script (List of Programs IDs)
 . ".\WINGET_Programs.ps1"
@@ -91,4 +92,4 @@ for ($i = 0; $i -lt $WINGET_PROGRAMS_ID.Length; $i++) {
 }
 
 Write-Output "`n================================================================"
-Write-Output "Installing programs Finished.`n"
+Write-Output "`nInstalling programs Finished."
