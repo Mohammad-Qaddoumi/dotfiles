@@ -4,6 +4,9 @@ Write-Output "Installing required fonts"
 Write-Output "Change Default Terminal To Windows Terminal"
 & .\ChangeDefaultTerminal.ps1
 
+# Installing NuGet in using BuildIn powershell
+& .\InstallNuGet.ps1
+
 Write-Output "Installing Terminal-Icons Module"
 Install-Module -Name Terminal-Icons -AllowClobber -Force -Repository PSGallery
 Write-Output "Installing PSReadLine Module"
@@ -47,3 +50,6 @@ function Copy-ItemWithCheck {
 
 Copy-ItemWithCheck -sourcePath ".\PowerShell" -destinationPath "$env:USERPROFILE\Documents"
 Copy-ItemWithCheck -sourcePath ".\WindowsTerminal\settings.json" -destinationPath "$env:USERPROFILE\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+
+Write-Output "`n================================================================"
+Write-Output "================================================================"

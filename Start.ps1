@@ -56,6 +56,9 @@ do {
             Set-Location $scriptDirectory
         }
 
+        Write-Output "`n================================================================"
+        Write-Output "================================================================"
+
         Write-Host "Running $scriptToRun..."
         & .\$(Split-Path -Leaf $scriptToRun)
 
