@@ -77,7 +77,7 @@ function Install-Program {
 Test-Winget
 
 # Main script execution
-Write-Output "`n === Start Installing Programs : ===`n"
+Write-Output "`n === Start Installing Programs : ==="
 
 # Source the variable definition script (List of Programs IDs)
 . ".\WINGET_Programs.ps1"
@@ -86,7 +86,7 @@ Write-Output "`n === Start Installing Programs : ===`n"
 for ($i = 0; $i -lt $WINGET_PROGRAMS_ID.Length; $i++) {
     $program = $WINGET_PROGRAMS_ID[$i]
     Write-Output "`n================================================================"
-    Write-Output "`nProcessing program(ID)($($i + 1)/$($WINGET_PROGRAMS_ID.Length)): $program"
+    Write-Output "`n ($($i + 1)/$($WINGET_PROGRAMS_ID.Length)) - Processing program(ID) : $program"
     Install-Program -program $program
 }
 

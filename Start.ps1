@@ -62,8 +62,11 @@ do {
         Write-Host "Running $scriptToRun..."
         & .\$(Split-Path -Leaf $scriptToRun)
 
+        Write-Output "`n================================================================"
+        Write-Output "================================================================"
+
         if ($scriptDirectory -ne '') {
-            Write-Host "Returning to original directory $originalDirectory"
+            Write-Host "`nReturning to original directory $originalDirectory`n"
             Set-Location $originalDirectory
         }
     } elseif ($choice -eq $scripts.Count + 1) {
