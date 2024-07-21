@@ -12,7 +12,7 @@ if not "%1"=="RUNNING" (
 cd /d "%~dp0"
 
 :: Your PowerShell script or commands go here
-powershell -NoProfile -ExecutionPolicy Bypass -Command "& { & ".\Start.ps1" }"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& '.\Start.ps1'"
 
 :: Pause to keep the window open
 pause
