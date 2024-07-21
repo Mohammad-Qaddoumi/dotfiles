@@ -8,5 +8,11 @@ if not "%1"=="RUNNING" (
     exit /b
 )
 
+:: Change directory to the location of the batch file
+cd /d "%~dp0"
+
 :: Your PowerShell script or commands go here
 powershell -NoProfile -ExecutionPolicy Bypass -Command "& { & ".\Start.ps1" }"
+
+:: Pause to keep the window open
+pause
