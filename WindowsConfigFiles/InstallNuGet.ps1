@@ -2,7 +2,7 @@
 $isBuiltInWindowsPowerShell = ($PSVersionTable.PSEdition -eq 'Desktop')
 
 if ($isBuiltInWindowsPowerShell) {
-    Write-Output "This is the built-in Windows PowerShell, Installing NuGet provider...."
+    Write-Output "`nThis is the built-in Windows PowerShell, Installing NuGet provider...."
     
     # Install NuGet provider
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force

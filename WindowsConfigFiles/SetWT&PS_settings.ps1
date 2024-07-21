@@ -1,19 +1,29 @@
-Write-Output "Installing required fonts"
+Write-Output "`nInstalling required fonts"
 & .\InstallFonts.ps1
 
-Write-Output "Change Default Terminal To Windows Terminal"
+Write-Output "`n================================================================"
+
+Write-Output "`nChange Default Terminal To Windows Terminal"
 & .\ChangeDefaultTerminal.ps1
+
+Write-Output "`n================================================================"
 
 # Installing NuGet in using BuildIn powershell
 & .\InstallNuGet.ps1
 
-Write-Output "Installing Terminal-Icons Module"
+Write-Output "`n================================================================"
+
+Write-Output "`nInstalling Terminal-Icons Module"
 Install-Module -Name Terminal-Icons -AllowClobber -Force -Repository PSGallery
 Write-Output "Installing PSReadLine Module"
 Install-Module -Name PSReadLine -AllowClobber -Force -Repository PSGallery
 Write-Output "Installing z Module"
 Install-Module -Name z -AllowClobber -Force -Repository PSGallery
 Write-Output "Installing Modules Finished"
+
+Write-Output "`n================================================================"
+
+Write-Output "`nCoping Settings Files : "
 
 function Copy-ItemWithCheck {
     param (
