@@ -1,9 +1,9 @@
-Write-Output "`nInstalling required fonts"
+Write-Output "`nInstalling required fonts`n"
 & .\InstallFonts.ps1
 
 Write-Output "`n================================================================"
 
-Write-Output "`nChange Default Terminal To Windows Terminal"
+Write-Output "`nChange Default Terminal To Windows Terminal`n"
 & .\ChangeDefaultTerminal.ps1
 
 Write-Output "`n================================================================"
@@ -19,11 +19,11 @@ Write-Output "Installing PSReadLine Module"
 Install-Module -Name PSReadLine -AllowClobber -Force -Repository PSGallery
 Write-Output "Installing z Module"
 Install-Module -Name z -AllowClobber -Force -Repository PSGallery
-Write-Output "Installing Modules Finished"
+Write-Output "`nInstalling Modules Finished"
 
 Write-Output "`n================================================================"
 
-Write-Output "`nCoping Settings Files : "
+Write-Output "`nCoping Settings Files : `n"
 
 function Copy-ItemWithCheck {
     param (
