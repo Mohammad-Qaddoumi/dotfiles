@@ -104,4 +104,3 @@ Write-Output "`nInstalling programs Finished."
 Write-Output "`n================================================================"
 Write-Output "`n   === Refresh Environment Variabels : ===`n"
 & .\RefreshEnvironmentVariabels.ps1
-Write-Output "`n================================================================"

@@ -53,6 +53,6 @@ Update-PathEnvironmentVariable -NewPath $WindowsAppsPath
 }
 
 # Display refreshed environment variables
-Write-Output "Refreshed environment variables:"
+Write-Output "`nRefreshed environment variables:`n"
 Get-ChildItem Env:
-Write-Output "Done"
+Write-Output "`nDone"
