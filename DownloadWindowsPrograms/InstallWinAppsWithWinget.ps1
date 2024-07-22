@@ -47,7 +47,7 @@ function Install-Program {
         Write-Output "$program is not installed."
         Write-Output "Attempting to install $program..."
         try {
-            $installArgs = "install --id $program --accept-package-agreements --accept-source-agreements"
+            $installArgs = "install --id $program --accept-package-agreements --accept-source-agreements --local US"
             $process = Start-Process -FilePath "winget" -ArgumentList $installArgs -NoNewWindow -PassThru
             $process.WaitForExit()
             # Check the exit code of the process
