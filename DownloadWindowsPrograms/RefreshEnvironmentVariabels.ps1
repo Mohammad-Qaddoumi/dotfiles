@@ -40,7 +40,7 @@ function Update-PathEnvironmentVariable {
 }
 
 # Add the WindowsApps directory to the PATH variable
-Write-Section "Checking and adding WindowsApps directory to PATH variable for current user if not present..."
+Write-Output "Checking and adding WindowsApps directory to PATH variable for current user if not present..."
 $WindowsAppsPath = [IO.Path]::Combine([Environment]::GetEnvironmentVariable("LOCALAPPDATA"), "Microsoft", "WindowsApps")
 Update-PathEnvironmentVariable -NewPath $WindowsAppsPath
 
