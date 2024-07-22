@@ -75,8 +75,15 @@ function Install-Program {
 
 # Ensure winget is installed
 Test-Winget
+# Timeout for 5 seconds to check winget
+Start-Sleep -Seconds 3
+Test-Winget
 
 Write-Output "`n================================================================"
+Write-Output "`n   === Refresh Environment Variabels : ===`n"
+& .\RefreshEnvironmentVariabels.ps1
+Write-Output "`n================================================================"
+
 # Main script execution
 Write-Output "`n   === Start Installing Programs : ==="
 
