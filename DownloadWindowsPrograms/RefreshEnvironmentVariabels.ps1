@@ -5,4 +5,6 @@
 }
 
 # Display refreshed environment variables
+Write-Out "Refreshed environment variables:"
 Get-ChildItem Env:
+Write-Out "Done"
