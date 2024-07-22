@@ -1,6 +1,5 @@
 # Function to test if winget is installed
 function Test-Winget {
-    Write-Output "`nChecking if winget is installed..."
     $wingetPath = (Get-Command winget -ErrorAction SilentlyContinue).Path
     if ($null -eq $wingetPath) {
         Write-Output "winget is not installed. Installing winget..."
@@ -47,7 +46,7 @@ function Install-Program {
         Write-Output "$program is not installed."
         Write-Output "Attempting to install $program..."
         try {
-            $installArgs = "install --id $program --accept-package-agreements --accept-source-agreements --locale US"
+            $installArgs = "install --id $program --accept-package-agreements --accept-source-agreements"
             $process = Start-Process -FilePath "winget" -ArgumentList $installArgs -NoNewWindow -PassThru
             $process.WaitForExit()
             # Check the exit code of the process
@@ -74,9 +73,11 @@ function Install-Program {
 }
 
 # Ensure winget is installed
+Write-Output "`nChecking if winget is installed..."
 Test-Winget
 # Timeout for 5 seconds to check winget
 Start-Sleep -Seconds 3
+Write-Output "`nDouble Check if winget is installed..."
 Test-Winget
 
 Write-Output "`n================================================================"
