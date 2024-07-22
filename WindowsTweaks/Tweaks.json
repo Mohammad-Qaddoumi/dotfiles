@@ -1,0 +1,26 @@
+{
+    "WPFTweaks":  [
+                      "WPFTweaksWifi",
+                      "WPFTweaksHome",
+                      "WPFTweaksStorage",
+                      "WPFTweaksConsumerFeatures",
+                      "WPFTweaksDVR",
+                      "WPFTweaksTele",
+                      "WPFTweaksDisplay",
+                      "WPFTweaksAH",
+                      "WPFTweaksEndTaskOnTaskbar",
+                      "WPFTweaksLoc",
+                      "WPFTweaksTeredo",
+                      "WPFTweaksDeleteTempFiles",
+                      "WPFTweaksPowershell7"
+                  ],
+    "Install":  [
+
+                ],
+    "WPFInstall":  [
+
+                   ],
+    "WPFFeature":  [
+
+                   ]
+}
