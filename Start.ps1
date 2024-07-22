@@ -1,7 +1,7 @@
 Write-Output "================================================================`n"
 Write-Output "Run the script in any powershell with Admin rights`n"
 Write-Output "Change Excution Policy by running : `n"
-Write-Output "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine`n"
+Write-Output "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine`n"
 Write-Output "================================================================`n"
 
 # Check if running with admin rights
