@@ -40,4 +40,4 @@
 
 # Credit to :
  - [winget-install](https://github.com/asheroto/winget-install)
- - [Winutil](https://github.com/ChrisTitusTech/winutil)
+ - [winutil](https://github.com/ChrisTitusTech/winutil)
