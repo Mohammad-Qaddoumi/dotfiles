@@ -93,3 +93,10 @@ do {
         Write-Host "Invalid choice. Please try again."
     }
 } while ($true)
+
+Write-Host " _____                       "
+Write-Host "(____ \                      "
+Write-Host " _   \ \ ___  ____   ____    "
+Write-Host "| |   | / _ \|  _ \ / _  )   "
+Write-Host "| |__/ / |_| | | | ( (/ /    "
+Write-Host "|_____/ \___/|_| |_|\____)   "

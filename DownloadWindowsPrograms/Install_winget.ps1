@@ -1,10 +1,10 @@
 <#PSScriptInfo
 
-.VERSION 3.0.1
+.VERSION 4.1.3
 
 .GUID 3b581edb-5d90-4fa1-ba15-4f2377275463
 
-.AUTHOR asheroto, 1ckov, MisterZeus, ChrisTitusTech
+.AUTHOR asheroto, 1ckov, MisterZeus, ChrisTitusTech, uffemcev, MatthiasGuelck, o-l-a-v
 
 .COMPANYNAME asheroto
 
@@ -30,26 +30,49 @@
 [Version 2.1.1] - Switched primary/alternate methods. Added Cleanup function to avoid errors when cleaning up temp files. Added output of URL for alternate method. Suppressed Add-AppxProvisionedPackage output. Improved success message. Improved verbiage. Improve PS script comments. Added check if the URL is empty. Moved display of URL beneath the check.
 [Version 3.0.0] - Major changes. Added OS version detection checks - detects OS version, release ID, ensures compatibility. Forces older file installation for Server 2022 to avoid issues after installing. Added DebugMode, DisableCleanup, Force. Renamed CheckForUpdates to CheckForUpdate. Improved output. Improved error handling. Improved comments. Improved code readability. Moved CheckForUpdate into function. Added PowerShellGalleryName. Renamed Get-OSVersion to Get-OSInfo. Moved architecture detection into Get-OSInfo. Renamed Get-NewestLink to Get-WingetDownloadUrl. Have Get-WingetDownloadUrl not get preview releases.
 [Version 3.0.1] - Updated Get-OSInfo function to fix issues when used on non-English systems. Improved error handling of "resources in use" error.
+[Version 3.0.2] - Added winget registration command for Windows 10 machines.
+[Version 3.1.0] - Added support for one-line installation with irm and iex compatible with $Force session variable. Added UpdateSelf command to automatically update the script to the latest version. Created short URL asheroto.com/winget.
+[Version 3.1.1] - Changed winget register command to run on all OS versions.
+[Version 3.2.0] - Added -ForceClose logic to relaunch the script in conhost.exe and automatically end active processes associated with winget that could interfere with the installation. Improved verbiage on winget already installed.
+[Version 3.2.1] - Fixed minor glitch when using -Version or -Help parameters.
+[Version 3.2.2] - Improved script exit functionality.
+[Version 3.2.3] - Improved -ForceClose window handling with x86 PowerShell process.
+[Version 3.2.4] - Improved verbiage for incompatible systems. Added importing Appx module on Windows Server with PowerShell 7+ systems to avoid error message.
+[Version 3.2.5] - Removed pause after script completion. Added optional Wait parameter to force script to wait several seconds for script output.
+[Version 3.2.6] - Improved ExitWithDelay function. Sometimes PowerShell will close the window accidentally, even when using the proper 'exit' command. Adjusted several closures for improved readability. Improved error code checking. Fixed glitch with -Wait param.
+[Version 3.2.7] - Addded ability to install for all users. Added checks for Windows Sandbox and administrative privileges.
+[Version 4.0.0] - Microsoft created some short URLs for winget. Removed a large portion of the script to use short URLs instead. Simplified and refactored. Switched debug param from DebugMode to Debug.
+[Version 4.0.1] - Fixed PowerShell help information.
+[Version 4.0.2] - Adjusted UpdateSelf function to reset PSGallery to original state if it was not trusted. Improved comments.
+[Version 4.0.3] - Updated UI.Xaml package as per winget-cli issue #4208.
+[Version 4.0.4] - Fixed detection for Windows multi-session.
+[Version 4.0.5] - Improved error handling when registering winget.
+[Version 4.1.0] - Support for Windows Server 2019 added by installing Visual C++ Redistributable.
+[Version 4.1.1] - Minor revisions to comments & debug output.
+[Version 4.1.2] - Implemented Visual C++ Redistributable version detection to ensure compatibility with winget.
+[Version 4.1.3] - Added additional debug output for Visual C++ Redistributable version detection.
 
 #>
 
 <#
 .SYNOPSIS
-	Downloads and installs the latest version of winget and its dependencies. Updates the PATH variable if needed.
+	Downloads and installs the latest version of winget and its dependencies.
 .DESCRIPTION
-	Downloads and installs the latest version of winget and its dependencies. Updates the PATH variable if needed.
+	Downloads and installs the latest version of winget and its dependencies.
 
-This script is designed to be straightforward and easy to use, removing the hassle of manually downloading, installing, and configuring winget. To make the newly installed winget available for use, a system reboot may be required after running the script.
-
-This function should be run with administrative privileges.
+This script is designed to be straightforward and easy to use, removing the hassle of manually downloading, installing, and configuring winget. This function should be run with administrative privileges.
 .EXAMPLE
 	winget-install
-.PARAMETER DebugMode
+.PARAMETER Debug
     Enables debug mode, which shows additional information for debugging.
-.PARAMETER DisableCleanup
-    Disables cleanup of the script and prerequisites after installation.
 .PARAMETER Force
     Ensures installation of winget and its dependencies, even if already present.
+.PARAMETER ForceClose
+    Relaunches the script in conhost.exe and automatically ends active processes associated with winget that could interfere with the installation.
+.PARAMETER Wait
+    Forces the script to wait several seconds before exiting.
+.PARAMETER UpdateSelf
+    Updates the script to the latest version on PSGallery.
 .PARAMETER CheckForUpdate
     Checks if there is an update available for the script.
 .PARAMETER Version
@@ -57,28 +80,29 @@ This function should be run with administrative privileges.
 .PARAMETER Help
     Displays the full help information for the script.
 .NOTES
-	Version      : 3.0.1
+	Version      : 4.1.3
 	Created by   : asheroto
 .LINK
 	Project Site: https://github.com/asheroto/winget-install
 #>
 [CmdletBinding()]
 param (
-    [switch]$Version,
-    [switch]$Help,
+    [switch]$Force,
+    [switch]$ForceClose,
     [switch]$CheckForUpdate,
-    [switch]$DisableCleanup,
-    [switch]$DebugMode,
-    [switch]$Force
+    [switch]$Wait,
+    [switch]$UpdateSelf,
+    [switch]$Version,
+    [switch]$Help
 )
 
-# Version
-$CurrentVersion = '3.0.1'
+# Script information
+$CurrentVersion = '4.1.3'
 $RepoOwner = 'asheroto'
 $RepoName = 'winget-install'
 $PowerShellGalleryName = 'winget-install'
 
-# Versions
+# Preferences
 $ProgressPreference = 'SilentlyContinue' # Suppress progress bar (makes downloading super fast)
 $ConfirmPreference = 'None' # Suppress confirmation prompts
 
@@ -100,18 +124,10 @@ if ($PSBoundParameters.ContainsKey('Verbose') -and $PSBoundParameters['Verbose']
     Get-Host
 }
 
-function Get-TempFolder {
-    <#
-        .SYNOPSIS
-        Gets the path of the current user's temp folder.
-
-        .DESCRIPTION
-        This function retrieves the path of the current user's temp folder.
-
-        .EXAMPLE
-        Get-TempFolder
-    #>
-    return [System.IO.Path]::GetTempPath()
+# Set debug preferences if -Debug is specified
+if ($PSBoundParameters.ContainsKey('Debug') -and $PSBoundParameters['Debug']) {
+    $DebugPreference = 'Continue'
+    $ConfirmPreference = 'None'
 }
 
 function Get-OSInfo {
@@ -185,6 +201,11 @@ function Get-OSInfo {
         # Extract numerical value from Name
         $numericVersion = ($nameValue -replace "[^\d]").Trim()
 
+        # If the numeric version is 10 or above, and the caption contains "multi-session", consider it a workstation
+        if ($numericVersion -ge 10 -and $osDetails.Caption -match "multi-session") {
+            $typeValue = "Workstation"
+        }
+
         # Create and return custom object with the required properties
         $result = [PSCustomObject]@{
             ReleaseId      = $releaseIdValue
@@ -200,7 +221,7 @@ function Get-OSInfo {
         return $result
     } catch {
         Write-Error "Unable to get OS version details.`nError: $_"
-        exit 1
+        ExitWithDelay 1
     }
 }
 
@@ -258,24 +279,64 @@ function CheckForUpdate {
 
     $Data = Get-GitHubRelease -Owner $RepoOwner -Repo $RepoName
 
+    Write-Output ""
+    Write-Output ("Repository:       {0,-40}" -f "https://github.com/$RepoOwner/$RepoName")
+    Write-Output ("Current Version:  {0,-40}" -f $CurrentVersion)
+    Write-Output ("Latest Version:   {0,-40}" -f $Data.LatestVersion)
+    Write-Output ("Published at:     {0,-40}" -f $Data.PublishedDateTime)
+
     if ($Data.LatestVersion -gt $CurrentVersion) {
-        Write-Output "`nA new version of $RepoName is available.`n"
-        Write-Output "Current version: $CurrentVersion."
-        Write-Output "Latest version: $($Data.LatestVersion)."
-        Write-Output "Published at: $($Data.PublishedDateTime).`n"
-        Write-Output "You can download the latest version from https://github.com/$RepoOwner/$RepoName/releases`n"
+        Write-Output ("Status:           {0,-40}" -f "A new version is available.")
+        Write-Output "`nOptions to update:"
+        Write-Output "- Download latest release: https://github.com/$RepoOwner/$RepoName/releases"
         if ($PowerShellGalleryName) {
-            Write-Output "Or you can run the following command to update:"
-            Write-Output "Install-Script $PowerShellGalleryName -Force`n"
+            Write-Output "- Run: $RepoName -UpdateSelf"
+            Write-Output "- Run: Install-Script $PowerShellGalleryName -Force"
         }
     } else {
-        Write-Output "`n$RepoName is up to date.`n"
-        Write-Output "Current version: $CurrentVersion."
-        Write-Output "Latest version: $($Data.LatestVersion)."
-        Write-Output "Published at: $($Data.PublishedDateTime)."
-        Write-Output "`nRepository: https://github.com/$RepoOwner/$RepoName/releases`n"
+        Write-Output ("Status:           {0,-40}" -f "Up to date.")
     }
     exit 0
+}
+
+function UpdateSelf {
+    try {
+        # Get PSGallery version of script
+        $psGalleryScriptVersion = (Find-Script -Name $PowerShellGalleryName).Version
+
+        # If the current version is less than the PSGallery version, update the script
+        if ($CurrentVersion -lt $psGalleryScriptVersion) {
+            Write-Output "Updating script to version $psGalleryScriptVersion..."
+
+            # Install NuGet PackageProvider if not already installed
+            if (-not (Get-PackageProvider -Name NuGet -ErrorAction SilentlyContinue)) {
+                Install-PackageProvider -Name "NuGet" -Force
+            }
+
+            # Trust the PSGallery if not already trusted
+            $psRepoInstallationPolicy = (Get-PSRepository -Name 'PSGallery').InstallationPolicy
+            if ($psRepoInstallationPolicy -ne 'Trusted') {
+                Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted | Out-Null
+            }
+
+            # Update the script
+            Install-Script $PowerShellGalleryName -Force
+
+            # If PSGallery was not trusted, reset it to its original state
+            if ($psRepoInstallationPolicy -ne 'Trusted') {
+                Set-PSRepository -Name 'PSGallery' -InstallationPolicy $psRepoInstallationPolicy | Out-Null
+            }
+
+            Write-Output "Script updated to version $psGalleryScriptVersion."
+            exit 0
+        } else {
+            Write-Output "Script is already up to date."
+            exit 0
+        }
+    } catch {
+        Write-Output "An error occurred: $_"
+        exit 1
+    }
 }
 
 function Write-Section($text) {
@@ -324,8 +385,7 @@ function Get-WingetDownloadUrl {
     )
 
     $uri = "https://api.github.com/repos/microsoft/winget-cli/releases"
-    Write-Debug "Getting information from $uri"
-    $releases = Invoke-RestMethod -uri $uri -Method Get -ErrorAction stop
+    $releases = Invoke-RestMethod -uri $uri -Method Get -ErrorAction Stop
 
     Write-Debug "Getting latest release..."
     foreach ($release in $releases) {
@@ -368,55 +428,6 @@ function Get-WingetStatus {
     return $false
 }
 
-function Update-PathEnvironmentVariable {
-    <#
-        .SYNOPSIS
-        Updates the PATH environment variable with a new path for both the User and Machine levels.
-
-        .DESCRIPTION
-        The function will add a new path to the PATH environment variable, making sure it is not a duplicate.
-        If the new path is already in the PATH variable, the function will skip adding it.
-        This function operates at both User and Machine levels.
-
-        .PARAMETER NewPath
-        The new directory path to be added to the PATH environment variable.
-
-        .EXAMPLE
-        Update-PathEnvironmentVariable -NewPath "C:\NewDirectory"
-        This command will add the directory "C:\NewDirectory" to the PATH variable at both the User and Machine levels.
-    #>
-    param(
-        [string]$NewPath
-    )
-
-    foreach ($Level in "Machine", "User") {
-        # Get the current PATH variable
-        $path = [Environment]::GetEnvironmentVariable("PATH", $Level)
-
-        # Check if the new path is already in the PATH variable
-        if (!$path.Contains($NewPath)) {
-            if ($DebugMode) {
-                Write-Output "Adding $NewPath to PATH variable for $Level..."
-            } else {
-                Write-Output "Adding PATH variable for $Level..."
-            }
-
-            # Add the new path to the PATH variable
-            $path = ($path + ";" + $NewPath).Split(';') | Select-Object -Unique
-            $path = $path -join ';'
-
-            # Set the new PATH variable
-            [Environment]::SetEnvironmentVariable("PATH", $path, $Level)
-        } else {
-            if ($DebugMode) {
-                Write-Output "$NewPath already present in PATH variable for $Level, skipping."
-            } else {
-                Write-Output "PATH variable already present for $Level, skipping."
-            }
-        }
-    }
-}
-
 function Handle-Error {
     <#
         .SYNOPSIS
@@ -448,6 +459,8 @@ function Handle-Error {
     # Set to silently continue
     $ErrorActionPreference = 'SilentlyContinue'
 
+    # Handle common errors
+    # Not returning $ErrorRecord on some errors is intentional
     if ($ErrorRecord.Exception.Message -match '0x80073D06') {
         Write-Warning "Higher version already installed."
         Write-Warning "That's okay, continuing..."
@@ -457,8 +470,16 @@ function Handle-Error {
     } elseif ($ErrorRecord.Exception.Message -match '0x80073D02') {
         # Stop execution and return the ErrorRecord so that the calling try/catch block throws the error
         Write-Warning "Resources modified are in-use. Try closing Windows Terminal / PowerShell / Command Prompt and try again."
-        Write-Warning "If the problem persists, restart your computer."
+        Write-Warning "Windows Terminal sometimes has trouble installing winget. If you are using Windows Terminal and the problem persists, run the script with the -ForceClose parameter which will relaunch the script in conhost.exe and automatically end active processes associated with winget that could interfere with the installation. Please note that using the -ForceClose parameter will close the PowerShell window and could break custom scripts that rely on the current PowerShell session."
         return $ErrorRecord
+    } elseif ($ErrorRecord.Exception.Message -match '0x80073CF3') {
+        # Prerequisite not detected, tell user to run it again
+        Write-Warning "Problem with one of the prerequisites."
+        Write-Warning "Try running the script again which usually fixes the issue. If the problem persists, try running the script with the -ForceClose parameter which will relaunch the script in conhost.exe and automatically end active processes associated with winget that could interfere with the installation. Please note that using the -ForceClose parameter will close the PowerShell window and could break custom scripts that rely on the current PowerShell session."
+        return $ErrorRecord
+    } elseif ($ErrorRecord.Exception.Message -match '0x80073CF9') {
+        Write-Warning "Registering winget failed with error code 0x80073CF9."
+        Write-Warning "This error usually occurs when using the Local System account to install winget. The SYSTEM account is not officially supported by winget and may not work. See the requirements section of the README. If winget is not working, run the installation script again using an Administrator account."
     } elseif ($ErrorRecord.Exception.Message -match 'Unable to connect to the remote server') {
         Write-Warning "Cannot connect to the Internet to download the required files."
         Write-Warning "Try running the script again and make sure you are connected to the Internet."
@@ -477,283 +498,302 @@ function Handle-Error {
     $ErrorActionPreference = $OriginalErrorActionPreference
 }
 
-function Cleanup {
+function Get-CurrentProcess {
     <#
         .SYNOPSIS
-            Deletes a file or directory specified without prompting for confirmation or displaying errors.
+            Retrieves the current PowerShell process information.
 
         .DESCRIPTION
-            This function takes a path to a file or directory and deletes it without prompting for confirmation or displaying errors.
-            If the path is a directory, the function will delete the directory and all its contents.
-
-        .PARAMETER Path
-            The path of the file or directory to be deleted.
-
-        .PARAMETER Recurse
-            If the path is a directory, this switch specifies whether to delete the directory and all its contents.
+            The Get-CurrentProcess function identifies the current PowerShell process by temporarily changing the console window title. It then filters the list of running processes to find the one with the matching window title. The function returns a custom object containing the Name and Id of the current process.
 
         .EXAMPLE
-            Cleanup -Path "C:\Temp"
-            This example deletes the directory "C:\Temp" and all its contents.
+            PS C:\> $result = Get-CurrentProcess
+            PS C:\> Write-Output $result
 
-        .EXAMPLE
-            Cleanup -Path "C:\Temp" -Recurse
-            This example deletes the directory "C:\Temp" and all its contents.
+            This example demonstrates how to call the Get-CurrentProcess function and store its output in a variable named $result. The output is then displayed using Write-Output.
 
-        .EXAMPLE
-            Cleanup -Path "C:\Temp\file.txt"
-            This example deletes the file "C:\Temp\file.txt".
+        .NOTES
+            The function temporarily changes the console window title. Ensure no other scripts or processes are dependent on the window title during execution. The function uses a 1-second sleep to allow time for the window title change to take effect. This may vary based on system performance.
     #>
+    $oldTitle = $host.ui.RawUI.WindowTitle
+    $tempTitle = ([Guid]::NewGuid())
+    $host.ui.RawUI.WindowTitle = $tempTitle
+    Start-Sleep 1
+    $currentProcess = Get-Process | Where-Object { $_.MainWindowTitle -eq $tempTitle }
+    $currentProcess = [PSCustomObject]@{
+        Name = $currentProcess.Name
+        Id   = $currentProcess.Id
+    }
+    $host.ui.RawUI.WindowTitle = $oldTitle
+    return $currentProcess
+}
+
+function ExitWithDelay {
+    <#
+        .SYNOPSIS
+            Exits the script with a specified exit code after a specified delay, 10 seconds by default.
+
+        .DESCRIPTION
+            This function takes an exit code as an argument, waits for 10 seconds unless specified, and then exits the script with the given exit code.
+
+        .PARAMETER ExitCode
+            The exit code to use when exiting the script.
+
+        .EXAMPLE
+            ExitWithDelay -ExitCode 1
+            Waits for 10 seconds (default) and then exits the script with an exit code of 1.
+
+        .EXAMPLE
+            ExitWithDelay -ExitCode 2 -Seconds 5
+            Waits for 5 seconds and then exits the script with an exit code of 2.
+        .NOTES
+            Use this function to introduce a delay before exiting the script, allowing time for any cleanup or logging activities.
+    #>
+
     param (
-        [string]$Path,
-        [switch]$Recurse
+        [int]$ExitCode,
+        [int]$Seconds = 10
     )
 
+    # Debug mode output
+    if ($Debug -and $Wait) {
+        Write-Warning "Wait specified, waiting several seconds..."
+    } elseif ($Debug -and !$Wait) {
+        Write-Warning "Wait not specified, exiting immediately..."
+    }
+
+    # If Wait is specified, wait for x seconds before exiting
+    if ($Wait) {
+        # Waiting for x seconds output
+        Write-Output "`nWaiting for $Seconds seconds before exiting..."
+        Start-Sleep -Seconds $Seconds
+    }
+
+    # Exit the script with error code
+    # Some systems may accidentally close the window, but that's a PowerShell bug
+    # https://stackoverflow.com/questions/67593504/why-wont-the-exit-function-work-in-my-powershell-code
+    Exit $ExitCode
+}
+
+function Import-GlobalVariable {
+    <#
+        .SYNOPSIS
+        This function checks if a specified global variable exists and imports its value into a script scope variable of the same name.
+
+        .DESCRIPTION
+        The Import-GlobalVariable function allows you to specify the name of a variable. It checks if a global variable with that name exists, and if it does, it imports its value into a script scope variable with the same name.
+
+        .PARAMETER VariableName
+        The name of the variable to check and import if it exists in the global scope.
+
+    #>
+
+    [CmdletBinding()]
+    param(
+        [string]$VariableName
+    )
+
+    # Check if the specified global variable exists; if yes, import its value
     try {
-        if (Test-Path -Path $Path) {
-            if ($Recurse -and (Get-Item -Path $Path) -is [System.IO.DirectoryInfo]) {
-                Get-ChildItem -Path $Path -Recurse | Remove-Item -Force -Recurse
-                Remove-Item -Path $Path -Force -Recurse
-            } else {
-                Remove-Item -Path $Path -Force
-            }
-        }
-        if ($DebugMode) {
-            Write-Output "Deleted: $Path"
-        }
+        $globalValue = Get-Variable -Name $VariableName -ValueOnly -Scope Global -ErrorAction Stop
+        Set-Variable -Name $VariableName -Value $globalValue -Scope Script
     } catch {
-        # Errors are ignored
+        # If the variable does not exist, do nothing
     }
 }
 
-function Install-Prerequisite {
+function Test-AdminPrivileges {
     <#
-        .SYNOPSIS
-        Downloads and installs a prerequisite for winget.
+    .SYNOPSIS
+        Checks if the script is running with Administrator privileges. Returns $true if running with Administrator privileges, $false otherwise.
 
-        .DESCRIPTION
-        This function takes a name, version, URL, alternate URL, content type, and body and downloads and installs the prerequisite.
+    .DESCRIPTION
+        This function checks if the current PowerShell session is running with Administrator privileges by examining the role of the current user. It returns $true if the current user is an Administrator, $false otherwise.
 
-        .PARAMETER Name
-        The name of the prerequisite.
+    .EXAMPLE
+        Test-AdminPrivileges
 
-        .PARAMETER Version
-        The version of the prerequisite.
-
-        .PARAMETER Url
-        The URL of the prerequisite.
-
-        .PARAMETER AlternateUrl
-        The alternate URL of the prerequisite.
-
-        .PARAMETER ContentType
-        The content type of the prerequisite.
-
-        .PARAMETER Body
-        The body of the prerequisite.
-
-        .PARAMETER NupkgVersion
-        The nupkg version of the prerequisite.
-
-        .PARAMETER AppxFileVersion
-        The appx file version of the prerequisite.
-
-        .EXAMPLE
-        Install-Prerequisite -Name "VCLibs" -Version "14.00" -Url "https://store.rg-adguard.net/api/GetFiles" -AlternateUrl "https://aka.ms/Microsoft.VCLibs.$arch.14.00.Desktop.appx" -ContentType "application/x-www-form-urlencoded" -Body "type=PackageFamilyName&url=Microsoft.VCLibs.140.00_8wekyb3d8bbwe&ring=RP&lang=en-US"
-
-        Where $arch is the architecture type of the current system.
+    .NOTES
+        This function is particularly useful for scripts that require elevated permissions to run correctly.
     #>
+    if (([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+        return $true
+    }
+    return $false
+}
+
+Function New-TemporaryFile2 {
+    <#
+    .SYNOPSIS
+        Creates a new temporary file.
+
+    .DESCRIPTION
+        This function generates a temporary file and returns the full path of the file. The New-TemporaryFile command is not available in PowerShell 5.1 and earlier so this function is a workaround.
+
+    .EXAMPLE
+        $tempFile = New-TemporaryFile2
+        This example creates a new temporary file and stores its path in the $tempFile variable.
+
+    .OUTPUTS
+        String. The full path of the created temporary file.
+    #>
+
+    # Create a temporary file
+    $tempPath = [System.IO.Path]::GetTempPath()
+    $tempFile = [System.IO.Path]::Combine($tempPath, [System.IO.Path]::GetRandomFileName())
+    $null = New-Item -Path $tempFile -ItemType File -Force
+
+    # Return the path of the temporary file
+    return $tempFile
+}
+
+function Add-ToEnvironmentPath {
     param (
-        [string]$Name,
-        [string]$Url,
-        [string]$AlternateUrl,
-        [string]$ContentType,
-        [string]$Body,
-        [string]$NupkgVersion,
-        [string]$AppxFileVersion
+        [string]$PathToAdd
+    )
+    <#
+    .SYNOPSIS
+    Adds the specified path to the environment PATH variable.
+
+    .DESCRIPTION
+    This function adds a given path to the system-wide and current session PATH environment variable if it is not already present.
+
+    .PARAMETER PathToAdd
+    The directory path to add to the environment PATH variable.
+
+    .EXAMPLE
+    Add-ToEnvironmentPath -PathToAdd "C:\Program Files\MyApp"
+    #>
+
+    # Get the full path to ensure consistency
+    $fullPathToAdd = [System.IO.Path]::GetFullPath($PathToAdd)
+
+    # Get the current system PATH
+    $systemEnvPath = [System.Environment]::GetEnvironmentVariable('PATH', [System.EnvironmentVariableTarget]::Machine)
+
+    # Check if the path is already in the system PATH variable
+    if (-not ($systemEnvPath -split ';').Contains($fullPathToAdd)) {
+        # Add to system PATH
+        $systemEnvPath += ";$fullPathToAdd"
+        [System.Environment]::SetEnvironmentVariable('PATH', $systemEnvPath, [System.EnvironmentVariableTarget]::Machine)
+        Write-Output "Adding winget folder to the system PATH."
+        Write-Debug "Adding $fullPathToAdd to the system PATH.`n`n"
+    } else {
+        Write-Output "winget folder already in the system PATH."
+        Write-Debug "$fullPathToAdd is already in the system PATH.`n`n"
+    }
+
+    # Update the current session PATH
+    if (-not ($env:PATH -split ';').Contains($fullPathToAdd)) {
+        $env:PATH += ";$fullPathToAdd"
+        Write-Output "Adding winget folder to the current session PATH."
+        Write-Debug "Adding $fullPathToAdd to the current session PATH."
+    } else {
+        Write-Output "winget folder is already in the current session PATH."
+        Write-Debug "$fullPathToAdd is already in the current session PATH."
+    }
+}
+
+function Test-VCRedistInstalled {
+    <#
+    .SYNOPSIS
+    Checks if Visual C++ Redistributable is installed and verifies the major version is 14.
+
+    .DESCRIPTION
+    This function checks the registry and the file system to determine if Visual C++ Redistributable is installed
+    and if the major version is 14.
+
+    .EXAMPLE
+    Test-VCRedistInstalled
+    #>
+
+    # Assets
+    $64BitOS = [System.Environment]::Is64BitOperatingSystem
+    $64BitProcess = [System.Environment]::Is64BitProcess
+
+    # Require running system native process
+    if ($64BitOS -and -not $64BitProcess) {
+        Throw 'Please run PowerShell in the system native architecture (x64 PowerShell if x64 Windows).'
+    }
+
+    # Check that uninstall information exists in the registry
+    $registryPath = [string]::Format(
+        'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\{0}\Microsoft\VisualStudio\14.0\VC\Runtimes\X{1}',
+        $(if ($64BitOS -and $64BitProcess) { 'WOW6432Node' } else { '' }),
+        $(if ($64BitOS) { '64' } else { '86' })
     )
 
-    $osVersion = Get-OSInfo
-    $arch = $osVersion.Architecture
+    $registryExists = Test-Path -Path $registryPath
 
-    Write-Section "Downloading & installing ${arch} ${Name}..."
+    Write-Debug "Registry Path: $registryPath"
+    Write-Debug "Registry Exists: $registryExists"
 
-    $ThrowReason = @{
-        Message = ""
-        Code    = 0
+    # Check the major version
+    $majorVersion = if ($registryExists) {
+        (Get-ItemProperty -Path $registryPath -Name 'Major').Major
+    } else {
+        0
     }
+
+    # Check the full version
+    $version = if ($registryExists) {
+        (Get-ItemProperty -Path $registryPath -Name 'Version').Version
+    } else {
+        0
+    }
+
+    Write-Debug "Major Version: $majorVersion"
+    Write-Debug "Version: $version"
+
+    # Check that one required DLL exists on the file system
+    $dllPath = [string]::Format(
+        '{0}\system32\concrt140.dll',
+        $env:windir
+    )
+
+    $dllExists = [System.IO.File]::Exists($dllPath)
+
+    Write-Debug "DLL Path: $dllPath"
+    Write-Debug "DLL Exists: $dllExists"
+
+    # Determine if VCRedist is installed and major version is 14
+    return $registryExists -and $majorVersion -eq 14 -and $dllExists
+}
+
+function TryRemove {
+    <#
+    .SYNOPSIS
+    Tries to remove a specified file if it exists.
+
+    .DESCRIPTION
+    This function checks if the specified file exists and attempts to remove it. 
+    It will not produce an error if the file does not exist or if the removal fails.
+
+    .PARAMETER FilePath
+    The path to the file that should be removed.
+
+    .EXAMPLE
+    TryRemove -FilePath "C:\path\to\file.txt"
+    #>
+
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$FilePath
+    )
+
     try {
-        # ============================================================================ #
-        # Windows 10 / Server 2022 detection
-        # ============================================================================ #
-
-        # Function to extract domain from URL
-        function Get-DomainFromUrl($url) {
-            $uri = [System.Uri]$url
-            $domain = $uri.Host -replace "^www\."
-            return $domain
-        }
-
-        # If Server 2022 or Windows 10, force non-store version of VCLibs (return true)
-        $messageTemplate = "{OS} detected. Using {DOMAIN} version of {NAME}."
-
-        # Determine the OS-specific information
-        $osType = $osVersion.Type
-        $osNumericVersion = $osVersion.NumericVersion
-
-        if (($osType -eq "Server" -and $osNumericVersion -eq 2022) -or ($osType -eq "Workstation" -and $osNumericVersion -eq 10)) {
-            if ($osType -eq "Server") {
-                $osName = "Server 2022"
+        if (Test-Path -Path $FilePath) {
+            Remove-Item -Path $FilePath -ErrorAction SilentlyContinue
+            if ($?) {
+                Write-Debug "File '$FilePath' was successfully removed."
             } else {
-                $osName = "Windows 10"
+                Write-Debug "Failed to remove the file '$FilePath'."
             }
-            $domain = Get-DomainFromUrl $AlternateUrl
-            $ThrowReason.Message = ($messageTemplate -replace "{OS}", $osName) -replace "{NAME}", $Name -replace "{DOMAIN}", $domain
-            $ThrowReason.Code = 1
-            throw
+        } else {
+            Write-Debug "File '$FilePath' does not exist."
         }
-
-        # ============================================================================ #
-        # Primary method
-        # ============================================================================ #
-
-        $url = Invoke-WebRequest -Uri $Url -Method "POST" -ContentType $ContentType -Body $Body -UseBasicParsing | ForEach-Object Links | Where-Object outerHTML -match "$Name.+_${arch}__8wekyb3d8bbwe.appx" | ForEach-Object href
-
-        # If the URL is empty, try the alternate method
-        if ($url -eq "") {
-            $ThrowReason.Message = "URL is empty"
-            $ThrowReason.Code = 2
-            throw
-        }
-
-        if ($DebugMode) {
-            Write-Output "URL: ${url}`n"
-        }
-        Write-Output "Installing ${arch} ${Name}..."
-        Add-AppxPackage $url -ErrorAction Stop
-        Write-Output "`n$Name installed successfully."
     } catch {
-        # Alternate method
-        if ($_.Exception.Message -match '0x80073D02') {
-            # If resources in use exception, fail immediately
-            Handle-Error $_
-            throw
-        }
-
-        try {
-            $url = $AlternateUrl
-
-            # Throw reason if alternate method is required
-            if ($ThrowReason.Code -eq 0) {
-                Write-Warning "Error when trying to download or install $Name. Trying alternate method..."
-            } else {
-                Write-Warning $ThrowReason.Message
-            }
-            Write-Output ""
-
-            # If the URL is empty, throw error
-            if ($url -eq "") {
-                throw "URL is empty"
-            }
-
-            # Specific logic for VCLibs alternate method
-            if ($Name -eq "VCLibs") {
-                if ($DebugMode) {
-                    Write-Output "URL: $($url)`n"
-                }
-                Write-Output "Installing ${arch} ${Name}..."
-                Add-AppxPackage $url -ErrorAction Stop
-                Write-Output "`n$Name installed successfully."
-            }
-
-            # Specific logic for UI.Xaml
-            if ($Name -eq "UI.Xaml") {
-                $TempFolder = Get-TempFolder
-
-                $uiXaml = @{
-                    url           = $url
-                    appxFolder    = "tools/AppX/$arch/Release/"
-                    appxFilename  = "Microsoft.UI.Xaml.$AppxFileVersion.appx"
-                    nupkgFilename = Join-Path -Path $TempFolder -ChildPath "Microsoft.UI.Xaml.$NupkgVersion.nupkg"
-                    nupkgFolder   = Join-Path -Path $TempFolder -ChildPath "Microsoft.UI.Xaml.$NupkgVersion"
-                }
-
-                # Debug
-                if ($DebugMode) {
-                    $formattedDebugOutput = ($uiXaml | ConvertTo-Json -Depth 10 -Compress) -replace '\\\\', '\'
-                    Write-Output "uiXaml:"
-                    Write-Output $formattedDebugOutput
-                    Write-Output ""
-                }
-
-                # Downloading
-                Write-Output "Downloading UI.Xaml..."
-                if ($DebugMode) {
-                    Write-Output "URL: $($uiXaml.url)"
-                }
-                Invoke-WebRequest -Uri $uiXaml.url -OutFile $uiXaml.nupkgFilename
-
-                # Check if folder exists and delete if needed (will occur whether DisableCleanup is $true or $false)
-                Cleanup -Path $uiXaml.nupkgFolder -Recurse
-
-                # Extracting
-                Write-Output "Extracting...`n"
-                if ($DebugMode) {
-                    Write-Output "Into folder: $($uiXaml.nupkgFolder)`n"
-                }
-                Add-Type -Assembly System.IO.Compression.FileSystem
-                [IO.Compression.ZipFile]::ExtractToDirectory($uiXaml.nupkgFilename, $uiXaml.nupkgFolder)
-
-                # Prep for install
-                Write-Output "Installing ${arch} ${Name}..."
-                $XamlAppxFolder = Join-Path -Path $uiXaml.nupkgFolder -ChildPath $uiXaml.appxFolder
-                $XamlAppxPath = Join-Path -Path $XamlAppxFolder -ChildPath $uiXaml.appxFilename
-
-                # Debugging
-                if ($DebugMode) { Write-Output "Installing appx Packages in: $XamlAppxFolder" }
-
-                # Install
-                Get-ChildItem -Path $XamlAppxPath -Filter *.appx | ForEach-Object {
-                    if ($DebugMode) { Write-Output "Installing appx Package: $($_.Name)" }
-                    Add-AppxPackage $_.FullName -ErrorAction Stop
-                }
-                Write-Output "`nUI.Xaml installed successfully."
-
-                # Cleanup
-                if ($DisableCleanup -eq $false) {
-                    if ($DebugMode) { Write-Output "" } # Extra line break for readability if DebugMode is enabled
-                    Cleanup -Path $uiXaml.nupkgFilename
-                    Cleanup -Path $uiXaml.nupkgFolder -Recurse $true
-                }
-            }
-        } catch {
-            # If unable to connect to remote server and Windows 10 or Server 2022, display warning message
-            $ShowOldVersionMessage = $False
-            if ($_.Exception.Message -match "Unable to connect to the remote server") {
-                # Determine the correct Windows caption and set $ShowOutput to $True if conditions are met
-                if ($osVersion.Type -eq "Workstation" -and $osVersion.NumericVersion -eq 10) {
-                    $WindowsCaption = "Windows 10"
-                    $ShowOldVersionMessage = $True
-                } elseif ($osVersion.Type -eq "Server" -and $osVersion.NumericVersion -eq 2022) {
-                    $WindowsCaption = "Server 2022"
-                    $ShowOldVersionMessage = $True
-                }
-
-                # Output the warning message if $ShowOldVersionMessage is $True, otherwise output the generic error message
-                if ($ShowOldVersionMessage) {
-                    $OldVersionMessage = "There is an issue connecting to the server to download $Name. Unfortunately this is a known issue with the prerequisite server URLs - sometimes they are down. Since you're using $WindowsCaption you must use the non-store versions of the prerequisites, the prerequisites from the Windows store will not work, so you may need to try again later or install manually."
-                    Write-Warning $OldVersionMessage
-                } else {
-                    Write-Warning "Error when trying to download or install $Name. Please try again later or manually install $Name."
-                }
-            }
-
-            $errorHandled = Handle-Error $_
-            if ($null -ne $errorHandled) {
-                throw $errorHandled
-            }
-            $errorHandled = $null
-        }
+        Write-Debug "An error occurred while trying to remove the file '$FilePath'."
     }
 }
 
@@ -761,44 +801,97 @@ function Install-Prerequisite {
 # Initial checks
 # ============================================================================ #
 
+# Use global variables if specified by user
+Import-GlobalVariable -VariableName "Debug"
+Import-GlobalVariable -VariableName "ForceClose"
+Import-GlobalVariable -VariableName "Force"
+
+# First heading
+Write-Output "winget-install $CurrentVersion"
+
 # Check for updates if -CheckForUpdate is specified
-if ($CheckForUpdate) {
-    CheckForUpdate -RepoOwner $RepoOwner -RepoName $RepoName -CurrentVersion $CurrentVersion -PowerShellGalleryName $PowerShellGalleryName
-}
+if ($CheckForUpdate) { CheckForUpdate -RepoOwner $RepoOwner -RepoName $RepoName -CurrentVersion $CurrentVersion -PowerShellGalleryName $PowerShellGalleryName }
+
+# Update the script if -UpdateSelf is specified
+if ($UpdateSelf) { UpdateSelf }
 
 # Heading
-Write-Output "winget-install $CurrentVersion"
 Write-Output "To check for updates, run winget-install -CheckForUpdate"
+Write-Output "To delay script exit, run winget-install -Wait"
 
-# Set OS version
+# Check if the current user is an administrator
+if (-not (Test-AdminPrivileges)) {
+    Write-Warning "winget requires Administrator privileges to install. Please run the script as an Administrator and try again."
+    ExitWithDelay 1
+}
+
+# Get OS version
 $osVersion = Get-OSInfo
 
-# Set architecture type
+# Get architecture type
 $arch = $osVersion.Architecture
+
+# Get current process module name to determine if launched in conhost
+$currentProcess = Get-CurrentProcess
 
 # If it's a workstation, make sure it is Windows 10+
 if ($osVersion.Type -eq "Workstation" -and $osVersion.NumericVersion -lt 10) {
-    Write-Error "winget is only compatible with Windows 10 or greater."
-    exit 1
+    Write-Error "winget requires Windows 10 or later on workstations. Your version of Windows is not supported."
+    ExitWithDelay 1
 }
 
 # If it's a workstation with Windows 10, make sure it's version 1809 or greater
 if ($osVersion.Type -eq "Workstation" -and $osVersion.NumericVersion -eq 10 -and $osVersion.ReleaseId -lt 1809) {
-    Write-Error "winget is only compatible with Windows 10 version 1809 or greater."
-    exit 1
+    Write-Error "winget requires Windows 10 version 1809 or later on workstations. Please update Windows to a compatible version."
+    ExitWithDelay 1
 }
 
-# If it's a server, it needs to be 2022+
-if ($osVersion.Type -eq "Server" -and $osVersion.NumericVersion -lt 2022) {
-    Write-Error "winget is only compatible with Windows Server 2022+."
-    exit 1
+# If it's a server, it needs to be 2019+
+if ($osVersion.Type -eq "Server" -and $osVersion.NumericVersion -lt 2019) {
+    Write-Error "winget requires Windows Server 2019 or newer on server platforms. Your version of Windows Server is not supported."
+    ExitWithDelay 1
 }
 
 # Check if winget is already installed
 if (Get-WingetStatus) {
     if ($Force -eq $false) {
-        Write-Output "winget is already installed, exiting..."
-        exit 0
+        Write-Warning "winget is already installed, exiting..."
+        Write-Warning "If you want to reinstall winget, run the script with the -Force parameter."
+        ExitWithDelay 0 5
+    }
+}
+
+# Check if ForceClose parameter is specified. If terminal detected, so relaunch in conhost
+if ($ForceClose) {
+    Write-Warning "ForceClose parameter is specified."
+    if ($currentProcess.Name -eq "WindowsTerminal") {
+        Write-Warning "Terminal detected, relaunching in conhost in 10 seconds..."
+        Write-Warning "It may break your custom batch files and ps1 scripts with extra commands!"
+        Start-Sleep -Seconds 10
+
+        # Prepare the command to relaunch
+        $command = "cd '$pwd'; $($MyInvocation.Line)"
+
+        # Append parameters if their corresponding variables are $true and not already in the command
+        if ($Force -and !($command -imatch '\s-Force\b')) { $command += " -Force" }
+        if ($ForceClose -and !($command -imatch '\s-ForceClose\b')) { $command += " -ForceClose" }
+        if ($Debug -and !($command -imatch '\s-Debug\b')) { $command += " -Debug" }
+
+        # Relaunch in conhost
+        if ([Environment]::Is64BitOperatingSystem) {
+            if ([Environment]::Is64BitProcess) {
+                Start-Process -FilePath "conhost.exe" -ArgumentList "powershell -ExecutionPolicy Bypass -Command &{$command}" -Verb RunAs
+            } else {
+                Start-Process -FilePath "$env:windir\sysnative\conhost.exe" -ArgumentList "powershell -ExecutionPolicy Bypass -Command &{$command}" -Verb RunAs
+            }
+        } else {
+            Start-Process -FilePath "conhost.exe" -ArgumentList "powershell -ExecutionPolicy Bypass -Command &{$command}" -Verb RunAs
+        }
+
+        # Stop the current process module
+        Stop-Process -id $currentProcess.Id
+    } else {
+        Write-Warning "Windows Terminal not detected, continuing..."
     }
 }
 
@@ -811,59 +904,22 @@ try {
     # Install prerequisites
     # ============================================================================ #
 
-    # VCLibs
-    Install-Prerequisite -Name "VCLibs" -Version "14.00" -Url "https://store.rg-adguard.net/api/GetFiles" -AlternateUrl "https://aka.ms/Microsoft.VCLibs.$arch.14.00.Desktop.appx" -ContentType "application/x-www-form-urlencoded" -Body "type=PackageFamilyName&url=Microsoft.VCLibs.140.00_8wekyb3d8bbwe&ring=RP&lang=en-US"
+    Write-Section "Prerequisites"
 
-    # UI.Xaml
-    Install-Prerequisite -Name "UI.Xaml" -Version "2.7.3" -Url "https://store.rg-adguard.net/api/GetFiles" -AlternateUrl "https://www.nuget.org/api/v2/package/Microsoft.UI.Xaml/2.7.3" -ContentType "application/x-www-form-urlencoded" -Body "type=ProductId&url=9P5VK8KZB5QZ&ring=RP&lang=en-US" -NupkgVersion "2.7.3" -AppxFileVersion "2.7"
-
-    # ============================================================================ #
-    # Install winget
-    # ============================================================================ #
-
-    $TempFolder = Get-TempFolder
-
-    # Output
-    Write-Section "Downloading & installing winget..."
-
-    Write-Output "Retrieving download URL for winget from GitHub..."
-    $wingetUrl = Get-WingetDownloadUrl -Match "msixbundle"
-    $wingetPath = Join-Path -Path $tempFolder -ChildPath "winget.msixbundle"
-    $wingetLicenseUrl = Get-WingetDownloadUrl -Match "License1.xml"
-    $wingetLicensePath = Join-Path -Path $tempFolder -ChildPath "license1.xml"
-
-    # If the URL is empty, throw error
-    if ($wingetUrl -eq "") {
-        throw "URL is empty"
-    }
-
-    Write-Output "Downloading winget..."
-    if ($DebugMode) {
-        Write-Output "`nURL: $wingetUrl"
-        Write-Output "Saving as: $wingetPath"
-    }
-    Invoke-WebRequest -Uri $wingetUrl -OutFile $wingetPath
-
-    Write-Output "Downloading license..."
-    if ($DebugMode) {
-        Write-Output "`nURL: $wingetLicenseUrl"
-        Write-Output "Saving as: $wingetLicensePath"
-    }
-    Invoke-WebRequest -Uri $wingetLicenseUrl -OutFile $wingetLicensePath
-
-    Write-Output "`nInstalling winget..."
-
-    # Debugging
-    if ($DebugMode) {
-        Write-Output "wingetPath: $wingetPath"
-        Write-Output "wingetLicensePath: $wingetLicensePath"
-    }
-
-    # Try to install winget
     try {
-        # Add-AppxPackage will throw an error if the app is already installed or higher version installed, so we need to catch it and continue
-        Add-AppxProvisionedPackage -Online -PackagePath $wingetPath -LicensePath $wingetLicensePath -ErrorAction SilentlyContinue | Out-Null
-        Write-Output "`nwinget installed successfully."
+        # Download VCLibs
+        $VCLibs_Url = "https://aka.ms/Microsoft.VCLibs.${arch}.14.00.Desktop.appx"
+        $VCLibs_Path = New-TemporaryFile2
+        Write-Output "Downloading VCLibs..."
+        Write-Debug "Downloading VCLibs from $VCLibs_Url to $VCLibs_Path`n`n"
+        Invoke-WebRequest -Uri $VCLibs_Url -OutFile $VCLibs_Path
+
+        # Download UI.Xaml
+        $UIXaml_Url = "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.${arch}.appx"
+        $UIXaml_Path = New-TemporaryFile2
+        Write-Output "Downloading UI.Xaml..."
+        Write-Debug "Downloading UI.Xaml from $UIXaml_Url to $UIXaml_Path"
+        Invoke-WebRequest -Uri $UIXaml_Url -OutFile $UIXaml_Path
     } catch {
         $errorHandled = Handle-Error $_
         if ($null -ne $errorHandled) {
@@ -872,29 +928,122 @@ try {
         $errorHandled = $null
     }
 
-    # Cleanup
-    if ($DisableCleanup -eq $false) {
-        if ($DebugMode) { Write-Output "" } # Extra line break for readability if DebugMode is enabled
-        Cleanup -Path $wingetPath
-        Cleanup -Path $wingetLicensePath
+    # ============================================================================ #
+    #  winget
+    # ============================================================================ #
+
+    Write-Section "winget"
+
+    # winget
+    try {
+        # Download winget license
+        $winget_license_path = New-TemporaryFile2
+        $winget_license_url = Get-WingetDownloadUrl -Match "License1.xml"
+        Write-Output "Downloading winget license..."
+        Write-Debug "Downloading winget license from $winget_license_url to $winget_license_path`n`n"
+        Invoke-WebRequest -Uri $winget_license_url -OutFile $winget_license_path
+
+        # Download winget
+        $winget_path = New-TemporaryFile2
+        $winget_url = "https://aka.ms/getwinget"
+        Write-Output "Downloading winget..."
+        Write-Debug "Downloading winget from $winget_url to $winget_path`n`n"
+        Invoke-WebRequest -Uri $winget_url -OutFile $winget_path
+
+        # Install everything
+        Write-Output "Installing winget and its dependencies..."
+        Add-AppxProvisionedPackage -Online -PackagePath $winget_path -DependencyPackagePath $UIXaml_Path, $VCLibs_Path -LicensePath $winget_license_path | Out-Null
+
+        # Remove temporary files
+        Write-Debug "Removing temporary files..."
+        TryRemove $VCLibs_Path
+        TryRemove $UIXaml_Path
+        TryRemove $winget_path
+        TryRemove $winget_license_path
+    } catch {
+        $errorHandled = Handle-Error $_
+        if ($null -ne $errorHandled) {
+            throw $errorHandled
+        }
+        $errorHandled = $null
     }
 
     # ============================================================================ #
-    # PATH environment variable
+    #  Server 2019 only
     # ============================================================================ #
 
-    # Add the WindowsApps directory to the PATH variable
-    Write-Section "Checking and adding WindowsApps directory to PATH variable for current user if not present..."
-    $WindowsAppsPath = [IO.Path]::Combine([Environment]::GetEnvironmentVariable("LOCALAPPDATA"), "Microsoft", "WindowsApps")
-    Update-PathEnvironmentVariable -NewPath $WindowsAppsPath
+    if ($osVersion.Type -eq "Server" -and $osVersion.NumericVersion -eq 2019) {
+        # ============================================================================ #
+        # Visual C++ Redistributable
+        # ============================================================================ #
+
+        Write-Section "Visual C++ Redistributable (Server 2019 only)"
+
+        # Test if Visual C++ Redistributable is not installed
+        if (!(Test-VCRedistInstalled)) {
+            Write-Debug "Visual C++ Redistributable is not installed.`n`n"
+
+            # Define the URL and temporary file path for the download
+            $VCppRedistributable_Url = "https://aka.ms/vs/17/release/vc_redist.${arch}.exe"
+            $VCppRedistributable_Path = New-TemporaryFile2
+            Write-Output "Downloading Visual C++ Redistributable..."
+            Write-Debug "Downloading Visual C++ Redistributable from $VCppRedistributable_Url to $VCppRedistributable_Path`n`n"
+            Invoke-WebRequest -Uri $VCppRedistributable_Url -OutFile $VCppRedistributable_Path
+
+            # Rename file
+            $VCppRedistributableExe_Path = $VCppRedistributable_Path + ".exe"
+            Rename-Item -Path $VCppRedistributable_Path -NewName $VCppRedistributableExe_Path
+
+            # Install Visual C++ Redistributable
+            Write-Output "Installing Visual C++ Redistributable..."
+            Write-Debug "Installing Visual C++ Redistributable from $VCppRedistributableExe_Path`n`n"
+            Start-Process -FilePath $VCppRedistributableExe_Path -ArgumentList "/install", "/quiet", "/norestart" -Wait
+
+            Write-Debug "Removing temporary file..."
+            TryRemove $VCppRedistributableExe_Path
+        } else {
+            Write-Output "Visual C++ Redistributable is already installed."
+        }
+
+        # ============================================================================ #
+        # Adjust access rights & PATH environment variable
+        # ============================================================================ #
+
+        Write-Section "Adjust access rights & PATH environment variable (Server 2019 only)"
+
+        # Find the last version of WinGet folder path
+        $WinGetFolderPath = Get-ChildItem -Path ([IO.Path]::Combine($env:ProgramFiles, 'WindowsApps')) -Filter "Microsoft.DesktopAppInstaller_*_${arch}__8wekyb3d8bbwe" | Sort-Object Name | Select-Object -Last 1
+        Write-Debug "WinGetFolderPath: $WinGetFolderPath`n`n"
+
+        if ($null -ne $WinGetFolderPath) {
+            $WinGetFolderPath = $WinGetFolderPath.FullName
+            # Fix Permissions
+            Write-Output "Fixing permissions for $WinGetFolderPath..."
+            $acl = Get-Acl $WinGetFolderPath
+            $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule($env:USERNAME, "FullControl", "ContainerInherit,ObjectInherit", "None", "Allow")
+            $acl.SetAccessRule($accessRule)
+            Set-Acl -Path $WinGetFolderPath -AclObject $acl
+
+            # Add Environment Path
+            Add-ToEnvironmentPath -PathToAdd $WinGetFolderPath
+        } else {
+            Write-Warning "winget folder path not found. You may need to manually add winget's folder path to your system PATH environment variable."
+        }
+    }
+
+    # ============================================================================ #
+    #  Done
+    # ============================================================================ #
+
+    Write-Section "Complete"
+
+    Write-Output "winget installed successfully."
 
     # ============================================================================ #
     # Finished
     # ============================================================================ #
 
-    Write-Section "Installation complete!"
-
-    # Timeout for 5 seconds to check winget
+    # Timeout before checking winget
     Write-Output "Checking if winget is installed and working..."
     Start-Sleep -Seconds 3
 
@@ -902,10 +1051,33 @@ try {
     if (Get-WingetStatus -eq $true) {
         Write-Output "winget is installed and working now, you can go ahead and use it."
     } else {
-        Write-Warning "winget is installed but is not detected as a command. Try using winget now. If it doesn't work, wait about 1 minute and try again (it is sometimes delayed). Also try restarting your computer."
-        Write-Warning "If you restart your computer and the command still isn't recognized, please read the Troubleshooting section`nof the README: https://github.com/asheroto/winget-install#troubleshooting`n"
-        Write-Warning "Make sure you have the latest version of the script by running this command: $PowerShellGalleryName -CheckForUpdate"
+        # ============================================================================ #
+        # Register winget
+        # ============================================================================ #
+
+        # If winget is not detected as a command, try registering it
+        Write-Section "Registering"
+        try {
+            Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe -ErrorAction Stop
+            Write-Output "winget command registered successfully."
+        } catch {
+            Write-Warning "Unable to register winget. You may need to restart your computer for winget to work."
+            $errorHandled = Handle-Error $_
+            if ($null -ne $errorHandled) {
+                throw $errorHandled
+            }
+            $errorHandled = $null
+        }
+
+        # If winget is still not detected as a command, show warning
+        if (Get-WingetStatus -eq $false) {
+            Write-Warning "winget is installed but is not detected as a command. Try using winget now. If it doesn't work, wait about 1 minute and try again (it is sometimes delayed). Also try restarting your computer."
+            Write-Warning "If you restart your computer and the command still isn't recognized, please read the Troubleshooting section`nof the README: https://github.com/asheroto/winget-install#troubleshooting`n"
+            Write-Warning "Make sure you have the latest version of the script by running this command: $PowerShellGalleryName -CheckForUpdate`n`n"
+        }
     }
+
+    ExitWithDelay 0
 } catch {
     # ============================================================================ #
     # Error handling
@@ -913,13 +1085,15 @@ try {
 
     Write-Section "WARNING! An error occurred during installation!"
     Write-Warning "If messages above don't help and the problem persists, please read the Troubleshooting section`nof the README: https://github.com/asheroto/winget-install#troubleshooting"
-    Write-Warning "Make sure you have the latest version of the script by running this command: $PowerShellGalleryName -CheckForUpdate"
+    Write-Warning "Make sure you have the latest version of the script by running this command: $PowerShellGalleryName -CheckForUpdate`n`n"
 
     # If it's not 0x80073D02 (resources in use), show error
     if ($_.Exception.Message -notmatch '0x80073D02') {
-        if ($DebugMode) {
+        if ($Debug) {
             Write-Warning "Line number : $($_.InvocationInfo.ScriptLineNumber)"
         }
         Write-Warning "Error: $($_.Exception.Message)`n"
     }
+
+    ExitWithDelay 1
 }
