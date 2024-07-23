@@ -6,38 +6,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Credit to :
  - [winget-install](https://github.com/asheroto/winget-install)
  - [winutil](https://github.com/ChrisTitusTech/winutil)
