@@ -19,11 +19,12 @@ if (-not (Test-IsAdmin)) {
 
 # Define the scripts and their descriptions(optional)
 $scripts = @(
-    @{ Name = ".\DownloadWindowsPrograms\InstallWinAppsWithWinget.ps1"; Description = "Bulk install windows progarm " },
-    @{ Name = ".\WindowsConfigFiles\SetWT&PS_settings.ps1"; Description = "Set WindowsTerminal & PowerShell Settings " }
-    # @{ Name = "Script3.ps1"; Description = "Description of Script 3" },
+    @{ Name = ".\DownloadWindowsPrograms\Install_winget.ps1"; Description = "Install winget"; Parameter = "-Force"; SleepTime = 5; MessageAfter = "You may need to restart if did not work"},
+    @{ Name = ".\DownloadWindowsPrograms\InstallWinAppsWithWinget.ps1"; Description = "Bulk install windows progarm"; Parameter = ""; SleepTime = 0; MessageAfter = "" },
+    @{ Name = ".\WindowsConfigFiles\SetWT&PS_settings.ps1"; Description = "Set WindowsTerminal & PowerShell Settings"; Parameter = ""; SleepTime = 0; MessageAfter = "" }
     # @{ Name = "Script4.ps1"; Description = "Description of Script 4" },
-    # @{ Name = "Script5.ps1"; Description = "Description of Script 5" }
+    # @{ Name = "Script5.ps1"; Description = "Description of Script 5" },
+    # @{ Name = "Script6.ps1"; Description = "Description of Script 6" }
 )
 
 # Function to display the menu and get user choice
@@ -48,6 +49,9 @@ do {
 
     if ($choice -gt 0 -and $choice -le $scripts.Count) {
         $scriptToRun = $scripts[$choice - 1].Name
+        $scriptParameter = $scripts[$choice - 1].Parameter
+        $sleepTime = $scripts[$choice - 1].SleepTime
+        $messageAfter = $scripts[$choice - 1].MessageAfter
         $scriptDirectory = Split-Path -Parent $scriptToRun
         $originalDirectory = Get-Location
 
@@ -61,7 +65,18 @@ do {
         
         Write-Host "`nRunning $scriptToRun...`n"
         Write-Output "================================================================"
-        & .\$(Split-Path -Leaf $scriptToRun)
+        # & .\$(Split-Path -Leaf $scriptToRun)
+        if ($scriptParameter) {
+            & .\$(Split-Path -Leaf $scriptToRun) $scriptParameter
+        } else {
+            & .\$(Split-Path -Leaf $scriptToRun)
+        }
+        if($sleepTime){
+            Start-Sleep -Seconds $sleepTime
+        }
+        if($messageAfter){
+            Write-Output $messageAfter
+        }
 
         Write-Output "`n================================================================"
         Write-Output "================================================================"

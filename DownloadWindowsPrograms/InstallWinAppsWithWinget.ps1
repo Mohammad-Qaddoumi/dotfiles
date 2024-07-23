@@ -1,34 +1,34 @@
 # Function to test if winget is installed
-function Test-Winget {
-    $wingetPath = (Get-Command winget -ErrorAction SilentlyContinue).Path
-    if ($null -eq $wingetPath) {
-        Write-Output "winget is not installed. Installing winget..."
-        Install-Winget
-    } else {
-        Write-Output "winget is already installed at $wingetPath."
-    }
-}
+# function Test-Winget {
+#     $wingetPath = (Get-Command winget -ErrorAction SilentlyContinue).Path
+#     if ($null -eq $wingetPath) {
+#         Write-Output "winget is not installed. Installing winget..."
+#         Install-Winget
+#     } else {
+#         Write-Output "winget is already installed at $wingetPath."
+#     }
+# }
 
-# Function to install winget
-function Install-Winget {
-    # Download the latest winget installer
-    $wingetInstallerUrl = "https://aka.ms/getwinget"
-    $wingetInstallerPath = "$env:TEMP\wingetInstaller.msixbundle"
-    Write-Output "Downloading winget installer from $wingetInstallerUrl..."
-    Invoke-WebRequest -Uri $wingetInstallerUrl -OutFile $wingetInstallerPath
+# # Function to install winget
+# function Install-Winget {
+#     # Download the latest winget installer
+#     $wingetInstallerUrl = "https://aka.ms/getwinget"
+#     $wingetInstallerPath = "$env:TEMP\wingetInstaller.msixbundle"
+#     Write-Output "Downloading winget installer from $wingetInstallerUrl..."
+#     Invoke-WebRequest -Uri $wingetInstallerUrl -OutFile $wingetInstallerPath
     
-    # Install winget
-    Write-Output "Installing winget from $wingetInstallerPath..."
-    Add-AppxPackage -Path $wingetInstallerPath
+#     # Install winget
+#     Write-Output "Installing winget from $wingetInstallerPath..."
+#     Add-AppxPackage -Path $wingetInstallerPath
     
-    # Verify installation
-    if (Get-Command winget -ErrorAction SilentlyContinue) {
-        Write-Output "winget installed successfully."
-    } else {
-        Write-Output "Failed to install winget."
-        exit 1
-    }
-}
+#     # Verify installation
+#     if (Get-Command winget -ErrorAction SilentlyContinue) {
+#         Write-Output "winget installed successfully."
+#     } else {
+#         Write-Output "Failed to install winget."
+#         exit 1
+#     }
+# }
 
 # Function to install a program using winget
 function Install-Program {
@@ -66,13 +66,17 @@ function Install-Program {
     }
 }
 
-# Ensure winget is installed
-Write-Output "`nChecking if winget is installed..."
-Test-Winget
-# Timeout for 5 seconds to check winget
-Start-Sleep -Seconds 3
-Write-Output "`nDouble Check if winget is installed..."
-Test-Winget
+# & .\winget.ps1 -Force
+# Write-Output "If winget did not work propeply, reboot the machine."
+# Start-Sleep -Seconds 5
+
+# # Ensure winget is installed
+# Write-Output "`nChecking if winget is installed..."
+# Test-Winget
+# # Timeout for 5 seconds to check winget
+# Start-Sleep -Seconds 3
+# Write-Output "`nDouble Check if winget is installed..."
+# Test-Winget
 
 Write-Output "`n================================================================"
 Write-Output "`n   === Refresh Environment Variabels : ===`n"
