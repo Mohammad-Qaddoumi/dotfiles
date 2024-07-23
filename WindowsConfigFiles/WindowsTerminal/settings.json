@@ -95,7 +95,7 @@
             {
                 "altGrAliasing": true,
                 "antialiasingMode": "grayscale",
-                "closeOnExit": "automatic",
+                "closeOnExit": "always",
                 "colorScheme": "Campbell",
                 "commandline": "%SystemRoot%\\System32\\cmd.exe",
                 "cursorShape": "bar",

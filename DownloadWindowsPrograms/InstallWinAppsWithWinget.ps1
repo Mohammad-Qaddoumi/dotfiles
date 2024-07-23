@@ -50,7 +50,8 @@ function Install-Program {
             $process = Start-Process -FilePath "winget" -ArgumentList $installArgs -NoNewWindow -PassThru
             $process.WaitForExit()
             # Check the exit code of the process
-            if ($process.ExitCode -eq 0) {
+            Write-Output $process.ExitCode
+            if ($process.ExitCode -eq 1) {
                 # Move the cursor up one line
                 Write-Host "`e[1A" -NoNewline
                 # Clear the bottom line
@@ -59,13 +60,6 @@ function Install-Program {
             } else {
                 Write-Host "Failed to install $program. Exit code: $($process.ExitCode)"
             }
-
-            # $installResult = winget install --id $program --accept-package-agreements --accept-source-agreements
-            # if ($installResult -match "Successfully installed") {
-            #     Write-Output "$program installed successfully."
-            # } else {
-            #     Write-Output "Failed to install $program. Exit code: $($installResult.ExitCode)"
-            # }
         } catch {
             Write-Output "An error occurred while attempting to install $program. Error: $_"
         }
