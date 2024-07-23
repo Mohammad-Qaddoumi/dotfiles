@@ -1,17 +1,21 @@
-# Define the registry path for the console settings
-$regPath = "HKCU:\Console"
+# Get the current user SID
+$currentUserSID = ([System.Security.Principal.WindowsIdentity]::GetCurrent()).User
 
-# Define the key and value for setting the default terminal
-$regKey = "ForceV2"
-$regValue = 1
+# Define the base registry path using the current user SID
+$baseRegPath = "HKU\$currentUserSID\Console\%%Startup"
+$delegationConsoleValue = "{2EACA947-7F5F-4CFA-BA87-8F7FBEEFBE69}"
+$delegationTerminalValue = "{E12CFF52-A866-4C77-9A90-F570A7AA2C6B}"
 
-# Check if the registry key exists
-if (-not (Test-Path $regPath)) {
-    New-Item -Path $regPath -Force
+# Ensure the path exists by attempting to get a property
+if (-not (Test-Path "Registry::$baseRegPath")) {
+    # Create the registry path if it doesn't exist
+    # New-Item -Path "Registry::HKU\$currentUserSID\Console" -Name "%%Startup" -Force | Out-Null
 }
 
-# Set the registry value
-Set-ItemProperty -Path $regPath -Name $regKey -Value $regValue -Force
+# Set the DelegationConsole value
+New-ItemProperty -Path "Registry::$baseRegPath" -Name "DelegationConsole" -Value $delegationConsoleValue -PropertyType String -Force
 
-# Inform the user
-Write-Output "Default terminal has been set to Windows Terminal."
+# Set the DelegationTerminal value
+New-ItemProperty -Path "Registry::$baseRegPath" -Name "DelegationTerminal" -Value $delegationTerminalValue -PropertyType String -Force
+
+Write-Host "Registry values updated successfully."
