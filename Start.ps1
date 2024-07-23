@@ -19,7 +19,7 @@ if (-not (Test-IsAdmin)) {
 
 # Define the scripts and their descriptions(optional)
 $scripts = @(
-    @{ Name = ".\DownloadWindowsPrograms\Install_winget.ps1"; Description = "Install winget"; Parameter = "-Force"; SleepTime = 5; MessageAfter = "You may need to restart if did not work"},
+    @{ Name = ".\DownloadWindowsPrograms\Install_winget.ps1"; Description = "Install winget"; Parameter = "-Force:$true"; SleepTime = 5; MessageAfter = "You may need to restart if did not work"},
     @{ Name = ".\DownloadWindowsPrograms\InstallWinAppsWithWinget.ps1"; Description = "Bulk install windows progarm"; Parameter = ""; SleepTime = 0; MessageAfter = "" },
     @{ Name = ".\WindowsConfigFiles\SetWT&PS_settings.ps1"; Description = "Set WindowsTerminal & PowerShell Settings"; Parameter = ""; SleepTime = 0; MessageAfter = "" }
     # @{ Name = "Script4.ps1"; Description = "Description of Script 4" },
