@@ -8,7 +8,7 @@ function Get-LatestMesloLGSFontUrl {
 
 # Function to check if the font is already installed
 function Test-FontInstalled {
-    $fontFiles = @("MesloLGS NF Regular.ttf", "MesloLGS NF Bold.ttf", "MesloLGS NF Italic.ttf", "MesloLGS NF Bold Italic.ttf")
+    $fontFiles = @("MesloLGLNerdFont-Regular.ttf", "MesloLGLNerdFont-Bold.ttf", "MesloLGLNerdFont-Italic.ttf", "MesloLGLNerdFont-BoldItalic.ttf")
     $fontsFolder = "$env:SystemRoot\\Fonts"
     
     foreach ($fontFile in $fontFiles) {
@@ -19,9 +19,33 @@ function Test-FontInstalled {
     return $true
 }
 
+# # Check if the font is already installed
+# if (Test-FontInstalled) {
+#     $userInput = Read-Host "The Meslo LG Nerd Font is already installed. Do you want to reinstall it? (y/n)"
+#     if ($userInput -ne "y") {
+#         Write-Output "Installation aborted."
+#         exit
+#     }
+# }
 # Check if the font is already installed
 if (Test-FontInstalled) {
-    $userInput = Read-Host "The Meslo LG Nerd Font is already installed. Do you want to reinstall it? (y/n)"
+    Write-Host "The Meslo LG Nerd Font is already installed. Do you want to reinstall it? (y/n)"
+    $defaultChoice = "n"
+    $timeout = 5
+    $userInput = $null
+    $timer = [System.Diagnostics.Stopwatch]::StartNew()
+
+    while ($timer.Elapsed.TotalSeconds -lt $timeout -and -not $userInput) {
+        if ($Host.UI.RawUI.KeyAvailable) {
+            $userInput = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown").Character
+            $timer.Stop()
+        }
+    }
+
+    if (-not $userInput) {
+        $userInput = $defaultChoice
+    }
+
     if ($userInput -ne "y") {
         Write-Output "Installation aborted."
         exit
@@ -67,6 +91,8 @@ foreach ($fontFile in $fontFiles) {
     # Register the font in the system
     $fontRegKey = "HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts"
     $fontRegName = $fontFileName
+    New-ItemProperty -Path $fontRegKey -Name $fontRegName -Value $fontFileName -PropertyType String -Force
+    $fontRegKey = "HKCU:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts"
     New-ItemProperty -Path $fontRegKey -Name $fontRegName -Value $fontFileName -PropertyType String -Force
 }
 
