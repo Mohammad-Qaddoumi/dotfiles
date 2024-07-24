@@ -19,37 +19,14 @@ function Test-FontInstalled {
     return $true
 }
 
-# # Check if the font is already installed
-# if (Test-FontInstalled) {
-#     $userInput = Read-Host "The Meslo LG Nerd Font is already installed. Do you want to reinstall it? (y/n)"
-#     if ($userInput -ne "y") {
-#         Write-Output "Installation aborted."
-#         exit
-#     }
-# }
 # Check if the font is already installed
 if (Test-FontInstalled) {
-    Write-Host "The Meslo LG Nerd Font is already installed. Do you want to reinstall it? (y/n)"
-    $defaultChoice = "n"
-    $timeout = 5
-    $userInput = $null
-    $timer = [System.Diagnostics.Stopwatch]::StartNew()
-
-    while ($timer.Elapsed.TotalSeconds -lt $timeout -and -not $userInput) {
-        if ($Host.UI.RawUI.KeyAvailable) {
-            $userInput = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown").Character
-            $timer.Stop()
-        }
-    }
-
-    if (-not $userInput) {
-        $userInput = $defaultChoice
-    }
-
-    if ($userInput -ne "y") {
-        Write-Output "Installation aborted."
-        exit
-    }
+    "The Meslo LG Nerd Font is already installed."
+    Write-Output "Installation aborted."
+    exit
+}
+else{
+    Write-Output "Installing the fonts :"
 }
 
 # Get the latest MesloLGS Nerd Font URL
