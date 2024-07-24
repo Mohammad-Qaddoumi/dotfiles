@@ -65,19 +65,17 @@ do {
         
         Write-Host "`nRunning $scriptToRun...`n"
         Write-Output "================================================================"
-        # & .\$(Split-Path -Leaf $scriptToRun)
         if ($scriptParameter) {
-            # & .\$(Split-Path -Leaf $scriptToRun) $scriptParameter
             $command = "& .\$(Split-Path -Leaf $scriptToRun) $scriptParameter"
             Invoke-Expression $command
         } else {
             & .\$(Split-Path -Leaf $scriptToRun)
         }
-        if($sleepTime){
-            Start-Sleep -Seconds $sleepTime
-        }
         if($messageAfter){
             Write-Output $messageAfter
+        }
+        if($sleepTime){
+            Start-Sleep -Seconds $sleepTime
         }
 
         Write-Output "`n================================================================"

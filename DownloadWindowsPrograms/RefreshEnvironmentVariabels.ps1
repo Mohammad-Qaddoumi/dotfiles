@@ -44,14 +44,6 @@ Write-Output "Checking and adding WindowsApps directory to PATH variable for cur
 $WindowsAppsPath = [IO.Path]::Combine([Environment]::GetEnvironmentVariable("LOCALAPPDATA"), "Microsoft", "WindowsApps")
 Update-PathEnvironmentVariable -NewPath $WindowsAppsPath
 
-# Reload environment variables from the system (user and machine)
-# [System.Environment]::GetEnvironmentVariables([System.EnvironmentVariableTarget]::User).GetEnumerator() | ForEach-Object {
-#     [System.Environment]::SetEnvironmentVariable($_.Key, $_.Value, 'Process')
-# }
-# [System.Environment]::GetEnvironmentVariables([System.EnvironmentVariableTarget]::Machine).GetEnumerator() | ForEach-Object {
-#     [System.Environment]::SetEnvironmentVariable($_.Key, $_.Value, 'Process')
-# }
-
 $ENV:PATH = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
 
 # Display refreshed environment variables
