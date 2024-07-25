@@ -12,4 +12,4 @@ foreach($program in $PROGRAMS_ID){
 
 Write-Output "`n================================================================"
 Write-Output "`n   === Refresh Environment Variabels : ===`n"
-& ..\DownloadWindowsPrograms\RefreshEnvironmentVariabels.ps1
+& .\DownloadWindowsPrograms\RefreshEnvironmentVariabels.ps1
