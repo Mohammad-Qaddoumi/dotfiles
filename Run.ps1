@@ -1,7 +1,12 @@
 # Check for admin privileges
 if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
 {
-    Write-Warning "This script requires administrator privileges. Please run as administrator."
+    Write-Output "================================================================`n"
+    Write-Output "Run the script with Admin rights`n"
+    Write-Output "Change Excution Policy by running : `n"
+    Write-Output "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine`n"
+    Write-Output "================================================================`n"
+    Write-Warning "Exiting ..."
     pause
     exit
 }
