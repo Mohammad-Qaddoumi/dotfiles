@@ -18,6 +18,8 @@ if (-not (Test-IsAdmin)) {
 }
 
 # Define the scripts and their descriptions(optional)
+# TODO: make a command to do a pre requisite ,like winget ,powershell ,windows terminal ...
+#       in one command
 $scripts = @(
     @{ Name = ".\DownloadWindowsPrograms\Install_winget.ps1"; Description = "Install winget"; Parameter = "-Force"; SleepTime = 5; MessageAfter = "You may need to restart if did not work"},
     @{ Name = ".\DownloadWindowsPrograms\InstallWinAppsWithWinget.ps1"; Description = "Bulk install windows progarm"; Parameter = ""; SleepTime = 0; MessageAfter = "" },
