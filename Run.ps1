@@ -35,16 +35,27 @@ if ($args[0] -eq "continue") {
 # Wait for 5 seconds
 Start-Sleep -Seconds 5
 
+if (Get-ScheduledTask -TaskName "ContinueInstallation" -ErrorAction SilentlyContinue) {
+    Unregister-ScheduledTask -TaskName "ContinueInstallation" -Confirm:$false
+}
 # Create a scheduled task to continue after reboot
 $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File `"$PSCommandPath`" continue"
 $trigger = New-ScheduledTaskTrigger -AtLogOn
 $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
 Register-ScheduledTask -TaskName "ContinueInstallation" -Action $action -Trigger $trigger -Principal $principal -Force
+# Add this after the Register-ScheduledTask line
+if ($?) {
+    Write-Host "Scheduled task created successfully"
+} else {
+    Write-Host "Failed to create scheduled task. Error: $($Error[0])"
+}
 
 Write-Host "Do you want to reboot(recommended)? (y/n)" -NoNewline
 $userInput = Read-Host
 if ($userInput -ne "y") {
+    Unregister-ScheduledTask -TaskName "ContinueInstallation" -Confirm:$false
     Continue-AfterReboot
+    exit
 }
 else{
     # Reboot the system
