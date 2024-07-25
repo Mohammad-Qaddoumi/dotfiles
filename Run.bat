@@ -11,8 +11,8 @@ if not "%1"=="RUNNING" (
 :: Change directory to the location of the batch file
 cd /d "%~dp0"
 
-:: TODO: Try installing powershell last version by installing pre requisite script first 
-::       then try lunch the main script with pwsh (the new powershell)
+REM TODO: Try installing powershell last version by installing pre requisite script first 
+REM       then try lunch the main script with pwsh (the new powershell)
 
 :: Your PowerShell script or commands go here
 powershell -NoProfile -ExecutionPolicy Bypass -Command "& '.\Start.ps1'"
