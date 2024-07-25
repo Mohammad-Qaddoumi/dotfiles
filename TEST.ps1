@@ -22,6 +22,7 @@ function CheckIfTheUserWantToContinue {
             if (Test-Path $OutputFile) {
                 $userInput = Get-Content $OutputFile -Raw
             }
+            Write-Host "`nChoosing : $userInput"
             break
         }
         if (Get-Job -Id $timeoutJob.Id | Where-Object { $_.State -eq 'Completed' }) {
