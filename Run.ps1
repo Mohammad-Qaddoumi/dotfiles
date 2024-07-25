@@ -25,7 +25,7 @@ if ($args[0] -eq "continue") {
 }
 
 # Run install_winget.ps1 with -Force parameter
-& "$PSScriptRoot\install_winget.ps1" -Force
+& "$PSScriptRoot\PreRequisite\install_winget.ps1" -Force
 
 # Wait for 5 seconds
 Start-Sleep -Seconds 5
