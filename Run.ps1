@@ -20,7 +20,7 @@ function Continue-AfterReboot {
     & "$PSScriptRoot\PreRequisite\install_PS_and_WT.ps1"
 
     # Launch Start.ps1 in the new PowerShell (pwsh)
-    Start-Process pwsh -ArgumentList "-ExecutionPolicy Bypass -File `"$PSScriptRoot\Start.ps1`"" -Wait
+    Start-Process pwsh -ArgumentList "-ExecutionPolicy Bypass -File `"$PSScriptRoot\Start.ps1`""
 }
 
 # Check if we're continuing after a reboot
@@ -41,5 +41,12 @@ $trigger = New-ScheduledTaskTrigger -AtLogOn
 $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
 Register-ScheduledTask -TaskName "ContinueInstallation" -Action $action -Trigger $trigger -Principal $principal -Force
 
-# Reboot the system
-Restart-Computer -Force
+Write-Host "Do you want to reboot(recommended)? (y/n)" -NoNewline
+$userInput = Read-Host
+if ($userInput -ne "y") {
+    Continue-AfterReboot
+}
+else{
+    # Reboot the system
+    Restart-Computer -Force
+}
