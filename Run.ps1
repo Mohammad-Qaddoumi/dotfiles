@@ -13,6 +13,7 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     else{
         Start-Process powershell -Verb runAs -ArgumentList "-ExecutionPolicy Bypass -File `".\Run.ps1`""
     }
+    Start-Process PowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd '$pwd'; & '$PSCommandPath';`""
 
     Write-Warning "Exiting ..."
     pause
