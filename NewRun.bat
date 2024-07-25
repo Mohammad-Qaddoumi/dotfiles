@@ -15,7 +15,7 @@ REM Check if we're continuing after a reboot
 if "%1"=="continue" goto continue
 
 REM Run install_winget.ps1 with -Force parameter
-powershell -ExecutionPolicy Bypass -File .\install_winget.ps1 -Force
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& '.\install_winget.ps1' -Force"
 
 REM Wait for 5 seconds
 timeout /t 5 /nobreak
