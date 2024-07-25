@@ -14,10 +14,11 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 # Function to continue after reboot
 function Continue-AfterReboot {
     # Remove the scheduled task
-    Unregister-ScheduledTask -TaskName "ContinueInstallation" -Confirm:$false
-
+    if (Get-ScheduledTask -TaskName "ContinueInstallation" -ErrorAction SilentlyContinue) {
+        Unregister-ScheduledTask -TaskName "ContinueInstallation" -Confirm:$false
+    }
     # Run install_PS_and_WT.ps1
-    & "$PSScriptRoot\PreRequisite\install_PS_and_WT.ps1"
+    & "$PSScriptRoot\PreRequisite\install_PS_WT_Git.ps1"
 
     # Launch Start.ps1 in the new PowerShell (pwsh)
     Start-Process pwsh -ArgumentList "-ExecutionPolicy Bypass -File `"$PSScriptRoot\Start.ps1`""

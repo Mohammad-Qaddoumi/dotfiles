@@ -1,8 +1,5 @@
 $WINGET_PROGRAMS_ID = @(
-    "Microsoft.PowerShell",
-    "Microsoft.WindowsTerminal",
     "JanDeDobbeleer.OhMyPosh", # powershell prompt
-    "Git.Git",
     "GitHub.cli"
     # "PDFLabs.PDFtk.Free", # PDF merge
     # "OpenJS.NodeJS",  # NodeJS
@@ -29,7 +26,7 @@ $WINGET_PROGRAMS_ID = @(
     # "qBittorrent.qBittorrent",
     # "VideoLAN.VLC",
     # "Zoom.Zoom"
-    )
+)
 
 # Suppress the warning for this variable
 $WINGET_PROGRAMS_ID = $WINGET_PROGRAMS_ID # PSScriptAnalyzer disable:PSUseDeclaredVarsMoreThanAssignments
