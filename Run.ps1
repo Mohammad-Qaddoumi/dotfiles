@@ -7,6 +7,7 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     Write-Output "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine`n"
     Write-Output "================================================================`n"
 
+    # $PSCommandPath : Contains the full path and filename of the script that's being run
     if ($args[0] -eq "continue") {
         Start-Process PowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd '$pwd'; & '$PSCommandPath' continue;`""
     }
