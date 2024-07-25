@@ -12,7 +12,7 @@ function Continue-AfterReboot {
     Unregister-ScheduledTask -TaskName "ContinueInstallation" -Confirm:$false
 
     # Run install_PS_and_WT.ps1
-    & "$PSScriptRoot\install_PS_and_WT.ps1"
+    & "$PSScriptRoot\PreRequisite\install_PS_and_WT.ps1"
 
     # Launch Start.ps1 in the new PowerShell (pwsh)
     Start-Process pwsh -ArgumentList "-ExecutionPolicy Bypass -File `"$PSScriptRoot\Start.ps1`"" -Wait
