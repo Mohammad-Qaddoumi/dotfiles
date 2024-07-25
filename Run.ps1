@@ -3,16 +3,23 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 {
     Write-Output "================================================================`n"
     Write-Output "Run the script with Admin rights`n"
-    Write-Output "Change Excution Policy by running : `n"
+    Write-Output "Change Execution Policy by running : `n"
     Write-Output "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine`n"
     Write-Output "================================================================`n"
 
     # $PSCommandPath : Contains the full path and filename of the script that's being run
-    if ($args[0] -eq "continue") {
-        Start-Process PowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd '$pwd'; & '$PSCommandPath' continue;`""
+    try {
+        if ($args[0] -eq "continue") {
+            Start-Process PowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd '$pwd'; & '$PSCommandPath' continue;`"" -ErrorAction Stop
+        }
+        else {
+            Start-Process PowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd '$pwd'; & '$PSCommandPath';`"" -ErrorAction Stop
+        }
     }
-    else{
-        Start-Process PowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd '$pwd'; & '$PSCommandPath';`""
+    catch {
+        Write-Error "Failed to start PowerShell with admin rights. Error: $_"
+        pause
+        exit 1
     }
 
     Write-Warning "Exiting ..."
@@ -27,10 +34,26 @@ function Resume-AfterReboot {
         Unregister-ScheduledTask -TaskName "ContinueInstallation" -Confirm:$false
     }
     # Run install_PS_and_WT.ps1
-    & "$PSScriptRoot\PreRequisite\install_PS_WT_Git.ps1"
+    $installScript = Join-Path $PSScriptRoot "PreRequisite\install_PS_WT_Git.ps1"
+    if (Test-Path $installScript) {
+        & $installScript
+    }
+    else {
+        Write-Error "Cannot find script: $installScript"
+        pause
+        exit 1
+    }
 
     # Launch Start.ps1 in the new PowerShell (pwsh)
-    Start-Process pwsh -ArgumentList "-ExecutionPolicy Bypass -File `"$PSScriptRoot\Start.ps1`""
+    $startScript = Join-Path $PSScriptRoot "Start.ps1"
+    if (Test-Path $startScript) {
+        Start-Process pwsh -ArgumentList "-ExecutionPolicy Bypass -File `"$startScript`""
+    }
+    else {
+        Write-Error "Cannot find script: $startScript"
+        pause
+        exit 1
+    }
 }
 
 # Check if we're continuing after a reboot
@@ -40,7 +63,15 @@ if ($args[0] -eq "continue") {
 }
 
 # Run install_winget.ps1 with -Force parameter
-& "$PSScriptRoot\PreRequisite\install_winget.ps1" -Force
+$wingetScript = Join-Path $PSScriptRoot "PreRequisite\install_winget.ps1"
+if (Test-Path $wingetScript) {
+    & $wingetScript -Force
+}
+else {
+    Write-Error "Cannot find script: $wingetScript"
+    pause
+    exit 1
+}
 
 # Wait for 5 seconds
 Start-Sleep -Seconds 5
@@ -48,26 +79,31 @@ Start-Sleep -Seconds 5
 if (Get-ScheduledTask -TaskName "ContinueInstallation" -ErrorAction SilentlyContinue) {
     Unregister-ScheduledTask -TaskName "ContinueInstallation" -Confirm:$false
 }
+
 # Create a scheduled task to continue after reboot
-$action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File `"$PSCommandPath`" continue"
-$trigger = New-ScheduledTaskTrigger -AtLogOn
-$principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
-Register-ScheduledTask -TaskName "ContinueInstallation" -Action $action -Trigger $trigger -Principal $principal -Force
-# Add this after the Register-ScheduledTask line
-if ($?) {
+try {
+    $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File `"$PSCommandPath`" continue"
+    $trigger = New-ScheduledTaskTrigger -AtLogOn
+    $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
+    Register-ScheduledTask -TaskName "ContinueInstallation" -Action $action -Trigger $trigger -Principal $principal -Force
     Write-Host "Scheduled task created successfully"
-} else {
-    Write-Host "Failed to create scheduled task. Error: $($Error[0])"
+}
+catch {
+    Write-Error "Failed to create scheduled task. Error: $_"
+    pause
+    exit 1
 }
 
-Write-Host "Do you want to reboot(recommended)? (y/n)" -NoNewline
-$userInput = Read-Host
+do {
+    $userInput = Read-Host "Do you want to reboot (recommended)? (y/n)"
+} while ($userInput -notmatch '^[yn]$')
+
 if ($userInput -ne "y") {
     Unregister-ScheduledTask -TaskName "ContinueInstallation" -Confirm:$false
     Resume-AfterReboot
     exit
 }
-else{
+else {
     # Reboot the system
     Restart-Computer -Force
 }
