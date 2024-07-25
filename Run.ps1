@@ -6,6 +6,14 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     Write-Output "Change Excution Policy by running : `n"
     Write-Output "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine`n"
     Write-Output "================================================================`n"
+
+    if ($args[0] -eq "continue") {
+        Start-Process powershell -PassThru -Verb runAs -ArgumentList "-ExecutionPolicy Bypass -File `".\Run.ps1`" continue"
+    }
+    else{
+        Start-Process powershell -PassThru -Verb runAs -ArgumentList "-ExecutionPolicy Bypass -File `".\Run.ps1`""
+    }
+
     Write-Warning "Exiting ..."
     pause
     exit
