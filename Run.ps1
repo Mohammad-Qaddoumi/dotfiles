@@ -12,7 +12,7 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 }
 
 # Function to continue after reboot
-function Continue-AfterReboot {
+function Resume-AfterReboot {
     # Remove the scheduled task
     if (Get-ScheduledTask -TaskName "ContinueInstallation" -ErrorAction SilentlyContinue) {
         Unregister-ScheduledTask -TaskName "ContinueInstallation" -Confirm:$false
@@ -26,7 +26,7 @@ function Continue-AfterReboot {
 
 # Check if we're continuing after a reboot
 if ($args[0] -eq "continue") {
-    Continue-AfterReboot
+    Resume-AfterReboot
     exit
 }
 
@@ -55,7 +55,7 @@ Write-Host "Do you want to reboot(recommended)? (y/n)" -NoNewline
 $userInput = Read-Host
 if ($userInput -ne "y") {
     Unregister-ScheduledTask -TaskName "ContinueInstallation" -Confirm:$false
-    Continue-AfterReboot
+    Resume-AfterReboot
     exit
 }
 else{
