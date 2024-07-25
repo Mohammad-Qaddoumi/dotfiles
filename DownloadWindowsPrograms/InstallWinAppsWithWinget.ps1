@@ -19,6 +19,7 @@ function Install-Program {
             $process.WaitForExit()
             # Check the exit code of the process
             Write-Output $process.ExitCode
+            # TODO: fix checking for error
             if ($process.ExitCode -eq 1) {
                 # Move the cursor up one line
                 Write-Host "`e[1A" -NoNewline

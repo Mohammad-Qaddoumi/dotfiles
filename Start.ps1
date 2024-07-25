@@ -33,6 +33,7 @@ function Show-Menu {
         [string]$prompt = 'Select a script to run:'
     )
 
+    # TODO: make a choice to run everythings.
     Write-Host $prompt
     for ($i = 0; $i -lt $scripts.Count; $i++) {
         Write-Host "$($i + 1). $($scripts[$i].Description)"
