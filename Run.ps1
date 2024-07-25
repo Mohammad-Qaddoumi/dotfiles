@@ -8,10 +8,10 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     Write-Output "================================================================`n"
 
     if ($args[0] -eq "continue") {
-        Start-Process powershell -PassThru -Verb runAs -ArgumentList "-ExecutionPolicy Bypass -File `".\Run.ps1`" continue"
+        Start-Process powershell -Verb runAs -ArgumentList "-ExecutionPolicy Bypass -File `".\Run.ps1`" continue"
     }
     else{
-        Start-Process powershell -PassThru -Verb runAs -ArgumentList "-ExecutionPolicy Bypass -File `".\Run.ps1`""
+        Start-Process powershell -Verb runAs -ArgumentList "-ExecutionPolicy Bypass -File `".\Run.ps1`""
     }
 
     Write-Warning "Exiting ..."
