@@ -96,14 +96,14 @@ catch {
 
 do {
     $userInput = Read-Host "Do you want to reboot (recommended)? (y/n)"
-} while ($userInput -notmatch '^[yn]$')
+    $userInput = $userInput.ToLower()
+} while ($userInput -notmatch '^(y|n|yes|no)$')
 
-if ($userInput -ne "y") {
+if ($userInput -eq 'y' -or $userInput -eq 'yes') {
     Unregister-ScheduledTask -TaskName "ContinueInstallation" -Confirm:$false
     Resume-AfterReboot
     exit
 }
-else {
-    # Reboot the system
-    Restart-Computer -Force
-}
+
+# Reboot the system
+Restart-Computer -Force

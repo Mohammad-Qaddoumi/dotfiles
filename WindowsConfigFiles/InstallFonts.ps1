@@ -33,7 +33,7 @@ function CheckIfTheUserWantToContinue {
         return $defaultValue
     } -ArgumentList $TimeoutSeconds, $DefaultValue
 
-    $command = "Write-Host `"$Prompt `" -NoNewline;`$UserInput = Read-Host;if ([string]::IsNullOrWhiteSpace(`$UserInput)) {`$UserInput = `"$DefaultValue`"}`$UserInput | Out-File -FilePath `"$OutputFile`" -NoNewline"
+    $command = "Write-Host `"$Prompt `" -NoNewline;`$UserInput = Read-Host;if ([string]::IsNullOrWhiteSpace(`$UserInput)) {`$UserInput = `"$DefaultValue`"}`$UserInput = `$UserInput.ToLower();`$UserInput | Out-File -FilePath `"$OutputFile`" -NoNewline"
 
     # Start the process with the command
     $process = Start-Process pwsh -NoNewWindow -PassThru -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"$command`""
