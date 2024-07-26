@@ -44,8 +44,8 @@ function Resume-AfterReboot {
         exit 1
     }
 
-    # Launch Start.ps1 in the new PowerShell (pwsh)
-    $startScript = Join-Path $PSScriptRoot "Start.ps1"
+    # Launch RunSecond.ps1 in the new PowerShell (pwsh)
+    $startScript = Join-Path $PSScriptRoot "RunSecond.ps1"
     if (Test-Path $startScript) {
         Start-Process pwsh -ArgumentList "-ExecutionPolicy Bypass -File `"$startScript`""
     }

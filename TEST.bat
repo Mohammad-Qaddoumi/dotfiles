@@ -1,14 +1,21 @@
 @echo off
-SET scriptFileName=TEST.ps1
-SET scriptFolderPath=%~dp0
-SET powershellScriptFileName=%scriptFileName%
-SET "mycommand=Set-Location '%scriptFolderPath%' ; .\%powershellScriptFileName%"
-
-REM Start PowerShell with elevated privileges and run the script
-powershell -NoProfile -Command "& {Start-Process powershell -ArgumentList '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', \"%mycommand%\" -Verb RunAs}"
-
-if %ERRORLEVEL% neq 0 (
-    echo Failed to start PowerShell script with admin rights.
-    pause
-    exit /b 1
+:: Check for administrative privileges
+:: If not running as admin, relaunch the script with admin rights
+>nul 2>&1 set "suppressOutput=1"
+set "params=%*"
+if not "%1"=="RUNNING" (
+    powershell -Command "Start-Process cmd.exe -ArgumentList '/c \"%~f0\" RUNNING %params%' -Verb RunAs"
+    exit /b
 )
+
+:: Change directory to the location of the batch file
+cd /d "%~dp0"
+
+REM TODO: Try installing powershell last version by installing pre requisite script first 
+REM       then try lunch the main script with pwsh (the new powershell)
+
+:: Your PowerShell script or commands go here
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& '.\Start.ps1'"
+
+:: Pause to keep the window open
+pause
