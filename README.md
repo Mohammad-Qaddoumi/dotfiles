@@ -7,8 +7,6 @@
 # How to use
 
  - Run [RunFirst.bat]
- - after the reboot if it did not start automaticlly 
-   Run [RunSecond.bat] in the new powershell [pwsh]
 
 
 # Credit to :
