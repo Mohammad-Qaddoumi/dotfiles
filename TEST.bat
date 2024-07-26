@@ -1,21 +1,23 @@
 @echo off
-:: Check for administrative privileges
-:: If not running as admin, relaunch the script with admin rights
->nul 2>&1 set "suppressOutput=1"
-set "params=%*"
-if not "%1"=="RUNNING" (
-    powershell -Command "Start-Process cmd.exe -ArgumentList '/c \"%~f0\" RUNNING %params%' -Verb RunAs"
-    exit /b
+SET scriptFileName=%~n0
+SET scriptFolderPath=%~dp0
+SET powershellScriptFileName=%scriptFileName%.ps1
+SET "mycommand=Set-Location '%scriptFolderPath%' ; .\%powershellScriptFileName%"
+SET "TaskName=ContinueInstallation"
+SET "mycontinue=continue"
+
+schtasks /query /tn "%TaskName%" >nul 2>&1
+
+if %ERRORLEVEL% equ 0 (
+    echo The "%TaskName%" task exists.
+    powershell -NoProfile -Command "& {Start-Process powershell -ArgumentList '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', \"%mycommand% %mycontinue% \" -Verb RunAs}"
+) else (
+    echo The "%TaskName%" task does not exist.
+    powershell -NoProfile -Command "& {Start-Process powershell -ArgumentList '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', \"%mycommand%\" -Verb RunAs}"
 )
 
-:: Change directory to the location of the batch file
-cd /d "%~dp0"
-
-REM TODO: Try installing powershell last version by installing pre requisite script first 
-REM       then try lunch the main script with pwsh (the new powershell)
-
-:: Your PowerShell script or commands go here
-powershell -NoProfile -ExecutionPolicy Bypass -Command "& '.\Start.ps1'"
-
-:: Pause to keep the window open
-pause
+if %ERRORLEVEL% neq 0 (
+    echo Failed to start PowerShell script with admin rights.
+    pause
+    exit /b 1
+)

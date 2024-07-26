@@ -1,7 +1,7 @@
 @echo off
-SET scriptFileName=TEST.ps1
+SET scriptFileName=%~n0
 SET scriptFolderPath=%~dp0
-SET powershellScriptFileName=%scriptFileName%
+SET powershellScriptFileName=%scriptFileName%.ps1
 SET "mycommand=Set-Location '%scriptFolderPath%' ; .\%powershellScriptFileName%"
 SET "TaskName=ContinueInstallation"
 SET "mycontinue=continue"
