@@ -23,7 +23,7 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     }
 
     Write-Warning "Exiting ..."
-    pause
+    Start-Sleep -Seconds 7
     exit
 }
 
@@ -94,8 +94,9 @@ catch {
     exit 1
 }
 
+# TODO: fix this
 do {
-    $userInput = Read-Host "Do you want to reboot (recommended)? (y/n)"
+    $userInput = Read-Host "`nDo you want to reboot (recommended)? (y/n)"
     $userInput = $userInput.ToLower()
 } while ($userInput -notmatch '^(y|n|yes|no)$')
 

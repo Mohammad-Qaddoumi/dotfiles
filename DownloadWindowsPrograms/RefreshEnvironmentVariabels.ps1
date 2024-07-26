@@ -49,4 +49,4 @@ $ENV:PATH = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";
 # Display refreshed environment variables
 Write-Output "`nRefreshed environment variables:`n"
 Get-ChildItem Env:
-Write-Output "`nDone"
+Write-Output "`nDone Refreshing ENV"

@@ -77,8 +77,6 @@ if (Test-FontInstalled) {
     }
 }
 
-Write-Output "Installing the fonts :"
-
 # Get the latest MesloLGS Nerd Font URL
 $fontUrl = Get-LatestMesloLGSFontUrl
 if (-not $fontUrl) {
