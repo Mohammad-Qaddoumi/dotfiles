@@ -8,7 +8,7 @@
 
  - Run [RunFirst.bat]
  - after the reboot if it did not start automaticlly 
-   Run [RunSecond.ps1] in the new powershell [pwsh]
+   Run [RunSecond.bat] in the new powershell [pwsh]
 
 
 # Credit to :
