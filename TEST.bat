@@ -1,16 +1,14 @@
 @echo off
-set scriptFileName=%~n0
-set scriptFolderPath=%~dp0
-set powershellScriptFileName=%scriptFileName%.ps1
+SET scriptFileName=TEST.ps1
+SET scriptFolderPath=%~dp0
+SET powershellScriptFileName=%scriptFileName%
+SET "mycommand=Set-Location '%scriptFolderPath%' ; .\%powershellScriptFileName%"
 
-echo "%scriptFolderPath%%powershellScriptFileName%"
-set "mycommand=cd \"%scriptFolderPath%\"; & .\\\"%powershellScriptFileName%\""
-echo %mycommand%
-powershell -NoNewWindow -Command "Start-Process powershell -NoNewWindow -Verb RunAs -ArgumentList '-ExecutionPolicy Bypass -NoProfile -NoExit -Command \"%mycommand%\"'"
+REM Start PowerShell with elevated privileges and run the script
+powershell -NoProfile -Command "& {Start-Process powershell -ArgumentList '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', \"%mycommand%\" -Verb RunAs}"
 
 if %ERRORLEVEL% neq 0 (
     echo Failed to start PowerShell script with admin rights.
     pause
     exit /b 1
 )
-pause
