@@ -7,7 +7,7 @@ Write-Host "Start the script testing"
 Write-Host "===================================`n`n"
 
 
-$program = "Git.Git"
+$program = "GitHub.cli"
 try {
     $installArgs = "install --id $program --accept-package-agreements --accept-source-agreements"
     $process = Start-Process -FilePath "winget" -ArgumentList $installArgs -NoNewWindow -PassThru -Wait
