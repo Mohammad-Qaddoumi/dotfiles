@@ -10,6 +10,8 @@ if (Get-ScheduledTask -TaskName "ContinueInstallation" -ErrorAction SilentlyCont
 if ($args[0] -eq "continue") {
     Write-Host "continue is passed"
     Write-Host "Running after reboot"
+    # Pause for a while to view the output
+    Start-Sleep -Seconds 30
 }
 else{
     # Create a scheduled task to continue after reboot
