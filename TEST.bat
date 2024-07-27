@@ -6,6 +6,7 @@ SET "mycommand=Set-Location '%scriptFolderPath%' ; .\%powershellScriptFileName%"
 SET "TaskName=ContinueInstallation"
 SET "mycontinue=continue"
 
+schtasks /create /tn "%TaskName%" /tr powershell /sc onstart /ru Reskit\Administrator
 schtasks /query /tn "%TaskName%" >nul 2>&1
 
 if %ERRORLEVEL% equ 0 (
