@@ -21,7 +21,7 @@ if (-not (Test-IsAdmin)) {
 # TODO: make a command to do a pre requisite ,like winget ,powershell ,windows terminal ...
 #       in one command
 $scripts = @(
-    @{ Name = ".\PreRequisite\Install_winget.ps1"; Description = "Install winget"; Parameter = "-Force"; SleepTime = 5; MessageAfter = "You may need to restart if did not work"},
+    @{ Name = ".\PreRequisite\RunAllPreRequisite.ps1"; Description = "Install all pre requisite"; Parameter = ""; SleepTime = 0; MessageAfter = "You may need to restart if did not work"},
     @{ Name = ".\DownloadWindowsPrograms\InstallWinAppsWithWinget.ps1"; Description = "Bulk install windows progarm"; Parameter = ""; SleepTime = 0; MessageAfter = "" },
     @{ Name = ".\WindowsConfigFiles\SetWT&PS_settings.ps1"; Description = "Set WindowsTerminal & PowerShell Settings"; Parameter = ""; SleepTime = 0; MessageAfter = "" }
     # @{ Name = "Script4.ps1"; Description = "Description of Script 4" },
