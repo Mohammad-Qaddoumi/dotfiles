@@ -20,7 +20,7 @@
 
 ## option 2
 
- - Download and run
+ - Download and run in one command
   ```powershell
   $url = "https://github.com/Qaddoumi/dotfiles/archive/refs/heads/master.zip"; $destinationPath = ([Environment]::GetFolderPath('Desktop')); Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\temp.zip"; Expand-Archive -Path "$env:TEMP\temp.zip" -DestinationPath $destinationPath -Force; Remove-Item "$env:TEMP\temp.zip";Set-Location "$destinationPath\dotfiles-master";& .\RunFirst.bat;
   ```
