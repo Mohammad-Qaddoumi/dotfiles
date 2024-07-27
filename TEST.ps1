@@ -1,3 +1,8 @@
+# Log outputs to a file
+$scriptDirectory = Split-Path -Parent $PSCommandPath
+$logFile = "$scriptDirectory\LogFile.txt"
+Start-Transcript -Path $logFile -Append
+
 Write-Host "I made it"
 Write-Host $PSCommandPath
 
@@ -6,19 +11,20 @@ if (Get-ScheduledTask -TaskName "ContinueInstallation" -ErrorAction SilentlyCont
     Unregister-ScheduledTask -TaskName "ContinueInstallation" -Confirm:$false
 }
 
-
 if ($args[0] -eq "continue") {
     Write-Host "continue is passed"
     Write-Host "Running after reboot"
-    # Pause for a while to view the output
-    Start-Sleep -Seconds 30
+    
+    # Display message box
+    Add-Type -AssemblyName PresentationFramework
+    [System.Windows.MessageBox]::Show("Script ran successfully after reboot")
 }
 else{
     # Create a scheduled task to continue after reboot
     try {
         $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File `"$PSCommandPath`" continue"
         $trigger = New-ScheduledTaskTrigger -AtLogOn
-        $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
+        $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
         Register-ScheduledTask -TaskName "ContinueInstallation" -Action $action -Trigger $trigger -Principal $principal -Force
         Write-Host "Scheduled task created successfully"
     }
@@ -29,5 +35,7 @@ else{
     }
 }
 
+Stop-Transcript
 
+# Pause to allow viewing of the script output
 Pause
