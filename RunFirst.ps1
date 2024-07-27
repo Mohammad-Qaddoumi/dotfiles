@@ -10,10 +10,10 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     # $PSCommandPath : Contains the full path and filename of the script that's being run
     try {
         if ($args[0] -eq "continue") {
-            Start-Process PowerShell -NoNewWindow -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd `"$pwd`"; & `"$PSCommandPath`" continue;`"" -ErrorAction Stop
+            Start-Process PowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd `"$pwd`"; & `"$PSCommandPath`" continue;`"" -ErrorAction Stop
         }
         else {
-            Start-Process PowerShell -NoNewWindow -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd `"$pwd`"; & `"$PSCommandPath`";`"" -ErrorAction Stop
+            Start-Process PowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd `"$pwd`"; & `"$PSCommandPath`";`"" -ErrorAction Stop
         }
     }
     catch {
