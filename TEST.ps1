@@ -10,8 +10,8 @@ Write-Host "===================================`n`n"
 $program = "GitHub.cli"
 try {
     $installArgs = "install --id $program --accept-package-agreements --accept-source-agreements"
-    $process = Start-Process -FilePath "winget" -ArgumentList $installArgs -NoNewWindow -PassThru -Wait
-    
+    $process = Start-Process -FilePath "winget" -ArgumentList $installArgs -NoNewWindow -PassThru
+    $process.WaitForExit()
     # Check the exit code of the process
     $exitCode = $process.ExitCode
     Write-Output "Exit Code: $exitCode"
