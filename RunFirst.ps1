@@ -82,9 +82,9 @@ if (Get-ScheduledTask -TaskName "ContinueInstallation" -ErrorAction SilentlyCont
 
 # Create a scheduled task to continue after reboot
 try {
-    $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File `"$PSCommandPath`" continue"
+    $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -Command `"Set-Location `"$(Get-Location)`"; & `"$PSCommandPath`" continue;`""
     $trigger = New-ScheduledTaskTrigger -AtLogOn
-    $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
+    $principal = New-ScheduledTaskPrincipal -UserID $env:UserName -LogonType ServiceAccount -RunLevel Highest
     Register-ScheduledTask -TaskName "ContinueInstallation" -Action $action -Trigger $trigger -Principal $principal -Force
     Write-Host "Scheduled task created successfully"
 }
