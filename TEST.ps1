@@ -1,18 +1,10 @@
 Write-Host "I made it"
 
-do {
-    $userInput = Read-Host "`nDo you want to reboot (recommended)? (y/n)"
-    $userInput = $userInput.ToLower()
-} while ($userInput -notmatch '^(y|n|yes|no)$')
-
-Write-Host "UserInput : $userInput"
-
-if ($userInput -eq 'y' -or $userInput -eq 'yes') {
-    Write-Host "YES"
+if ($args[0] -eq "continue"){
+    Write-Host "continue is passed"
 }
-else
-{
-    Write-Host "NO"
+else {
+    Write-Host "No continue"
 }
 
 

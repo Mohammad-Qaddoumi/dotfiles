@@ -23,7 +23,7 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     }
 
     Write-Warning "Exiting ..."
-    Start-Sleep -Seconds 7
+    Start-Sleep -Seconds 5
     exit
 }
 
