@@ -6,6 +6,10 @@
 
 # How to use
 
+  - use this code in powershell
+  ```$url = "https://github.com/Qaddoumi/dotfiles/archive/refs/heads/master.zip"; $destinationPath = Join-Path -Path ([Environment]::GetFolderPath('Desktop')) -ChildPath "dotfiles"; Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\temp.zip"; Expand-Archive -Path "$env:TEMP\temp.zip" -DestinationPath $destinationPath -Force; Remove-Item "$env:TEMP\temp.zip"```
+
+
  - Run [RunFirst.bat](https://github.com/Qaddoumi/dotfiles/blob/master/RunFirst.bat) To Install All pre requisite.
  
  - RunFirst should start [RunSecound.bat](https://github.com/Qaddoumi/dotfiles/blob/master/RunSecond.bat) by itself but 
