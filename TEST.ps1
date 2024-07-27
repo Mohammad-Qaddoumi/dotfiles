@@ -3,37 +3,31 @@ $scriptDirectory = Split-Path -Parent $PSCommandPath
 $logFile = "$scriptDirectory\LogFile.txt"
 Start-Transcript -Path $logFile -Append
 
-Write-Host "I made it"
-Write-Host $PSCommandPath
+Write-Host "Start the script testing"
+Write-Host "===================================`n`n"
 
-# Remove the scheduled task
-if (Get-ScheduledTask -TaskName "ContinueInstallation" -ErrorAction SilentlyContinue) {
-    Unregister-ScheduledTask -TaskName "ContinueInstallation" -Confirm:$false
-}
 
-if ($args[0] -eq "continue") {
-    Write-Host "continue is passed"
-    Write-Host "Running after reboot"
+$program = "Git.Git"
+try {
+    $installArgs = "install --id $program --accept-package-agreements --accept-source-agreements"
+    $process = Start-Process -FilePath "winget" -ArgumentList $installArgs -NoNewWindow -PassThru -Wait
     
-    # Display message box
-    Add-Type -AssemblyName PresentationFramework
-    [System.Windows.MessageBox]::Show("Script ran successfully after reboot")
-}
-else{
-    # Create a scheduled task to continue after reboot
-    try {
-        $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File `"$PSCommandPath`" continue"
-        $trigger = New-ScheduledTaskTrigger -AtLogOn
-        $principal = New-ScheduledTaskPrincipal -UserID $env:UserName -LogonType ServiceAccount -RunLevel Highest
-        Register-ScheduledTask -TaskName "ContinueInstallation" -Action $action -Trigger $trigger -Principal $principal -Force
-        Write-Host "Scheduled task created successfully"
+    # Check the exit code of the process
+    $exitCode = $process.ExitCode
+    Write-Output "Exit Code: $exitCode"
+    
+    if ($exitCode -eq 0) {
+        # Move the cursor up one line and clear it
+        Write-Host "`e[1A`e[K" -NoNewline
+        Write-Host "Successfully Installed (ID): $program"
+    } else {
+        Write-Host "Failed to install $program. Exit code: $exitCode"
     }
-    catch {
-        Write-Error "Failed to create scheduled task. Error: $_"
-        pause
-        exit 1
-    }
+} catch {
+    Write-Output "An error occurred while attempting to install $program. Error: $_"
 }
+
+
 
 Stop-Transcript
 
