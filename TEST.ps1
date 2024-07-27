@@ -33,9 +33,14 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 }
 
 
+if ($args[0] -eq "continue") {
+    Write-Host "Continue"
+}
+else {
+    Write-Host "No Continue"
+}
+
 Write-Host "Runs With Admin Exiting >>>"
-
-
 
 
 
