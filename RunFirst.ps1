@@ -44,6 +44,17 @@ function Resume-AfterReboot {
         exit 1
     }
 
+    # Run SET_EP.ps1
+    $installScript = Join-Path $PSScriptRoot "PreRequisite\SET_EP.ps1"
+    if (Test-Path $installScript) {
+        & $installScript
+    }
+    else {
+        Write-Error "Cannot find script: $installScript"
+        pause
+        exit 1
+    }
+
     # Launch RunSecond.ps1 in the new PowerShell (pwsh)
     $startScript = Join-Path $PSScriptRoot "RunSecond.ps1"
     if (Test-Path $startScript) {

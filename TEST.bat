@@ -3,6 +3,7 @@
 SET "mycommand=Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine"
 
 powershell -NoProfile -Command "& {Start-Process powershell -ArgumentList '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', \"%mycommand%\" -Verb RunAs}"
+pwsh -NoProfile -Command "& {Start-Process pwsh -ArgumentList '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', \"%mycommand%\" -Verb RunAs}"
 
 
 if %ERRORLEVEL% neq 0 (
