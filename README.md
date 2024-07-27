@@ -8,7 +8,7 @@
 
   - Use this code in powershell to download the files and extract into desktop
   ```powershell
-  $url = "https://github.com/Qaddoumi/dotfiles/archive/refs/heads/master.zip"; $destinationPath = Join-Path -Path ([Environment]::GetFolderPath('Desktop')) -ChildPath "dotfiles"; Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\temp.zip"; Expand-Archive -Path "$env:TEMP\temp.zip" -DestinationPath $destinationPath -Force; Remove-Item "$env:TEMP\temp.zip"
+  $url = "https://github.com/Qaddoumi/dotfiles/archive/refs/heads/master.zip"; $destinationPath = ([Environment]::GetFolderPath('Desktop')); Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\temp.zip"; Expand-Archive -Path "$env:TEMP\temp.zip" -DestinationPath $destinationPath -Force; Remove-Item "$env:TEMP\temp.zip";Set-Location "$destinationPath\dotfiles-master";
   ```
 
 
