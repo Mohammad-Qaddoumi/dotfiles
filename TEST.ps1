@@ -9,8 +9,8 @@ Write-Host "===================================`n`n"
 
 
 $Theme = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize"
-Set-ItemProperty -Path $Theme -Name AppsUseLightTheme -Value 1
-Set-ItemProperty -Path $Theme -Name SystemUsesLightTheme -Value 1
+Set-ItemProperty -Path $Theme -Name AppsUseLightTheme -Value 0
+Set-ItemProperty -Path $Theme -Name SystemUsesLightTheme -Value 0
 
 
 

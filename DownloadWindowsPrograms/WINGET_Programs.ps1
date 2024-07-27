@@ -1,6 +1,8 @@
 $WINGET_PROGRAMS_ID = @(
     "JanDeDobbeleer.OhMyPosh", # powershell prompt
-    "GitHub.cli"
+    "GitHub.cli",
+    "Microsoft.VisualStudioCode"
+    # "Microsoft.VisualStudio.2022.Community"
     # "PDFLabs.PDFtk.Free", # PDF merge
     # "OpenJS.NodeJS",  # NodeJS
     # "Google.GoogleDrive",
