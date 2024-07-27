@@ -6,8 +6,8 @@
 
 # How to use
 
- - Run [RunFirst.bat] To Install All pre requisite
-   RunFirst should start [RunSecound.bat] by itself but 
+ - Run [RunFirst.bat](https://github.com/Qaddoumi/dotfiles/blob/master/RunFirst.bat) To Install All pre requisite
+   RunFirst should start [RunSecound.bat](https://github.com/Qaddoumi/dotfiles/blob/master/RunSecond.bat) by itself but 
    if it did not start it manully
 
 
