@@ -18,10 +18,11 @@ function Install-Program {
             $process = Start-Process -FilePath "winget" -ArgumentList $installArgs -NoNewWindow -PassThru -Wait
             
             # Check the exit code of the process
-            if ($process.ExitCode -eq 0) {
-                Write-Host "Done Installing (ID): $program Exit code: $($process.ExitCode)"
+            $exitCode = $process.ExitCode
+            if ($exitCode -eq 0) {
+                Write-Host "Done Installing (ID): $program Exit code: $($exitCode)"
             } else {
-                Write-Host "Failed to install $program. Exit code: $($process.ExitCode)"
+                Write-Host "Failed to install $program. Exit code: $($exitCode)"
             }
         } catch {
             Write-Output "An error occurred while attempting to install $program. Error: $_"
