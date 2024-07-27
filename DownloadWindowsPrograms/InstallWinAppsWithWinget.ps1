@@ -15,17 +15,11 @@ function Install-Program {
         Write-Output "Attempting to install $program..."
         try {
             $installArgs = "install --id $program --accept-package-agreements --accept-source-agreements"
-            $process = Start-Process -FilePath "winget" -ArgumentList $installArgs -NoNewWindow -PassThru
-            $process.WaitForExit()
+            $process = Start-Process -FilePath "winget" -ArgumentList $installArgs -NoNewWindow -PassThru -Wait
+            
             # Check the exit code of the process
-            Write-Output $process.ExitCode
-            # TODO: fix checking for finished state
-            if ($process.ExitCode -eq 1) {
-                # Move the cursor up one line
-                Write-Host "`e[1A" -NoNewline
-                # Clear the bottom line
-                Write-Host "`e[K" -NoNewline  # Clear the current line from cursor to end of line
-                Write-Host "Successfully Installed (ID): $program"
+            if ($process.ExitCode -eq 0) {
+                Write-Host "Done Installing (ID): $program Exit code: $($process.ExitCode)"
             } else {
                 Write-Host "Failed to install $program. Exit code: $($process.ExitCode)"
             }
