@@ -6,7 +6,9 @@
 
 # How to use
 
- - Run [RunFirst.bat]
+ - Run [RunFirst.bat] To Install All pre requisite
+   RunFirst should start [RunSecound.bat] by itself but 
+   if it did not start it manully
 
 
 # Credit to :
