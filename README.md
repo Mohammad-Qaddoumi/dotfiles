@@ -1,4 +1,4 @@
-# dotfiles And settings
+# dotfiles AND settings
 
  - Nothing here is ready yet , maybe after a year 😒...
  
