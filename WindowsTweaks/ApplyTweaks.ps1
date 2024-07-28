@@ -17,7 +17,7 @@ function Enable-DarkMode {
         Write-Warning $psitem.Exception.StackTrace
     }
 }
-function Disable-BingSearch {
+function Enable-BingSearch {
     $Enabled = 1
     Try{
         Write-Host "Disabling Bing Search"
@@ -153,7 +153,7 @@ function Enable-TaskView {
 
 
 Enable-DarkMode
-Disable-BingSearch
+Enable-BingSearch
 Disable-SearchBoxTaskBar
 Enable-HiddenFiles
 Enable-HideFileExt
