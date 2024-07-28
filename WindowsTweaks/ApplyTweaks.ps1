@@ -5,7 +5,6 @@ function Enable-DarkMode {
         $Path = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize"
         Set-ItemProperty -Path $Path -Name AppsUseLightTheme -Value $DarkMoveValue
         Set-ItemProperty -Path $Path -Name SystemUsesLightTheme -Value $DarkMoveValue
-        Write-Output "Theme has been set"
     }
     Catch [System.Security.SecurityException] {
         Write-Warning "Unable to set $Path\$Name to $DarkMoveValue due to a Security Exception"
@@ -78,22 +77,15 @@ function Enable-HideFileExt {
 
 
 
-
-
 Enable-DarkMode
 Disable-BingSearch
 Enable-HiddenFiles
 Enable-HideFileExt
 
-@"
+<#
 Invoke-WinUtilDarkMode 
-
 Invoke-WinUtilBingSearch
-
 Invoke-WinUtilFeatureInstall
-
 Invoke-WinUtilGPU
-
 Invoke-WinUtilHiddenFiles
-
-"@
+#>
