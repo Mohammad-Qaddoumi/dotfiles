@@ -13,14 +13,5 @@
                       "WPFTweaksTeredo",
                       "WPFTweaksDeleteTempFiles",
                       "WPFTweaksPowershell7"
-                  ],
-    "Install":  [
-
-                ],
-    "WPFInstall":  [
-
-                   ],
-    "WPFFeature":  [
-
-                   ]
+                  ]
 }

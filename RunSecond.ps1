@@ -4,6 +4,7 @@ Write-Output "Change Excution Policy by running : `n"
 Write-Output "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine`n"
 Write-Output "================================================================`n"
 
+# TODO: make sure this script runs with pwsh not powershell
 # Check if running with admin rights
 function Test-IsAdmin {
     $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
