@@ -18,7 +18,7 @@ function Enable-DarkMode {
     }
 }
 function Disable-BingSearch {
-    $Enabled = 0
+    $Enabled = 1
     Try{
         Write-Host "Disabling Bing Search"
         $Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search"
