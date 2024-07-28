@@ -1,11 +1,10 @@
-# ************************************************
-# Create WinUtil shortcut on the desktop
-#
+# Create WinConf shortcut on the desktop
+
 $desktopPath = "$($env:USERPROFILE)\Desktop"
 # Specify the target PowerShell command
 $command = "`$url = `"https://github.com/Qaddoumi/dotfiles/archive/refs/heads/master.zip`"; `$destinationPath = ([Environment]::GetFolderPath('Desktop'));Set-Location `"`$destinationPath`";if (Test-Path -Path `"`$destinationPath\dotfiles-master`"){Remove-Item -Recurse dotfiles-master -Force} ;Invoke-WebRequest -Uri `$url -OutFile `"`$env:TEMP\temp.zip`"; Expand-Archive -Path `"`$env:TEMP\temp.zip`" -DestinationPath `$destinationPath -Force; Remove-Item `"`$env:TEMP\temp.zip`";Set-Location `"`$destinationPath\dotfiles-master`";Write-Host `"`nRun .\RunFirst.bat`n`";"
 # Specify the path for the shortcut
-$shortcutPath = Join-Path $desktopPath 'winutil.lnk'
+$shortcutPath = Join-Path $desktopPath 'winconf.lnk'
 # Create a shell object
 $shell = New-Object -ComObject WScript.Shell
 
@@ -32,8 +31,3 @@ $bytes[0x15] = $bytes[0x15] -bor 0x20
 [System.IO.File]::WriteAllBytes($shortcutPath, $bytes)
 
 Write-Host "Shortcut created at: $shortcutPath"
-#
-# Done create WinUtil shortcut on the desktop
-# ************************************************
-
-Start-Process explorer

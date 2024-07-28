@@ -25,6 +25,11 @@
   $url = "https://github.com/Qaddoumi/dotfiles/archive/refs/heads/master.zip"; $destinationPath = ([Environment]::GetFolderPath('Desktop')); Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\temp.zip"; Expand-Archive -Path "$env:TEMP\temp.zip" -DestinationPath $destinationPath -Force; Remove-Item "$env:TEMP\temp.zip";Set-Location "$destinationPath\dotfiles-master";& .\RunFirst.bat;
   ```
 
+## option 3
+  - Run in powershell
+```powershell
+irm https://raw.githubusercontent.com/Qaddoumi/dotfiles/master/CreateShortcut.ps1 | iex
+```
 
 # Credit to :
  - [winget-install](https://github.com/asheroto/winget-install)
