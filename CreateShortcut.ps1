@@ -1,10 +1,9 @@
 # Download the files and Create WinConf shortcut on the desktop
 
-# $desktopPath = "$($env:USERPROFILE)\Desktop"
-$desktopPath = "$([Environment]::GetFolderPath('Desktop'))"
+$desktopPath = "$($env:USERPROFILE)\Desktop"
 $url = "https://github.com/Qaddoumi/dotfiles/archive/refs/heads/master.zip";
 if (Test-Path -Path "$desktopPath\dotfiles-master"){
-    Remove-Item -Recurse dotfiles-master -Force
+    Remove-Item -Recurse "$desktopPath\dotfiles-master" -Force
 }
 Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\temp.zip"; 
 Expand-Archive -Path "$env:TEMP\temp.zip" -DestinationPath $desktopPath -Force; 
