@@ -17,7 +17,6 @@ function Enable-DarkMode {
         Write-Warning $psitem.Exception.StackTrace
     }
 }
-
 function Disable-BingSearch {
     $Enabled = 0
     Try{
@@ -36,7 +35,24 @@ function Disable-BingSearch {
         Write-Warning $psitem.Exception.StackTrace
     }
 }
-
+function Disable-SearchBoxTaskBar {
+    $Enabled = 0
+    Try{
+        Write-Host "Disabling Search Box TaskBar"
+        $Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search"
+        Set-ItemProperty -Path $Path -Name SearchboxTaskbarMode -Value $Enabled
+    }
+    Catch [System.Security.SecurityException] {
+        Write-Warning "Unable to set $Path\$Name to $Enabled due to a Security Exception"
+    }
+    Catch [System.Management.Automation.ItemNotFoundException] {
+        Write-Warning $psitem.Exception.ErrorRecord
+    }
+    Catch{
+        Write-Warning "Unable to set $Name due to unhandled exception"
+        Write-Warning $psitem.Exception.StackTrace
+    }
+}
 function Enable-HiddenFiles {
     $Enabled = 1
     Try{
@@ -55,7 +71,6 @@ function Enable-HiddenFiles {
         Write-Warning $psitem.Exception.StackTrace
     }
 }
-
 function Enable-HideFileExt {
     $Enabled = 0
     Try{
@@ -74,18 +89,75 @@ function Enable-HideFileExt {
         Write-Warning $psitem.Exception.StackTrace
     }
 }
+function Enable-TaskbarAlignment {
+    #Switches between Center & Left Taskbar Alignment
+    $Enabled = 0 # To the Left
+    Write-Host "Making Taskbar Alignment to the Left"
+    Try{
+        $Path = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+        Set-ItemProperty -Path $Path -Name "TaskbarAl" -Value $Enabled
+    }
+    Catch [System.Security.SecurityException] {
+        Write-Warning "Unable to set $Path\$Name to $Enabled due to a Security Exception"
+    }
+    Catch [System.Management.Automation.ItemNotFoundException] {
+        Write-Warning $psitem.Exception.ErrorRecord
+    }
+    Catch{
+        Write-Warning "Unable to set $Name due to unhandled exception"
+        Write-Warning $psitem.Exception.StackTrace
+    }
+}
+function Disable-TaskbarWidgets {
+    $Enabled = 0
+    Write-Host "Disabling Taskbar Widgets"
+    Try{
+        $Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+        Set-ItemProperty -Path $Path -Name TaskbarDa -Value $Enabled
+    }
+    Catch [System.Security.SecurityException] {
+        Write-Warning "Unable to set $Path\$Name to $Enabled due to a Security Exception"
+    }
+    Catch [System.Management.Automation.ItemNotFoundException] {
+        Write-Warning $psitem.Exception.ErrorRecord
+    }
+    Catch{
+        Write-Warning "Unable to set $Name due to unhandled exception"
+        Write-Warning $psitem.Exception.StackTrace
+    }
+}
+function Enable-TaskView {
+    Write-Host "Enabling Task View"
+    $Enabled = 1
+    Try{
+        $Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+        Set-ItemProperty -Path $Path -Name ShowTaskViewButton -Value $Enabled
+    }
+    Catch [System.Security.SecurityException] {
+        Write-Warning "Unable to set $Path\$Name to $Enabled due to a Security Exception"
+    }
+    Catch [System.Management.Automation.ItemNotFoundException] {
+        Write-Warning $psitem.Exception.ErrorRecord
+    }
+    Catch{
+        Write-Warning "Unable to set $Name due to unhandled exception"
+        Write-Warning $psitem.Exception.StackTrace
+    }
+}
+
+
+
+
+
 
 
 
 Enable-DarkMode
 Disable-BingSearch
+Disable-SearchBoxTaskBar
 Enable-HiddenFiles
 Enable-HideFileExt
+Enable-TaskbarAlignment
+Disable-TaskbarWidgets
+Enable-TaskView
 
-<#
-Invoke-WinUtilDarkMode 
-Invoke-WinUtilBingSearch
-Invoke-WinUtilFeatureInstall
-Invoke-WinUtilGPU
-Invoke-WinUtilHiddenFiles
-#>

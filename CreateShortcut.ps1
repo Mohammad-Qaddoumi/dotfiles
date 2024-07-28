@@ -19,12 +19,20 @@ $shell = New-Object -ComObject WScript.Shell
 # Create a shortcut object
 $shortcut = $shell.CreateShortcut($shortcutPath)
 
+# Invoke-WebRequest -Uri "https://christitus.com/images/logo-full.png" -OutFile "$env:TEMP\cttlogo.png"
 # if (Test-Path -Path "c:\Windows\mylogo.png")
 # {
 #     $shortcut.IconLocation = "c:\Windows\mylogo.png"
 # }
 
 # Set properties of the shortcut
+# # Use Powershell 7 if installed and fallback to PS5 if not
+# if (Get-Command "pwsh" -ErrorAction SilentlyContinue){
+#     $shortcut.TargetPath = "pwsh.exe"
+# }
+# else{
+#     $shortcut.TargetPath = "powershell.exe"
+# }
 $shortcut.TargetPath = "powershell.exe"
 $shortcut.Arguments = "-NoProfile -ExecutionPolicy Bypass -Command `"$command`""
 # Save the shortcut
