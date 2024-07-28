@@ -5,7 +5,7 @@ if ($isBuiltInWindowsPowerShell) {
     Write-Output "`nThis is the built-in Windows PowerShell, Installing NuGet provider...."
     
     # Install NuGet provider
-    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+    Install-PackageProvider -Name NuGet -Force
     
     # Verify installation
     if (Get-PackageProvider -Name NuGet -ErrorAction SilentlyContinue) {

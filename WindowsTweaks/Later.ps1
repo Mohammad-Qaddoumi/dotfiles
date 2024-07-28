@@ -699,7 +699,387 @@ function Invoke-WPFOOSU {
         $ProgressPreference = $Initial_ProgressPreference
     }
 }
+function Invoke-WPFUpdatesdefault {
+    <#
 
+    .SYNOPSIS
+        Resets Windows Update settings to default
+
+    #>
+    If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU")) {
+        New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Force | Out-Null
+    }
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "NoAutoUpdate" -Type DWord -Value 0
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUOptions" -Type DWord -Value 3
+    If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config")) {
+        New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Force | Out-Null
+    }
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name "DODownloadMode" -Type DWord -Value 1
+
+    $services = @(
+        "BITS"
+        "wuauserv"
+    )
+
+    foreach ($service in $services) {
+        # -ErrorAction SilentlyContinue is so it doesn't write an error to stdout if a service doesn't exist
+
+        Write-Host "Setting $service StartupType to Automatic"
+        Get-Service -Name $service -ErrorAction SilentlyContinue | Set-Service -StartupType Automatic
+    }
+    Write-Host "Enabling driver offering through Windows Update..."
+    Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Device Metadata" -Name "PreventDeviceMetadataFromNetwork" -ErrorAction SilentlyContinue
+    Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" -Name "DontPromptForWindowsUpdate" -ErrorAction SilentlyContinue
+    Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" -Name "DontSearchWindowsUpdate" -ErrorAction SilentlyContinue
+    Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" -Name "DriverUpdateWizardWuSearchEnabled" -ErrorAction SilentlyContinue
+    Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Name "ExcludeWUDriversInQualityUpdate" -ErrorAction SilentlyContinue
+    Write-Host "Enabling Windows Update automatic restart..."
+    Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "NoAutoRebootWithLoggedOnUsers" -ErrorAction SilentlyContinue
+    Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUPowerManagement" -ErrorAction SilentlyContinue
+    Write-Host "Enabled driver offering through Windows Update"
+    Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "BranchReadinessLevel" -ErrorAction SilentlyContinue
+    Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "DeferFeatureUpdatesPeriodInDays" -ErrorAction SilentlyContinue
+    Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "DeferQualityUpdatesPeriodInDays" -ErrorAction SilentlyContinue
+    Write-Host "==================================================="
+    Write-Host "---  Windows Update Settings Reset to Default   ---"
+    Write-Host "==================================================="
+}
+function Invoke-WPFUpdatesdisable {
+    <#
+
+    .SYNOPSIS
+        Disables Windows Update
+
+    .NOTES
+        Disabling Windows Update is not recommended. This is only for advanced users who know what they are doing.
+
+    #>
+    If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU")) {
+        New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Force | Out-Null
+    }
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "NoAutoUpdate" -Type DWord -Value 1
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUOptions" -Type DWord -Value 1
+    If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config")) {
+        New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Force | Out-Null
+    }
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name "DODownloadMode" -Type DWord -Value 0
+
+    $services = @(
+        "BITS"
+        "wuauserv"
+    )
+
+    foreach ($service in $services) {
+        # -ErrorAction SilentlyContinue is so it doesn't write an error to stdout if a service doesn't exist
+
+        Write-Host "Setting $service StartupType to Disabled"
+        Get-Service -Name $service -ErrorAction SilentlyContinue | Set-Service -StartupType Disabled
+    }
+    Write-Host "================================="
+    Write-Host "---   Updates ARE DISABLED    ---"
+    Write-Host "================================="
+}
+function Invoke-WPFUpdatessecurity {
+    <#
+
+    .SYNOPSIS
+        Sets Windows Update to recommended settings
+
+    .DESCRIPTION
+        1. Disables driver offering through Windows Update
+        2. Disables Windows Update automatic restart
+        3. Sets Windows Update to Semi-Annual Channel (Targeted)
+        4. Defers feature updates for 365 days
+        5. Defers quality updates for 4 days
+
+    #>
+    Write-Host "Disabling driver offering through Windows Update..."
+        If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Device Metadata")) {
+            New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Device Metadata" -Force | Out-Null
+        }
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Device Metadata" -Name "PreventDeviceMetadataFromNetwork" -Type DWord -Value 1
+        If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DriverSearching")) {
+            New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" -Force | Out-Null
+        }
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" -Name "DontPromptForWindowsUpdate" -Type DWord -Value 1
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" -Name "DontSearchWindowsUpdate" -Type DWord -Value 1
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" -Name "DriverUpdateWizardWuSearchEnabled" -Type DWord -Value 0
+        If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate")) {
+            New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" | Out-Null
+        }
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Name "ExcludeWUDriversInQualityUpdate" -Type DWord -Value 1
+        Write-Host "Disabling Windows Update automatic restart..."
+        If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU")) {
+            New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Force | Out-Null
+        }
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "NoAutoRebootWithLoggedOnUsers" -Type DWord -Value 1
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUPowerManagement" -Type DWord -Value 0
+        Write-Host "Disabled driver offering through Windows Update"
+        If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings")) {
+            New-Item -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Force | Out-Null
+        }
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "BranchReadinessLevel" -Type DWord -Value 20
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "DeferFeatureUpdatesPeriodInDays" -Type DWord -Value 365
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "DeferQualityUpdatesPeriodInDays" -Type DWord -Value 4
+
+        $ButtonType = [System.Windows.MessageBoxButton]::OK
+        $MessageboxTitle = "Set Security Updates"
+        $Messageboxbody = ("Recommended Update settings loaded")
+        $MessageIcon = [System.Windows.MessageBoxImage]::Information
+
+        [System.Windows.MessageBox]::Show($Messageboxbody, $MessageboxTitle, $ButtonType, $MessageIcon)
+        Write-Host "================================="
+        Write-Host "-- Updates Set to Recommended ---"
+        Write-Host "================================="
+}
+function Get-WinUtilWingetLatest {
+    <#
+    .SYNOPSIS
+        Uses GitHub API to check for the latest release of Winget.
+    .DESCRIPTION
+        This function grabs the latest version of Winget and returns the download path to Install-WinUtilWinget for installation.
+    #>
+    # Invoke-WebRequest is notoriously slow when the byte progress is displayed. The following lines disable the progress bar and reset them at the end of the function
+    $PreviousProgressPreference = $ProgressPreference
+    $ProgressPreference = "silentlyContinue"
+    Try{
+        # Grabs the latest release of Winget from the Github API for the install process.
+        $response = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/Winget-cli/releases/latest" -Method Get -ErrorAction Stop
+        $latestVersion = $response.tag_name #Stores version number of latest release.
+        $licenseWingetUrl = $response.assets.browser_download_url | Where-Object {$_ -like "*License1.xml"} #Index value for License file.
+        Write-Host "Latest Version:`t$($latestVersion)`n"
+        Write-Host "Downloading..."
+        $assetUrl = $response.assets.browser_download_url | Where-Object {$_ -like "*Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"}
+        Invoke-WebRequest -Uri $licenseWingetUrl -OutFile $ENV:TEMP\License1.xml
+        # The only pain is that the msixbundle for winget-cli is 246MB. In some situations this can take a bit, with slower connections.
+        Invoke-WebRequest -Uri $assetUrl -OutFile $ENV:TEMP\Microsoft.DesktopAppInstaller.msixbundle
+    }
+    Catch{
+        throw [WingetFailedInstall]::new('Failed to get latest Winget release and license')
+    }
+    $ProgressPreference = $PreviousProgressPreference
+}
+function Get-WinUtilWingetPrerequisites {
+    <#
+    .SYNOPSIS
+        Downloads the Winget Prereqs.
+    .DESCRIPTION
+        Downloads Prereqs for Winget. Version numbers are coded as variables and can be updated as uncommonly as Microsoft updates the prereqs.
+    #>
+
+    # I don't know of a way to detect the prereqs automatically, so if someone has a better way of defining these, that would be great.
+    # Microsoft.VCLibs version rarely changes, but for future compatibility I made it a variable.
+    $versionVCLibs = "14.00"
+    $fileVCLibs = "https://aka.ms/Microsoft.VCLibs.x64.${versionVCLibs}.Desktop.appx"
+    # Write-Host "$fileVCLibs"
+    # Microsoft.UI.Xaml version changed recently, so I made the version numbers variables.
+    $versionUIXamlMinor = "2.8"
+    $versionUIXamlPatch = "2.8.6"
+    $fileUIXaml = "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v${versionUIXamlPatch}/Microsoft.UI.Xaml.${versionUIXamlMinor}.x64.appx"
+    # Write-Host "$fileUIXaml"
+
+    Try{
+        Write-Host "Downloading Microsoft.VCLibs Dependency..."
+        Invoke-WebRequest -Uri $fileVCLibs -OutFile $ENV:TEMP\Microsoft.VCLibs.x64.Desktop.appx
+        Write-Host "Downloading Microsoft.UI.Xaml Dependency...`n"
+        Invoke-WebRequest -Uri $fileUIXaml -OutFile $ENV:TEMP\Microsoft.UI.Xaml.x64.appx
+    }
+    Catch{
+        throw [WingetFailedInstall]::new('Failed to install prerequsites')
+    }
+}
+function Install-WinUtilWinget {
+    <#
+
+    .SYNOPSIS
+        Installs Winget if it is not already installed.
+
+    .DESCRIPTION
+        This function will download the latest version of Winget and install it. If Winget is already installed, it will do nothing.
+    #>
+    $isWingetInstalled = Test-WinUtilPackageManager -winget
+
+    Try {
+        if ($isWingetInstalled -eq "installed") {
+            Write-Host "`nWinget is already installed.`r" -ForegroundColor Green
+            return
+        } elseif ($isWingetInstalled -eq "outdated") {
+            Write-Host "`nWinget is Outdated. Continuing with install.`r" -ForegroundColor Yellow
+        } else {
+            Write-Host "`nWinget is not Installed. Continuing with install.`r" -ForegroundColor Red
+        }
+
+        # Gets the computer's information
+        if ($null -eq $sync.ComputerInfo){
+            $ComputerInfo = Get-ComputerInfo -ErrorAction Stop
+        } else {
+            $ComputerInfo = $sync.ComputerInfo
+        }
+
+        if (($ComputerInfo.WindowsVersion) -lt "1809") {
+            # Checks if Windows Version is too old for Winget
+            Write-Host "Winget is not supported on this version of Windows (Pre-1809)" -ForegroundColor Red
+            return
+        }
+
+        # Install Winget via GitHub method.
+        # Used part of my own script with some modification: ruxunderscore/windows-initialization
+        Write-Host "Downloading Winget Prerequsites`n"
+        Get-WinUtilWingetPrerequisites
+        Write-Host "Downloading Winget and License File`r"
+        Get-WinUtilWingetLatest
+        Write-Host "Installing Winget w/ Prerequsites`r"
+        Add-AppxProvisionedPackage -Online -PackagePath $ENV:TEMP\Microsoft.DesktopAppInstaller.msixbundle -DependencyPackagePath $ENV:TEMP\Microsoft.VCLibs.x64.Desktop.appx, $ENV:TEMP\Microsoft.UI.Xaml.x64.appx -LicensePath $ENV:TEMP\License1.xml
+		Write-Host "Manually adding Winget Sources, from Winget CDN."
+		Add-AppxPackage -Path https://cdn.winget.microsoft.com/cache/source.msix #Seems some installs of Winget don't add the repo source, this should makes sure that it's installed every time.
+        Write-Host "Winget Installed" -ForegroundColor Green
+        Write-Host "Enabling NuGet and Module..."
+        Install-PackageProvider -Name NuGet -Force
+        Install-Module -Name Microsoft.WinGet.Client -Force
+        # Winget only needs a refresh of the environment variables to be used.
+        Write-Output "Refreshing Environment Variables...`n"
+        $ENV:PATH = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+    } Catch {
+        Write-Host "Failure detected while installing via GitHub method. Continuing with Chocolatey method as fallback." -ForegroundColor Red
+        # In case install fails via GitHub method.
+        Try {
+        # Install Choco if not already present
+        Install-WinUtilChoco
+        Start-Process -Verb runas -FilePath powershell.exe -ArgumentList "choco install winget-cli"
+        Write-Host "Winget Installed" -ForegroundColor Green
+        Write-Output "Refreshing Environment Variables...`n"
+        $ENV:PATH = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+        } Catch {
+            throw [WingetFailedInstall]::new('Failed to install!')
+        }
+    }
+}
+Function Install-WinUtilProgramWinget {
+
+    <#
+    .SYNOPSIS
+    Manages the provided programs using Winget
+
+    .PARAMETER ProgramsToInstall
+    A list of programs to manage
+
+    .PARAMETER manage
+    The action to perform on the programs, can be either 'Installing' or 'Uninstalling'
+
+    .NOTES
+    The triple quotes are required any time you need a " in a normal script block.
+    The winget Return codes are documented here: https://github.com/microsoft/winget-cli/blob/master/doc/windows/package-manager/winget/returnCodes.md
+    #>
+
+    param(
+        [Parameter(Mandatory, Position=0)]
+        [PsCustomObject]$ProgramsToInstall,
+
+        [Parameter(Position=1)]
+        [String]$manage = "Installing"
+    )
+    $x = 0
+    $count = $ProgramsToInstall.Count
+
+    Write-Progress -Activity "$manage Applications" -Status "Starting" -PercentComplete 0
+    Write-Host "==========================================="
+    Write-Host "--    Configuring winget packages       ---"
+    Write-Host "==========================================="
+    Foreach ($Program in $ProgramsToInstall){
+        $failedPackages = @()
+        Write-Progress -Activity "$manage Applications" -Status "$manage $($Program.winget) $($x + 1) of $count" -PercentComplete $($x/$count*100)
+        if($manage -eq "Installing"){
+            # Install package via ID, if it fails try again with different scope and then with an unelevated prompt.
+            # Since Install-WinGetPackage might not be directly available, we use winget install command as a workaround.
+            # Winget, not all installers honor any of the following: System-wide, User Installs, or Unelevated Prompt OR Silent Install Mode.
+            # This is up to the individual package maintainers to enable these options. Aka. not as clean as Linux Package Managers.
+            Write-Host "Starting install of $($Program.winget) with winget."
+            try {
+                $status = $(Start-Process -FilePath "winget" -ArgumentList "install --id $($Program.winget) --silent --accept-source-agreements --accept-package-agreements" -Wait -PassThru -NoNewWindow).ExitCode
+                if($status -eq 0){
+                    Write-Host "$($Program.winget) installed successfully."
+                    continue
+                }
+                if ($status -eq  -1978335189){
+                    Write-Host "$($Program.winget) No applicable update found"
+                    continue
+                }
+                Write-Host "Attempt with User scope"
+                $status = $(Start-Process -FilePath "winget" -ArgumentList "install --id $($Program.winget) --scope user --silent --accept-source-agreements --accept-package-agreements" -Wait -PassThru -NoNewWindow).ExitCode
+                if($status -eq 0){
+                    Write-Host "$($Program.winget) installed successfully with User scope."
+                    continue
+                }
+                if ($status -eq  -1978335189){
+                    Write-Host "$($Program.winget) No applicable update found"
+                    continue
+                }
+                Write-Host "Attempt with User prompt"
+                $userChoice = [System.Windows.MessageBox]::Show("Do you want to attempt $($Program.winget) installation with specific user credentials? Select 'Yes' to proceed or 'No' to skip.", "User Credential Prompt", [System.Windows.MessageBoxButton]::YesNo)
+                if ($userChoice -eq 'Yes') {
+                    $getcreds = Get-Credential
+                    $process = Start-Process -FilePath "winget" -ArgumentList "install --id $($Program.winget) --silent --accept-source-agreements --accept-package-agreements" -Credential $getcreds -PassThru -NoNewWindow
+                    Wait-Process -Id $process.Id
+                    $status = $process.ExitCode
+                } else {
+                    Write-Host "Skipping installation with specific user credentials."
+                }
+                if($status -eq 0){
+                    Write-Host "$($Program.winget) installed successfully with User prompt."
+                    continue
+                }
+                if ($status -eq  -1978335189){
+                    Write-Host "$($Program.winget) No applicable update found"
+                    continue
+                }
+            } catch {
+                Write-Host "Failed to install $($Program.winget). With winget"
+                $failedPackages += $Program
+            }
+        }
+        if($manage -eq "Uninstalling"){
+            # Uninstall package via ID using winget directly.
+            try {
+                $status = $(Start-Process -FilePath "winget" -ArgumentList "uninstall --id $($Program.winget) --silent" -Wait -PassThru -NoNewWindow).ExitCode
+                if($status -ne 0){
+                    Write-Host "Failed to uninstall $($Program.winget)."
+                } else {
+                    Write-Host "$($Program.winget) uninstalled successfully."
+                    $failedPackages += $Program
+                }
+            } catch {
+                Write-Host "Failed to uninstall $($Program.winget) due to an error: $_"
+                $failedPackages += $Program
+            }
+        }
+        $X++
+    }
+    Write-Progress -Activity "$manage Applications" -Status "Finished" -Completed
+    return $failedPackages;
+}
+function Copy-ToUSB([string] $fileToCopy){
+	foreach ($volume in Get-Volume) {
+		if ($volume -and $volume.FileSystemLabel -ieq "ventoy") {
+			$destinationPath = "$($volume.DriveLetter):\"
+			#Copy-Item -Path $fileToCopy -Destination $destinationPath -Force
+			# Get the total size of the file
+			$totalSize = (Get-Item $fileToCopy).length
+
+			Copy-Item -Path $fileToCopy -Destination $destinationPath -Verbose -Force -Recurse -Container -PassThru |
+				ForEach-Object {
+					# Calculate the percentage completed
+					$completed = ($_.BytesTransferred / $totalSize) * 100
+
+					# Display the progress bar
+					Write-Progress -Activity "Copying File" -Status "Progress" -PercentComplete $completed -CurrentOperation ("{0:N2} MB / {1:N2} MB" -f ($_.BytesTransferred / 1MB), ($totalSize / 1MB))
+				}
+
+			Write-Host "File copied to Ventoy drive $($volume.DriveLetter)"
+			return
+		}
+	}
+	Write-Host "Ventoy USB Key is not inserted"
+}
 
 
 

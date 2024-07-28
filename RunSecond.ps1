@@ -1,8 +1,8 @@
-Write-Output "================================================================`n"
-Write-Output "Run the script in any powershell with Admin rights`n"
-Write-Output "Change Excution Policy by running : `n"
-Write-Output "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine`n"
-Write-Output "================================================================`n"
+Write-Host "================================================================`n" -Foregroundcolor Red
+Write-Host "Run the script in any powershell with Admin rights`n" -Foregroundcolor Red
+Write-Host "Change Excution Policy by running : `n" -Foregroundcolor Red
+Write-Host "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine`n" -Foregroundcolor Red
+Write-Host "================================================================`n" -Foregroundcolor Red
 
 # TODO: make sure this script runs with pwsh not powershell
 # Check if running with admin rights
