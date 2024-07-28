@@ -1,8 +1,16 @@
-# Create WinConf shortcut on the desktop
+# Download the files and Create WinConf shortcut on the desktop
 
 $desktopPath = "$($env:USERPROFILE)\Desktop"
+$url = "https://github.com/Qaddoumi/dotfiles/archive/refs/heads/master.zip";
+if (Test-Path -Path "$desktopPath\dotfiles-master"){
+    Remove-Item -Recurse dotfiles-master -Force
+}
+Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\temp.zip"; 
+Expand-Archive -Path "$env:TEMP\temp.zip" -DestinationPath $desktopPath -Force; 
+Remove-Item "$env:TEMP\temp.zip";
+
 # Specify the target PowerShell command
-$command = "`$url = `"https://github.com/Qaddoumi/dotfiles/archive/refs/heads/master.zip`"; `$destinationPath = ([Environment]::GetFolderPath('Desktop'));Set-Location `"`$destinationPath`";if (Test-Path -Path `"`$destinationPath\dotfiles-master`"){Remove-Item -Recurse dotfiles-master -Force} ;Invoke-WebRequest -Uri `$url -OutFile `"`$env:TEMP\temp.zip`"; Expand-Archive -Path `"`$env:TEMP\temp.zip`" -DestinationPath `$destinationPath -Force; Remove-Item `"`$env:TEMP\temp.zip`";Set-Location `"`$destinationPath\dotfiles-master`";Write-Host `"`nRun .\RunFirst.bat`n`";"
+$command = "Set-Location `"$desktopPath\dotfiles-master`";& .\RunFirst.bat"
 # Specify the path for the shortcut
 $shortcutPath = Join-Path $desktopPath 'winconf.lnk'
 # Create a shell object
@@ -15,8 +23,6 @@ $shortcut = $shell.CreateShortcut($shortcutPath)
 # {
 #     $shortcut.IconLocation = "c:\Windows\mylogo.png"
 # }
-if (Test-Path -Path "$destinationPath\dotfiles-master"){Remove-Item -Recurse dotfiles-master -Force}
-Write-Host `"`nRun .\RunFirst.bat`n`";
 
 # Set properties of the shortcut
 $shortcut.TargetPath = "powershell.exe"
@@ -31,3 +37,4 @@ $bytes[0x15] = $bytes[0x15] -bor 0x20
 [System.IO.File]::WriteAllBytes($shortcutPath, $bytes)
 
 Write-Host "Shortcut created at: $shortcutPath"
+
