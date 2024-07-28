@@ -84,3 +84,16 @@ Enable-DarkMode
 Disable-BingSearch
 Enable-HiddenFiles
 Enable-HideFileExt
+
+@"
+Invoke-WinUtilDarkMode 
+
+Invoke-WinUtilBingSearch
+
+Invoke-WinUtilFeatureInstall
+
+Invoke-WinUtilGPU
+
+Invoke-WinUtilHiddenFiles
+
+"@
