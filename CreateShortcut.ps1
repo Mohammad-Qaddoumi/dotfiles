@@ -13,6 +13,9 @@ Remove-Item "$env:TEMP\temp.zip";
 $command = "Set-Location `"$desktopPath\dotfiles-master`";& .\RunFirst.bat"
 # Specify the path for the shortcut
 $shortcutPath = Join-Path $desktopPath 'winconf.lnk'
+if (Test-Path -Path "$shortcutPath"){
+    Remove-Item "$shortcutPath" -Force
+}
 # Create a shell object
 $shell = New-Object -ComObject WScript.Shell
 
