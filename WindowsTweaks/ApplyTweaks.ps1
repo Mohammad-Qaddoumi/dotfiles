@@ -215,6 +215,8 @@ function Disable-DeliveryOptimization {
     }
 }
 function Set-TaskbarIcons {
+    Write-Host "Set Taskbar Icons"
+
     $regPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband"
     # Create the registry key if it doesn't exist
     if (!(Test-Path -Path $regPath1)) {
