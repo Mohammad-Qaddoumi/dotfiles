@@ -265,11 +265,9 @@ function Set-TaskbarIcons {
         }
     )
     Try{
-        # Set the registry values
         foreach ($regValue in $regValues) {
             Set-ItemProperty -Path $regValue.Path -Name $regValue.Name -Value $regValue.Value -Type $regValue.Type
         }
-    
     }
     Catch [System.Security.SecurityException] {
         Write-Warning "Unable to set $Path\$Name to $Enabled due to a Security Exception"
@@ -281,7 +279,6 @@ function Set-TaskbarIcons {
         Write-Warning "Unable to set $Name due to unhandled exception"
         Write-Warning $psitem.Exception.StackTrace
     }
-
 }
 
 
