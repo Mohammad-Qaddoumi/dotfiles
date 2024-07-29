@@ -200,7 +200,6 @@ function Disable-DeliveryOptimization {
         If (!(Test-Path $Path)) {
             New-Item -Path $Path -Force | Out-Null
         }
-        Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name "DODownloadMode" -Type DWord -Value 1
         Set-ItemProperty -Path $Path -Name "DODownloadMode" -Type DWord -Value $Enabled
     }
     Catch [System.Security.SecurityException] {
@@ -280,6 +279,49 @@ function Set-TaskbarIcons {
         Write-Warning $psitem.Exception.StackTrace
     }
 }
+function Enable-EndTaskTaskbar {
+    Write-Host "Enable EndTask Taskbar"
+    $Enabled = 1
+    Try{
+        $Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
+        # Ensure the registry key exists
+        if (-not (Test-Path $Path)) {
+            New-Item -Path $Path -Force | Out-Null
+        }
+        # Set the property, creating it if it doesn''t exist
+        New-ItemProperty -Path $Path -Name $name -PropertyType DWord -Value $Enabled -Force | Out-Null
+    }
+    Catch [System.Security.SecurityException] {
+        Write-Warning "Unable to set $Path\$Name to $Enabled due to a Security Exception"
+    }
+    Catch [System.Management.Automation.ItemNotFoundException] {
+        Write-Warning $psitem.Exception.ErrorRecord
+    }
+    Catch{
+        Write-Warning "Unable to set $Name due to unhandled exception"
+        Write-Warning $psitem.Exception.StackTrace
+    }
+    
+}
+
+{ 
+    $Description = "Enables option to end task when right clicking a program in the taskbar"
+    $path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
+    $name = "TaskbarEndTask"
+    $value = 1
+
+    # Ensure the registry key exists
+    if (-not (Test-Path $path)) {
+        New-Item -Path $path -Force | Out-Null
+    }
+
+    # Set the property, creating it if it doesn''t exist
+    New-ItemProperty -Path $path -Name $name -PropertyType DWord -Value $value -Force | Out-Null
+}
+
+
+
+
 
 
 

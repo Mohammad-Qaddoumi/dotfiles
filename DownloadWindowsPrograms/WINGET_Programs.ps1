@@ -32,6 +32,7 @@ $WINGET_PROGRAMS_ID = @(
     # "TorProject.TorBrowser",
     # "qBittorrent.qBittorrent",
     # "VideoLAN.VLC",
+    # "Nvidia.GeForceNow",
     # "Zoom.Zoom"
 )
 
