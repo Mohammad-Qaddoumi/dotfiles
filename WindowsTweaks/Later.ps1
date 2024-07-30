@@ -4432,43 +4432,8 @@ $f = @(
 
 
 
-Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\ADMX_StartMenu\LockTaskbar
-Software\Policies\Microsoft\UEV\Agent\Configuration
 
 
-"DontPrettyPath"=dword:00000000
-DontPrettyPath: Controls the display of the full file path in the title bar of Explorer windows.
-0: Only the folder name is shown.
-1: The full path is displayed.
-
-"AutoCheckSelect"=dword:00000001
-AutoCheckSelect: Enables automatic selection of items when you hover over them in Explorer.
-0: Disabled (default behavior).
-1: Enabled (items are automatically selected on hover).
-
-Start_ShowMyComputer: Determines whether "This PC" (or "Computer" in older versions) is displayed in the Start menu.
-0: Hidden.
-1: Shown.
-
-Start_ShowMyDocs: Determines whether "Documents" is displayed in the Start menu.
-0: Hidden.
-1: Shown.
-
-Start_ShowMyGames: Determines whether "Games" is displayed in the Start menu.
-0: Hidden.
-1: Shown.
-
-Start_ShowMyMusic: Determines whether "Music" is displayed in the Start menu.
-0: Hidden.
-1: Shown.
-
-Start_ShowMyPics: Determines whether "Pictures" is displayed in the Start menu.
-0: Hidden.
-1: Shown.
-
-TaskbarAnimations: Controls whether animations are used for certain taskbar operations, such as opening or closing windows.
-0: Disabled.
-1: Enabled.
 
 
 
