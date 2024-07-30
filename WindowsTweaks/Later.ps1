@@ -1080,6 +1080,78 @@ function Copy-ToUSB([string] $fileToCopy){
 	}
 	Write-Host "Ventoy USB Key is not inserted"
 }
+function Remove-WinUtilAPPX {
+    <#
+
+    .SYNOPSIS
+        Removes all APPX packages that match the given name
+
+    .PARAMETER Name
+        The name of the APPX package to remove
+
+    .EXAMPLE
+        Remove-WinUtilAPPX -Name "Microsoft.Microsoft3DViewer"
+
+    #>
+    param (
+        $Name
+    )
+
+    Try {
+        Write-Host "Removing $Name"
+        Get-AppxPackage "*$Name*" | Remove-AppxPackage -ErrorAction SilentlyContinue
+        Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like "*$Name*" | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue
+    }
+    Catch [System.Exception] {
+        if ($psitem.Exception.Message -like "*The requested operation requires elevation*") {
+            Write-Warning "Unable to uninstall $name due to a Security Exception"
+        }
+        else {
+            Write-Warning "Unable to uninstall $name due to unhandled exception"
+            Write-Warning $psitem.Exception.StackTrace
+        }
+    }
+    Catch{
+        Write-Warning "Unable to uninstall $name due to unhandled exception"
+        Write-Warning $psitem.Exception.StackTrace
+    }
+}
+function Set-WinUtilDNS {
+    <#
+
+    .SYNOPSIS
+        Sets the DNS of all interfaces that are in the "Up" state. It will lookup the values from the DNS.Json file
+
+    .PARAMETER DNSProvider
+        The DNS provider to set the DNS server to
+
+    .EXAMPLE
+        Set-WinUtilDNS -DNSProvider "google"
+
+    #>
+    param($DNSProvider)
+    if($DNSProvider -eq "Default"){return}
+    Try{
+        $Adapters = Get-NetAdapter | Where-Object {$_.Status -eq "Up"}
+        Write-Host "Ensuring DNS is set to $DNSProvider on the following interfaces"
+        Write-Host $($Adapters | Out-String)
+
+        Foreach ($Adapter in $Adapters){
+            if($DNSProvider -eq "DHCP"){
+                Set-DnsClientServerAddress -InterfaceIndex $Adapter.ifIndex -ResetServerAddresses
+            }
+            Else{
+                Set-DnsClientServerAddress -InterfaceIndex $Adapter.ifIndex -ServerAddresses ("$($sync.configs.dns.$DNSProvider.Primary)", "$($sync.configs.dns.$DNSProvider.Secondary)")
+                Set-DnsClientServerAddress -InterfaceIndex $Adapter.ifIndex -ServerAddresses ("$($sync.configs.dns.$DNSProvider.Primary6)", "$($sync.configs.dns.$DNSProvider.Secondary6)")
+            }
+        }
+    }
+    Catch{
+        Write-Warning "Unable to set DNS Provider due to an unhandled exception"
+        Write-Warning $psitem.Exception.StackTrace
+    }
+}
+
 
 
 $a = @("Content": "Set Display for Performance",

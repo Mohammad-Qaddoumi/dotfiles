@@ -337,7 +337,7 @@ function Enable-EndTaskTaskbar {
 
 
 # To Use "HKU:\" reg path instaed of "Registry::HKU\"
-New-PSDrive -PSProvider Registry -Name HKU -Root HKEY_USERS
+if(!(Test-Path 'HKU:\')){New-PSDrive -PSProvider Registry -Name HKU -Root HKEY_USERS}
 
 Enable-DarkMode
 Enable-BingSearch

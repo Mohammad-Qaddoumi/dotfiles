@@ -101,6 +101,8 @@ try {
 }
 catch {
     Write-Error "Failed to create scheduled task. Error: $_"
+    Write-Warning $PSItem.Exception.Message
+    Write-Warning $PSItem.Exception.StackTrace
     pause
     exit 1
 }
