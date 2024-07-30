@@ -231,13 +231,7 @@ function Disable-DeliveryOptimization {
             if (!(Test-Path -Path $regValue.Path)) {
                 New-Item -Path $regValue.Path -Force | Out-Null
             }
-            Try{
-                New-ItemProperty -Path $regValue.Path -Name $regValue.Name -Value $regValue.Value -Type $regValue.Type
-            }
-            Catch{
-                Write-Warning "The item $($regValue.Name) already exist"
-            }
-            Set-ItemProperty -Path $regValue.Path -Name $regValue.Name -Value $regValue.Value -Type $regValue.Type
+            New-ItemProperty -Path $regValue.Path -Name $regValue.Name -Value $regValue.Value -Type $regValue.Type -Force | Out-Null
         }
     }
     Catch [System.Security.SecurityException] {
