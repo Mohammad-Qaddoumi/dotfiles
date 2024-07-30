@@ -202,12 +202,6 @@ function Disable-DeliveryOptimization {
             Path = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"
         },
         @{
-            Name = "KVFileExpirationTime"
-            Value = [byte[]]@(0xdd, 0x3f, 0xea, 0x21, 0x61, 0xe3, 0xda, 0x01)
-            Type = "Binary"
-            Path = "Registry::HKU\S-1-5-20\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"
-        },
-        @{
             Name = "RequestInfoType"
             Value = 0
             Type = "DWord"
