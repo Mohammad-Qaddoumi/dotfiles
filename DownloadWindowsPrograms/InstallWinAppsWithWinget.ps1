@@ -16,7 +16,7 @@ function Install-Program {
         try {
             $installArgs = "install --id $program --accept-package-agreements --accept-source-agreements"
             $process = Start-Process -FilePath "winget" -ArgumentList $installArgs -NoNewWindow -PassThru -Wait
-            # always use -Wait instaed of $process.WaitForExit() because it did not work in build in powershell
+            # always use -Wait instaed of $process.WaitForExit() because it did not work well in build in powershell
             # Check the exit code of the process
             $exitCode = $process.ExitCode
             if ($exitCode -eq 0) {

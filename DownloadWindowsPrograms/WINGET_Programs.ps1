@@ -1,13 +1,14 @@
 $WINGET_PROGRAMS_ID = @(
     "JanDeDobbeleer.OhMyPosh", # powershell prompt
     "GitHub.cli",
-    "Microsoft.VisualStudioCode"
+    "Microsoft.Sysinternals.ProcessMonitor" # log real-time file system, registry, and process/thread activity
+    # "Microsoft.VisualStudioCode",
     # TODO: Add VisualStudio tools like Microsoft.VisualStudio.2022.BuildTools,
     #         Microsoft.DotNet.AspNetCore.8, Microsoft.DotNet.DesktopRuntime.8,
     #         Microsoft.DotNet.Runtime.8, Microsoft.DotNet.SDK.8,
     #         Microsoft.VCRedist.2015+.x64, Microsoft.VCRedist.2015+.x86
     #       Use winget search Visual
-    # "Microsoft.VisualStudio.2022.Community"
+    # "Microsoft.VisualStudio.2022.Community",
     # "PDFLabs.PDFtk.Free", # PDF merge
     # "OpenJS.NodeJS",  # NodeJS
     # "Google.GoogleDrive",
