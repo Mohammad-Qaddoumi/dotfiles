@@ -194,13 +194,45 @@ function Enable-UltimatePerformance {
 }
 function Disable-DeliveryOptimization {
     Write-Host "Disable Delivery Optimization"
-    $Enabled = 1
-    Try{
-        $Path = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"
-        If (!(Test-Path $Path)) {
-            New-Item -Path $Path -Force | Out-Null
+    $regValues = @(
+        @{
+            Name = "DODownloadMode"
+            Value = 1
+            Type = "DWord"
+            Path = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"
+        },
+        @{
+            Name = "KVFileExpirationTime"
+            Value = [byte[]]@(0xdd, 0x3f, 0xea, 0x21, 0x61, 0xe3, 0xda, 0x01)
+            Type = "Binary"
+            Path = "Registry::HKU\S-1-5-20\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"
+        },
+        @{
+            Name = "RequestInfoType"
+            Value = 0
+            Type = "DWord"
+            Path = "Registry::HKU\S-1-5-20\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization"
+        },
+        @{
+            Name = "DownloadMode"
+            Value = 0
+            Type = "DWord"
+            Path = "Registry::HKU\S-1-5-20\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"
+        },
+        @{
+            Name = "DownloadModeProvider"
+            Value = 8
+            Type = "DWord"
+            Path = "Registry::HKU\S-1-5-20\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"
         }
-        Set-ItemProperty -Path $Path -Name "DODownloadMode" -Type DWord -Value $Enabled
+    )
+    Try{
+        foreach ($regValue in $regValues) {
+            if (!(Test-Path -Path $regValue.Path)) {
+                New-Item -Path $regValue.Path -Force | Out-Null
+            }
+            New-ItemProperty -Path $regValue.Path -Name $regValue.Name -Value $regValue.Value -Type $regValue.Type
+        }
     }
     Catch [System.Security.SecurityException] {
         Write-Warning "Unable to set $Path\$Name to $Enabled due to a Security Exception"
@@ -282,6 +314,7 @@ function Set-TaskbarIcons {
 function Enable-EndTaskTaskbar {
     Write-Host "Enable EndTask Taskbar"
     $Enabled = 1
+    $Name = "TaskbarEndTask"
     Try{
         $Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
         # Ensure the registry key exists
@@ -304,20 +337,6 @@ function Enable-EndTaskTaskbar {
     
 }
 
-{ 
-    $Description = "Enables option to end task when right clicking a program in the taskbar"
-    $path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
-    $name = "TaskbarEndTask"
-    $value = 1
-
-    # Ensure the registry key exists
-    if (-not (Test-Path $path)) {
-        New-Item -Path $path -Force | Out-Null
-    }
-
-    # Set the property, creating it if it doesn''t exist
-    New-ItemProperty -Path $path -Name $name -PropertyType DWord -Value $value -Force | Out-Null
-}
 
 
 
@@ -337,4 +356,4 @@ Enable-TaskView
 Enable-UltimatePerformance
 Disable-DeliveryOptimization
 Set-TaskbarIcons
-
+Enable-EndTaskTaskbar
