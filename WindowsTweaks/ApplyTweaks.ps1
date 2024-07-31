@@ -60,7 +60,7 @@ function Show-IconsSysTray{
         $Name = "IsPromoted"
     
         if ($values.IconGuid -eq "{7820AE78-23E3-4229-82C1-E41CB67D5B9C}" -and $values.ExecutablePath -eq "{F38BF404-1D43-42F2-9305-67DE0B28FC23}\explorer.exe" ){
-            Write-Host "FOUND IT" -ForegroundColor Green
+            #Write-Host "FOUND IT" -ForegroundColor Green
             $Enable = 1
         }
         else{

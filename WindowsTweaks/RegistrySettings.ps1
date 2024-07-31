@@ -14,7 +14,7 @@ $RegistrySettings = @(
             @{
                 Name = "HideDrivesWithNoMedia"
                 Type = "DWord"
-                Path = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
                 Value = "1"
             }
         )
@@ -24,7 +24,7 @@ $RegistrySettings = @(
             @{
                 Name = "ShowSuperHidden"
                 Type = "DWord"
-                Path = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
                 Value = "1"
             }
         )
@@ -34,7 +34,7 @@ $RegistrySettings = @(
             @{
                 Name = "AutoCheckSelect"
                 Type = "DWord"
-                Path = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
                 Value = "1"
             }
         )
@@ -44,7 +44,7 @@ $RegistrySettings = @(
             @{
                 Name = "PenWorkspaceButtonDesiredVisibility"
                 Type = "DWord"
-                Path = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\PenWorkspace"
                 Value = "1"
             }
         )
@@ -54,7 +54,7 @@ $RegistrySettings = @(
             @{
                 Name = "TipbandDesiredVisibility"
                 Type = "DWord"
-                Path = "HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7"
+                Path = "HKCU:\Software\Microsoft\TabletTip\1.7"
                 Value = "1"
             }
         )
@@ -64,7 +64,7 @@ $RegistrySettings = @(
             @{
                 Name = "Start_Layout"
                 Type = "DWord"
-                Path = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
                 Value = "1"
             }
         )
@@ -74,7 +74,7 @@ $RegistrySettings = @(
             @{
                 Name = "ShowFrequentList"
                 Type = "DWord"
-                Path = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Start"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Start"
                 Value = "1"
             }
         )
@@ -84,7 +84,7 @@ $RegistrySettings = @(
             @{
                 Name = "VisiblePlaces"
                 Type = "Binary"
-                Path = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Start"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Start"
                 Value = [byte[]]@(0xbc ,0x24 ,0x8a ,0x14 ,0x0c ,0xd6 ,0x89 ,0x42 ,0xa0 ,0x80 ,0x6e ,0xd9 ,0xbb ,0xa2 ,0x48 ,0x82 ,0xce ,0xd5 ,0x34 ,0x2d ,0x5a ,0xfa ,0x43 ,0x45 ,0x82 ,0xf2 ,0x22 ,0xe6 ,0xea ,0xf7 ,0x77 ,0x3c ,0x2f ,0xb3 ,0x67 ,0xe3 ,0xde ,0x89 ,0x55 ,0x43 ,0xbf ,0xce ,0x61 ,0xf3 ,0x7b ,0x18 ,0xa9 ,0x37 ,0xa0 ,0x07 ,0x3f ,0x38 ,0x0a ,0xe8 ,0x80 ,0x4c ,0xb0 ,0x5a ,0x86 ,0xdb ,0x84 ,0x5d ,0xbc ,0x4d ,0xc5 ,0xa5 ,0xb3 ,0x42 ,0x86 ,0x7d ,0xf4 ,0x42 ,0x80 ,0xa4 ,0x93 ,0xfa ,0xca ,0x7a ,0x88 ,0xb5 ,0x86 ,0x08 ,0x73 ,0x52 ,0xaa ,0x51 ,0x43 ,0x42 ,0x9f ,0x7b ,0x27 ,0x76 ,0x58 ,0x46 ,0x59 ,0xd4 ,0x44 ,0x81 ,0x75 ,0xfe ,0x0d ,0x08 ,0xae ,0x42 ,0x8b ,0xda ,0x34 ,0xed ,0x97 ,0xb6 ,0x63 ,0x94)
             }
         )
@@ -94,7 +94,7 @@ $RegistrySettings = @(
             @{
                 Name = "EnableClipboardHistory"
                 Type = "DWord"
-                Path = "HKEY_CURRENT_USER\Software\Microsoft\Clipboard"
+                Path = "HKCU:\Software\Microsoft\Clipboard"
                 Value = "1"
             }
         )
@@ -104,25 +104,25 @@ $RegistrySettings = @(
             @{
                 Name = "(Default)"
                 Type = "String"
-                Path = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\UserChosenExecuteHandlers\StorageOnArrival"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\UserChosenExecuteHandlers\StorageOnArrival"
                 Value = "MSTakeNoAction"
             }
             @{
                 Name = "(Default)"
                 Type = "String"
-                Path = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHandlersDefaultSelection\StorageOnArrival"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHandlersDefaultSelection\StorageOnArrival"
                 Value = "MSTakeNoAction"
             }
             @{
                 Name = "(Default)"
                 Type = "String"
-                Path = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHandlersDefaultSelection\CameraAlternate\ShowPicturesOnArrival"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHandlersDefaultSelection\CameraAlternate\ShowPicturesOnArrival"
                 Value = "MSTakeNoAction"
             }
             @{
                 Name = "(Default)"
                 Type = "String"
-                Path = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\UserChosenExecuteHandlers\CameraAlternate\ShowPicturesOnArrival"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\UserChosenExecuteHandlers\CameraAlternate\ShowPicturesOnArrival"
                 Value = "MSTakeNoAction"
             }
         )
@@ -225,19 +225,19 @@ $RegistrySettings = @(
                 Name = "RequestInfoType"
                 Value = 0
                 Type = "DWord"
-                Path = "Registry::HKU\S-1-5-20\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization"
+                Path = "HKU:\S-1-5-20\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization"
             }
             @{
                 Name = "DownloadMode"
                 Value = 0
                 Type = "DWord"
-                Path = "Registry::HKU\S-1-5-20\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"
+                Path = "HKU:\S-1-5-20\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"
             }
             @{
                 Name = "DownloadModeProvider"
-                Value = 8
+                Value = 0x8
                 Type = "DWord"
-                Path = "Registry::HKU\S-1-5-20\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"
+                Path = "HKU:\S-1-5-20\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"
             }
         )
     }
@@ -295,13 +295,13 @@ $RegistrySettings = @(
         Data = @(
             @{
                 Name = "Bias"
-                Value = ffffff4c
+                Value = 0xffffff4c
                 Type = "DWord"
                 Path = "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
             }
             @{
                 Name = "DaylightBias"
-                Value = ffffffc4
+                Value = 0xffffffc4
                 Type = "DWord"
                 Path = "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
             }
@@ -319,25 +319,25 @@ $RegistrySettings = @(
             }
             @{
                 Name = "StandardBias"
-                Value = 00000000
+                Value = 0x00000000
                 Type = "DWord"
                 Path = "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
             }
             @{
                 Name = "DynamicDaylightTimeDisabled"
-                Value = 00000000
+                Value = 0x00000000
                 Type = "DWord"
                 Path = "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
             }
             @{
                 Name = "ActiveTimeBias"
-                Value = ffffff4c
+                Value = 0xffffff4c
                 Type = "DWord"
                 Path = "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
             }
             @{
                 Name = "RealTimeIsUniversal"
-                Value = 00000001
+                Value = 0x00000001
                 Type = "DWord"
                 Path = "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
             }
