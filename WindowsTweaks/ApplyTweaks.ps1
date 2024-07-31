@@ -132,11 +132,14 @@ if (!(Test-Path 'HKU:')) {
 . ".\RegistrySettings.ps1"
 
 foreach($Setting in $RegistrySettings){
+    Write-Host "`n================================================================"
     Write-Host $Setting.Message -ForegroundColor Green
     foreach($Entry in $Setting.Data){
         Set-Registry -Name $Entry.Name -Path $Entry.Path -Type $Entry.Type -Value $Entry.Value
     }
 }
 
+Write-Host "`n================================================================"
 Show-IconsSysTray
+Write-Host "`n================================================================"
 Enable-UltimatePerformance
