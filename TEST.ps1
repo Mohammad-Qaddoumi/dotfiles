@@ -17,65 +17,40 @@ Write-Host "===================================`n`n" -ForegroundColor Gray
 
 
 
+@{ Message = ""
+        Data = @(
+            @{
+                Name = ""
+                Type = ""
+                Path = ""
+                Value = ""
+            }
+        )
+    }
 
 @{ Message = ""
-    Data = @(
-        @{
-            Name = ""
-            Type = ""
-            Path = ""
-            Value = ""
-        }
-    )
-}
-
-
-@{ Message = ""
-    Data = @(
-        @{
-            Name = ""
-            Type = ""
-            Path = ""
-            Value = ""
-        }
-    )
-}
-
+        Data = @(
+            @{
+                Name = ""
+                Type = ""
+                Path = ""
+                Value = ""
+            }
+        )
+    }
 
 @{ Message = ""
-    Data = @(
-        @{
-            Name = ""
-            Type = ""
-            Path = ""
-            Value = ""
-        }
-    )
-}
+        Data = @(
+            @{
+                Name = ""
+                Type = ""
+                Path = ""
+                Value = ""
+            }
+        )
+    }
 
 
-@{ Message = ""
-    Data = @(
-        @{
-            Name = ""
-            Type = ""
-            Path = ""
-            Value = ""
-        }
-    )
-}
-
-
-@{ Message = ""
-    Data = @(
-        @{
-            Name = ""
-            Type = ""
-            Path = ""
-            Value = ""
-        }
-    )
-}
 
 
 
