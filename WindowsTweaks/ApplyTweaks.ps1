@@ -330,7 +330,141 @@ function Enable-EndTaskTaskbar {
     }
     
 }
+function Show-IconsSysTray{
+    $registryPath = "HKCU:\Control Panel\NotifyIconSettings"
+    $subKeys = Get-ChildItem -Path $registryPath
+    $Enable = 1
+    Write-Host "Show Icons SysTray"
+    foreach ($subKey in $subKeys) {
+        # Check for specific values in the subkey that might identify "Safely Remove Hardware"
+        $values = Get-ItemProperty -Path $subKey.PSPath
+        #Write-Host $values
+        Write-Host $subKey.PSPath
+        $Path = $subKey.PSPath
+        $Name = "IsPromoted"
+    
+        if ($values.IconGuid -eq "{7820AE78-23E3-4229-82C1-E41CB67D5B9C}" -and $values.ExecutablePath -eq "{F38BF404-1D43-42F2-9305-67DE0B28FC23}\explorer.exe" ){
+            Write-Host "FOUND IT" -ForegroundColor Green
+            $Enable = 1
+        }
+        else{
+            $Enable = 0
+        }
+        Try{
+            # Ensure the registry key exists
+            if (-not (Test-Path $Path)) {
+                New-Item -Path $Path -Force | Out-Null
+            }
+            # Set the property, creating it if it doesn''t exist
+            New-ItemProperty -Path $Path -Name $Name -PropertyType DWord -Value $Enable -Force | Out-Null
+        }
+        Catch [System.Security.SecurityException] {
+            Write-Warning "Unable to set $Path\$Name to $Enable due to a Security Exception"
+        }
+        Catch [System.Management.Automation.ItemNotFoundException] {
+            Write-Warning $psitem.Exception.ErrorRecord
+        }
+        Catch{
+            Write-Warning "Unable to set $Name due to unhandled exception"
+            Write-Warning $psitem.Exception.StackTrace
+        }
+    }
+}
 
+
+function Set-TimeZone {
+    Write-Host "Set Time Zone To Amman Jordan"
+
+    $regPath1 = "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
+    # Create the registry key if it doesn't exist
+    if (!(Test-Path -Path $regPath1)) {
+        New-Item -Path $regPath1 -Force | Out-Null
+    }
+    $regValues = @(
+        @{
+            Name = "Bias"
+            Value = ffffff4c
+            Type = "DWord"
+            Path = $regPath1
+        },
+        @{
+            Name = "DaylightBias"
+            Value = ffffffc4
+            Type = "DWord"
+            Path = $regPath1
+        },
+        @{
+            Name = "DaylightStart"
+            Value = [byte[]]@(0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00)
+            Type = "Binary"
+            Path = $regPath1
+        },
+        @{
+            Name = "StandardStart"
+            Value = [byte[]]@(0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00)
+            Type = "Binary"
+            Path = $regPath1
+        },
+        @{
+            Name = "StandardBias"
+            Value = 00000000
+            Type = "DWord"
+            Path = $regPath1
+        },
+        @{
+            Name = "DynamicDaylightTimeDisabled"
+            Value = 00000000
+            Type = "DWord"
+            Path = $regPath1
+        },
+        @{
+            Name = "ActiveTimeBias"
+            Value = ffffff4c
+            Type = "DWord"
+            Path = $regPath1
+        },
+        @{
+            Name = "RealTimeIsUniversal"
+            Value = 00000001
+            Type = "DWord"
+            Path = $regPath1
+        },
+        @{
+            Name = "DaylightName"
+            Value = "@tzres.dll,-334"
+            Type = "String"
+            Path = $regPath1
+        },
+        @{
+            Name = "StandardName"
+            Value = "@tzres.dll,-335"
+            Type = "String"
+            Path = $regPath1
+        },
+        @{
+            Name = "TimeZoneKeyName"
+            Value = "Jordan Standard Time"
+            Type = "String"
+            Path = $regPath1
+        }
+    )
+    Try{
+        foreach ($regValue in $regValues) {
+            # Set the property, creating it if it doesn''t exist
+            New-ItemProperty -Path $regValue.Path -Name $regValue.Name -PropertyType $regValue.Type -Value $regValue.Value -Force | Out-Null
+        }
+    }
+    Catch [System.Security.SecurityException] {
+        Write-Warning "Unable to set $regPath1\$Name to $Enabled due to a Security Exception"
+    }
+    Catch [System.Management.Automation.ItemNotFoundException] {
+        Write-Warning $psitem.Exception.ErrorRecord
+    }
+    Catch{
+        Write-Warning "Unable to set $Name due to unhandled exception"
+        Write-Warning $psitem.Exception.StackTrace
+    }
+}
 
 
 
@@ -351,3 +485,5 @@ Enable-UltimatePerformance
 Disable-DeliveryOptimization
 Set-TaskbarIcons
 Enable-EndTaskTaskbar
+Show-IconsSysTray
+Set-TimeZone
