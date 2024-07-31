@@ -129,7 +129,7 @@ if (!(Test-Path 'HKU:')) {
     New-PSDrive -PSProvider Registry -Name HKU -Root HKEY_USERS 
 }
 # Source the variable definition script (List of Registry Settings)
-. ".\WINGET_Programs.ps1"
+. ".\RegistrySettings.ps1"
 
 foreach($Setting in $RegistrySettings){
     Write-Host $Setting.Message -ForegroundColor Green
