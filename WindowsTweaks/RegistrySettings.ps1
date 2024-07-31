@@ -491,5 +491,21 @@ $RegistrySettings = @(
             }
         )
     }
+    @{ Message = "Show All Icons in control panel"
+        Data = @(
+            @{
+                Name = "AllItemsIconView"
+                Type = "DWord"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel"
+                Value = "0"
+            }
+            @{
+                Name = "StartupPage"
+                Type = "DWord"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel"
+                Value = "1"
+            }
+        )
+    }
 )
 $RegistrySettings = $RegistrySettings

@@ -1,6 +1,6 @@
 $PROGRAMS_ID = @(
-    "Microsoft.PowerShell",
-    "Microsoft.WindowsTerminal",
+    "Microsoft.PowerShell"
+    "Microsoft.WindowsTerminal"
     "Git.Git"
 )
 

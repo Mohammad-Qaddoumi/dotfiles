@@ -77,26 +77,6 @@ $registry = @(
     Value= "0"
     Type= "DWord"
     }
-    @{
-    Path= "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-    Name= "TaskbarDa"
-    Value= "0"
-    Type= "DWord"
-    }
-    @{
-    Path= "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-    OriginalValue= "1"
-    Name= "ShowTaskViewButton"
-    Value= "0"
-    Type= "DWord"
-    }
-    @{
-    Path= "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search"
-    OriginalValue= "1"
-    Name= "SearchboxTaskbarMode"
-    Value= "0"
-    Type= "DWord"
-    }
     InvokeScript= [
       Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\" -Name "UserPreferencesMask" -Type Binary -Value ([byte[]](144,18,3,128,16,0,0,0))
     ]
@@ -125,6 +105,16 @@ $registry = @(
         )
     }
 
+@{ Message = ""
+        Data = @(
+            @{
+                Name = ""
+                Type = ""
+                Path = ""
+                Value = ""
+            }
+        )
+    }
 
 @{ Message = ""
         Data = @(
@@ -136,6 +126,29 @@ $registry = @(
             }
         )
     }
+
+@{ Message = ""
+        Data = @(
+            @{
+                Name = ""
+                Type = ""
+                Path = ""
+                Value = ""
+            }
+        )
+    }
+
+@{ Message = ""
+        Data = @(
+            @{
+                Name = ""
+                Type = ""
+                Path = ""
+                Value = ""
+            }
+        )
+    }
+
 
 
 

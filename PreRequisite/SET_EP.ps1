@@ -1,7 +1,5 @@
 $command = "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine"
 
-$process1 = Start-Process powershell -Verb RunAs -NoNewWindow -PassThru -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"$command`""
-$process1.WaitForExit()
+Start-Process powershell -Verb RunAs -NoNewWindow -Wait -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"$command`""
 
-$process2 = Start-Process pwsh -Verb RunAs -NoNewWindow -PassThru -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"$command`""
-$process2.WaitForExit()
+Start-Process pwsh -Verb RunAs -NoNewWindow -Wait -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"$command`""
