@@ -49,15 +49,15 @@ function Enable-UltimatePerformance {
 function Show-IconsSysTray{
     $registryPath = "HKCU:\Control Panel\NotifyIconSettings"
     $subKeys = Get-ChildItem -Path $registryPath
+    $Name = "IsPromoted"
     $Enable = 1
-    Write-Host "Show Icons SysTray"
+    Write-Host "Show Icons SysTray" -ForegroundColor Green
     foreach ($subKey in $subKeys) {
         # Check for specific values in the subkey that might identify "Safely Remove Hardware"
         $values = Get-ItemProperty -Path $subKey.PSPath
         #Write-Host $values
-        Write-Host $subKey.PSPath
+        Write-Host "Setting registry key: $Name at $subKey.PSPath" -ForegroundColor Cyan
         $Path = $subKey.PSPath
-        $Name = "IsPromoted"
     
         if ($values.IconGuid -eq "{7820AE78-23E3-4229-82C1-E41CB67D5B9C}" -and $values.ExecutablePath -eq "{F38BF404-1D43-42F2-9305-67DE0B28FC23}\explorer.exe" ){
             #Write-Host "FOUND IT" -ForegroundColor Green
@@ -101,7 +101,7 @@ function Set-Registry {
         [ValidateSet("String", "ExpandString", "Binary", "DWord", "QWord", "MultiString")]
         [string]$Type,
         
-        [string]$Value
+        [object]$Value
     )
     If (!(Test-Path $Path)) {
         Write-Warning "$Path was not found, Creating..."
@@ -138,5 +138,5 @@ foreach($Setting in $RegistrySettings){
     }
 }
 
-Enable-UltimatePerformance
 Show-IconsSysTray
+Enable-UltimatePerformance
