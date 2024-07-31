@@ -89,6 +89,28 @@ $RegistrySettings = @(
             }
         )
     }
+    @{ Message = "Disable Activity History" # This erases recent docs, clipboard, and run history
+        Data = @(
+            @{
+                Name = "EnableActivityFeed"
+                Type = "DWord"
+                Path = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
+                Value = "0"
+            }
+            @{
+                Name = "PublishUserActivities"
+                Type = "DWord"
+                Path = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
+                Value = "0"
+            }
+            @{
+                Name = "UploadUserActivities"
+                Type = "DWord"
+                Path = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
+                Value = "0"
+            }
+        )
+    }
     @{ Message = "Enable Clipboard History 🪟+v"
         Data = @(
             @{
@@ -291,6 +313,16 @@ $RegistrySettings = @(
             }
         )
     }
+    @{ Message = "Set Time to UTC (Dual Boot)"
+        Data = @(
+            @{
+                Name = "RealTimeIsUniversal"
+                Type = "DWord"
+                Path = "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
+                Value = "1"
+            }
+        )
+    }
     @{ Message = "Set Time Zone To Amman Jordan"
         Data = @(
             @{
@@ -358,6 +390,104 @@ $RegistrySettings = @(
                 Value = "Jordan Standard Time"
                 Type = "String"
                 Path = "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
+            }
+        )
+    }
+    @{ Message = "Disable Wifi-Sense"
+        Data = @(
+            @{
+                Name = "Value"
+                Type = "DWord"
+                Path = "HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting"
+                Value = "0"
+            }
+            @{
+                Name = "Value"
+                Type = "DWord"
+                Path = "HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots"
+                Value = "0"
+            }
+        )
+    }
+    @{ Message = "Disable ConsumerFeatures"
+        Data = @(
+            @{
+                Name = "DisableWindowsConsumerFeatures"
+                Type = "DWord"
+                Path = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
+                Value = "1"
+            }
+        )
+    }
+    @{ Message = "Disable Location Tracking"
+        Data = @(
+            @{
+                Name = "Value"
+                Type = "String"
+                Path = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
+                Value = "Deny"
+            }
+            @{
+                Name = "SensorPermissionState"
+                Type = "DWord"
+                Path = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
+                Value = "0"
+            }
+            @{
+                Name = "Status"
+                Type = "DWord"
+                Path = "HKLM:\SYSTEM\CurrentControlSet\Services\lfsvc\Service\Configuration"
+                Value = "0"
+            }
+            @{
+                Name = "AutoUpdateEnabled"
+                Type = "DWord"
+                Path = "HKLM:\SYSTEM\Maps"
+                Value = "0"
+            }
+        )
+    }
+    @{ Message = "Disable GameDVR" #GameDVR is a Windows App that is a dependency for some Store Games. I&#39;ve never met someone that likes it, but it&#39;s there for the XBOX crowd
+        Data = @(
+            @{
+                Name = "GameDVR_FSEBehavior"
+                Type = "DWord"
+                Path = "HKCU:\System\GameConfigStore"
+                Value = "2"
+            }
+            @{
+                Name = "GameDVR_Enabled"
+                Type = "DWord"
+                Path = "HKCU:\System\GameConfigStore"
+                Value = "0"
+            }
+            @{
+                Name = "GameDVR_HonorUserFSEBehaviorMode"
+                Type = "DWord"
+                Path = "HKCU:\System\GameConfigStore"
+                Value = "1"
+            }
+            @{
+                Name = "GameDVR_EFSEFeatureFlags"
+                Type = "DWord"
+                Path = "HKCU:\System\GameConfigStore"
+                Value = "0"
+            }
+            @{
+                Name = "AllowGameDVR0"
+                Type = "DWord"
+                Path = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameDVR"
+                Value = ""
+            }
+        )
+    }
+    @{ Message = "Disable Storage Sense" # Storage Sense deletes temp files automatically
+        Data = @(
+            @{
+                Name = "01"
+                Type = "Dword"
+                Path = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
+                Value = "0"
             }
         )
     }

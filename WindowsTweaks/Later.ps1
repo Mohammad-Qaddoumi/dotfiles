@@ -286,6 +286,24 @@ Function Set-WinUtilService {
     }
 
 }
+$f = @("Content": "Disable Homegroup",
+    "Description": "Disables HomeGroup - HomeGroup is a password-protected home networking service that lets you share your stuff with other PCs that are currently running and connected to your network.",
+    "category": "Essential Tweaks",
+    "panel": "1",
+    "Order": "a005_",
+    "service": [
+      {
+        "Name": "HomeGroupListener",
+        "StartupType": "Manual",
+        "OriginalType": "Automatic"
+      },
+      {
+        "Name": "HomeGroupProvider",
+        "StartupType": "Manual",
+        "OriginalType": "Automatic"
+      }
+    ]
+)
 Function Update-WinUtilProgramWinget {
 
     <#
@@ -1324,58 +1342,6 @@ $b = @("Content": "Remove ALL MS Store Apps - NOT RECOMMENDED",
             $proc.WaitForExit()
         }
       "
-    ]
-)
-$c = @("Content": "Set Time to UTC (Dual Boot)",
-    "Description": "Essential for computers that are dual booting. Fixes the time sync with Linux Systems.",
-    "category": "z__Advanced Tweaks - CAUTION",
-    "panel": "1",
-    "Order": "a027_",
-    "registry": [
-      {
-        "Path": "HKLM:\\SYSTEM\\CurrentControlSet\\Control\\TimeZoneInformation",
-        "Name": "RealTimeIsUniversal",
-        "Type": "DWord",
-        "Value": "1",
-        "OriginalValue": "0"
-      }
-    ]
-)
-$d = @("Content": "Disable Wifi-Sense",
-    "Description": "Wifi Sense is a spying service that phones home all nearby scanned wifi networks and your current geo location.",
-    "category": "Essential Tweaks",
-    "panel": "1",
-    "Order": "a005_",
-    "registry": [
-      {
-        "Path": "HKLM:\\Software\\Microsoft\\PolicyManager\\default\\WiFi\\AllowWiFiHotSpotReporting",
-        "Name": "Value",
-        "Type": "DWord",
-        "Value": "0",
-        "OriginalValue": "1"
-      },
-      {
-        "Path": "HKLM:\\Software\\Microsoft\\PolicyManager\\default\\WiFi\\AllowAutoConnectToWiFiSenseHotspots",
-        "Name": "Value",
-        "Type": "DWord",
-        "Value": "0",
-        "OriginalValue": "1"
-      }
-    ]
-)
-$e = @("Content": "Disable ConsumerFeatures",
-    "Description": "Windows 10 will not automatically install any games, third-party apps, or application links from the Windows Store for the signed-in user. Some default Apps will be inaccessible (eg. Phone Link)",
-    "category": "Essential Tweaks",
-    "panel": "1",
-    "Order": "a003_",
-    "registry": [
-      {
-        "Path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\CloudContent",
-        "OriginalValue": "0",
-        "Name": "DisableWindowsConsumerFeatures",
-        "Value": "1",
-        "Type": "DWord"
-      }
     ]
 )
 $f = @("Content": "Disable Telemetry",
@@ -3166,60 +3132,10 @@ $f = @("Content": "Set Services to Manual",
       }
     ]
 )
-$f = @("Content": "Disable Location Tracking",
-    "Description": "Disables Location Tracking...DUH!",
-    "category": "Essential Tweaks",
-    "panel": "1",
-    "Order": "a005_",
-    "registry": [
-      {
-        "Path": "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location",
-        "Name": "Value",
-        "Type": "String",
-        "Value": "Deny",
-        "OriginalValue": "Allow"
-      },
-      {
-        "Path": "HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Sensor\\Overrides\\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}",
-        "Name": "SensorPermissionState",
-        "Type": "DWord",
-        "Value": "0",
-        "OriginalValue": "1"
-      },
-      {
-        "Path": "HKLM:\\SYSTEM\\CurrentControlSet\\Services\\lfsvc\\Service\\Configuration",
-        "Name": "Status",
-        "Type": "DWord",
-        "Value": "0",
-        "OriginalValue": "1"
-      },
-      {
-        "Path": "HKLM:\\SYSTEM\\Maps",
-        "Name": "AutoUpdateEnabled",
-        "Type": "DWord",
-        "Value": "0",
-        "OriginalValue": "1"
-      }
-    ]
-)
-$f = @("Content": "Disable Homegroup",
-    "Description": "Disables HomeGroup - HomeGroup is a password-protected home networking service that lets you share your stuff with other PCs that are currently running and connected to your network.",
-    "category": "Essential Tweaks",
-    "panel": "1",
-    "Order": "a005_",
-    "service": [
-      {
-        "Name": "HomeGroupListener",
-        "StartupType": "Manual",
-        "OriginalType": "Automatic"
-      },
-      {
-        "Name": "HomeGroupProvider",
-        "StartupType": "Manual",
-        "OriginalType": "Automatic"
-      }
-    ]
-)
+
+
+
+
 $f = @("Content": "Set Hibernation as default (good for laptops)",
     "Description": "Most modern laptops have connected stadby enabled which drains the battery, this sets hibernation as default which will not drain the battery. See issue https://github.com/ChrisTitusTech/winutil/issues/1399",
     "category": "Essential Tweaks",
