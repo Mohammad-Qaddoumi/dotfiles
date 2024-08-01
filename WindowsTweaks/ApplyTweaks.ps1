@@ -131,6 +131,14 @@ function Show-IconsSysTray{
         Set-Registry -Name $Name -Path $subKey.PSPath -Type "DWord" -Value $Enable
     }
 }
+function Disable-PowershellTelemetry{
+    # This will create an Environment Variable called &#39;POWERSHELL_TELEMETRY_OPTOUT&#39; with a value of &#39;1&#39; which will tell Powershell 7 to not send Telemetry Data
+    Write-Host "Disable Powershell 7 Telemetry" -ForegroundColor Green
+    Write-Host "Setting Env `"POWERSHELL_TELEMETRY_OPTOUT`" To `"1`"" -ForegroundColor Cyan
+    [Environment]::SetEnvironmentVariable("POWERSHELL_TELEMETRY_OPTOUT", "1", "Machine")
+    # Undo
+    # [Environment]::SetEnvironmentVariable("POWERSHELL_TELEMETRY_OPTOUT", "", "Machine")
+}
 
 # To Use "HKU:\" reg path instaed of "Registry::HKU\"
 if (!(Test-Path 'HKU:')) { 
@@ -152,6 +160,8 @@ Write-Host "`n================================================================"
 Show-IconsSysTray
 Write-Host "`n================================================================"
 Enable-UltimatePerformance
+Write-Host "`n================================================================"
+Disable-PowershellTelemetry
 
 # Source the variable definition script (List of Services Collection)
 . ".\ServicesCollection.ps1"

@@ -21,7 +21,11 @@ function Install-Program {
             $exitCode = $process.ExitCode
             if ($exitCode -eq 0) {
                 Write-Host "Done Installing (ID): $program Exit code: $($exitCode)"
-            } else {
+            } 
+            elseif ($exitCode -eq  -1978335189){
+                Write-Host "$program No applicable update found"
+            }
+            else {
                 Write-Host "Failed to install $program. Exit code: $($exitCode)"
             }
         } catch {
