@@ -63,6 +63,22 @@ function Set-ServiceStartupType {
         Write-Warning $_.Exception.Message
     }
 }
+function Enable-LegacyF8BootRecovery{ # Enables Advanced Boot Options screen that lets you start Windows in advanced troubleshooting modes
+    RegData = @{
+        Name = "Enabled"
+        Type = "DWord"
+        Path = "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager\LastKnownGood"
+        Value = "0"
+    }
+    Set-Registry -Name $RegData.Name -Path $RegData.Path -Type $RegData.Type -Value $RegData.Value
+    Try{
+        Start-Process -FilePath cmd.exe -ArgumentList "/c bcdedit /Set {Current} BootMenuPolicy Standard" -Wait
+    }
+    Catch{
+        Write-Warning "Unable to set BootMenuPolicy due to unhandled exception"
+        Write-Warning $psitem.Exception.StackTrace
+    }
+}
 function Enable-UltimatePerformance {
     <#
     .SYNOPSIS
@@ -158,10 +174,15 @@ foreach($Setting in $RegistrySettings){
 
 Write-Host "`n================================================================"
 Show-IconsSysTray
+
 Write-Host "`n================================================================"
 Enable-UltimatePerformance
+
 Write-Host "`n================================================================"
 Disable-PowershellTelemetry
+
+Write-Host "`n================================================================"
+Enable-LegacyF8BootRecovery
 
 # Source the variable definition script (List of Services Collection)
 . ".\ServicesCollection.ps1"

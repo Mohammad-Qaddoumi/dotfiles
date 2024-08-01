@@ -617,5 +617,15 @@ $RegistrySettings = @(
             }
         )
     }
+    @{ Message = "Enable Search Box Web Suggestions in Registry"# Needs explorer restart
+        Data = @(
+            @{
+                Name = "DisableSearchBoxSuggestions"
+                Type = "DWord"
+                Path = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer"
+                Value = "0"
+            }
+        )
+    }
 )
 $RegistrySettings = $RegistrySettings
