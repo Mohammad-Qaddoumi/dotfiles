@@ -148,6 +148,11 @@ foreach($Setting in $RegistrySettings){
     }
 }
 
+Write-Host "`n================================================================"
+Show-IconsSysTray
+Write-Host "`n================================================================"
+Enable-UltimatePerformance
+
 # Source the variable definition script (List of Services Collection)
 . ".\ServicesCollection.ps1"
 Write-Host "`n================================================================"
@@ -157,7 +162,3 @@ foreach($service in $ServicesCollection.service){
     Set-ServiceToManual -Name $server.Name -StartupType $service.StartupType
 }
 
-Write-Host "`n================================================================"
-Show-IconsSysTray
-Write-Host "`n================================================================"
-Enable-UltimatePerformance
