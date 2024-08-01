@@ -24,7 +24,8 @@ $scripts = @(
     @{ Name = ".\DownloadWindowsPrograms\InstallWinAppsWithWinget.ps1"; Description = "Bulk install windows progarm"; Parameter = ""; SleepTime = 0; MessageAfter = "" },
     @{ Name = ".\WindowsConfigFiles\SetWT&PS_settings.ps1"; Description = "Set WindowsTerminal & PowerShell Settings"; Parameter = ""; SleepTime = 0; MessageAfter = "" },
     @{ Name = ".\WindowsTweaks\ApplyTweaks.ps1"; Description = "Apply Windows Tweaks"; Parameter = ""; SleepTime = 0; MessageAfter = "You may need to restart if did not work" }
-    @{ Name = ".\WindowsCleanup\DeleteTempFiles.ps1"; Description = "Delete Temp files"; Parameter = ""; SleepTime = 0; MessageAfter = "" }
+    @{ Name = ".\WindowsCleanupMaintenance\DeleteTempFiles.ps1"; Description = "Delete Temp files"; Parameter = ""; SleepTime = 0; MessageAfter = "" }
+    @{ Name = ".\WindowsCleanupMaintenance\Maintenance.ps1"; Description = "Daily Registry Backup AND Create Restore Point"; Parameter = ""; SleepTime = 0; MessageAfter = "" }
     # @{ Name = "Script5.ps1"; Description = "Description of Script 5" },
     # @{ Name = "Script6.ps1"; Description = "Description of Script 6" }
 )
