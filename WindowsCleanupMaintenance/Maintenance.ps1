@@ -1,3 +1,4 @@
+# TODO: fix this
 Write-Host "Enable Daily Registry Backup Task 12.30am" -ForegroundColor Green
 Write-Host "Enables daily registry backup, previously disabled by Microsoft in Windows 10 1803" -ForegroundColor Cyan
 [scriptblock]$InvokeScript = {
