@@ -507,5 +507,105 @@ $RegistrySettings = @(
             }
         )
     }
+    @{ Message = "Show task bar on all monitor"
+        Data = @(
+            @{
+                Name= "TaskbarMn"
+                Type= "DWord"
+                Path= "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                Value= "0" # 1 for main monitor
+            }
+        )
+    }
+    @{ Message = "Set Display for Performance" # Sets the system preferences to performance. You can do this manually with sysdm.cpl as well
+        Data = @(
+            @{
+                Name = "UserPreferencesMask"
+                Type = "Binary"
+                Path = "HKCU:\Control Panel\Desktop"
+                Value = [byte[]]@(90,12,03,80,10,00,00,00)
+            }
+            @{
+                Name= "MinAnimate"
+                Type= "String"
+                Path= "HKCU:\Control Panel\Desktop\WindowMetrics"
+                Value= "0"
+            }
+            @{
+                Name= "TaskbarAnimations"
+                Type= "DWord"
+                Path= "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                Value= "0"
+            }
+            @{
+                Name= "EnableAeroPeek"
+                Type= "DWord"
+                Path= "HKCU:\Software\Microsoft\Windows\DWM"
+                Value= "0"
+            }
+            @{
+                Name= "AlwaysHibernateThumbnails"
+                Type= "DWord"
+                Path= "HKCU:\Software\Microsoft\Windows\DWM"
+                Value= "0"
+            }
+            @{
+                Name= "DragFullWindows"
+                Type= "String"
+                Path= "HKCU:\Control Panel\Desktop"
+                Value= "0"
+            }
+            @{
+                Name= "ListviewShadow"
+                Type= "DWord"
+                Path= "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                Value= "0"
+            }
+            @{
+                Name= "VisualFXSetting"
+                Type= "DWord"
+                Path= "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects"
+                Value= "3"
+            }
+            @{
+                Name= "MenuShowDelay"
+                Type= "String"
+                Path= "HKCU:\Control Panel\Desktop"
+                Value= "200"
+            }
+            @{
+                Name= "KeyboardDelay"
+                Type= "DWord"
+                Path= "HKCU:\Control Panel\Keyboard"
+                Value= "0"
+            }
+            @{
+                Name= "ListviewAlphaSelect"
+                Type= "DWord"
+                Path= "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                Value= "0"
+            }
+        )
+    }
+    @{ Message = "Smooth edges of screen fonts"
+        Data = @(
+            @{
+                Name = "FontSmoothing"
+                Type = "String"
+                Path = "HKEY_CURRENT_USER\Control Panel\Desktop"
+                Value = "0"
+            }
+        )
+    }
+    @{ Message = "Show thumbnails instead of icons"
+        Data = @(
+            @{
+                Name = "IconsOnly"
+                Type = "DWord"
+                Path = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                Value = "0"
+            }
+        )
+    }
 )
 $RegistrySettings = $RegistrySettings
