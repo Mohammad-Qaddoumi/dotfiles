@@ -35,7 +35,7 @@ function Set-Registry {
         Write-Warning $psitem.Exception.StackTrace
     }
 }
-function Set-ServiceToManual {
+function Set-ServiceStartupType {
     <#
     .SYNOPSIS
         Changes the startup type of the given service
@@ -159,6 +159,6 @@ Write-Host "`n================================================================"
 Write-Host $ServicesCollection.Description -ForegroundColor Green
 foreach($service in $ServicesCollection.service){
     Write-Host "`n================================================================"
-    Set-ServiceToManual -Name $server.Name -StartupType $service.StartupType
+    Set-ServiceStartupType -Name $service.Name -StartupType $service.StartupType
 }
 

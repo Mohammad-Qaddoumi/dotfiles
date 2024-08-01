@@ -76,7 +76,8 @@ do {
             & .\$(Split-Path -Leaf $scriptToRun)
         }
         if($messageAfter){
-            Write-Output $messageAfter
+            Write-Host ""
+            Write-Warning $messageAfter
         }
         if($sleepTime){
             Start-Sleep -Seconds $sleepTime
