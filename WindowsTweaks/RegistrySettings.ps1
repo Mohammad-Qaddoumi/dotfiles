@@ -607,5 +607,15 @@ $RegistrySettings = @(
             }
         )
     }
+    @{ Message = "Display Detailed BSoD `"blue screen of death`"" # Display the Stop error information
+        Data = @(
+            @{
+                Name = "DisplayParameters"
+                Type = "DWord"
+                Path = "HKLM:\SYSTEM\CurrentControlSet\Control\CrashControl"
+                Value = "1"
+            }
+        )
+    }
 )
 $RegistrySettings = $RegistrySettings
