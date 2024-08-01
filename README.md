@@ -7,8 +7,15 @@
 # How to use
 
   - To Download and make a desktop shortcut in powershell
+
 ```powershell
-irm https://raw.githubusercontent.com/Qaddoumi/dotfiles/master/CreateShortcut.ps1 | iex
+irm https://raw.githubusercontent.com/Qaddoumi/dotfiles/master/install | iex
+```
+
+  - Or
+
+```powershell
+Invoke-RestMethod https://raw.githubusercontent.com/Qaddoumi/dotfiles/master/install | Invoke-Expression
 ```
 
 # Credit to :
