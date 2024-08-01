@@ -1,7 +1,7 @@
 Try{
     # Erases TEMP Folders
     Write-Host "Delete Temporary Files" -ForegroundColor Green
-    Get-ChildItem -Path \"C:\Windows\Temp\" *.* -Recurse | Remove-Item -Force -Recurse
+    Get-ChildItem -Path "C:\Windows\Temp" *.* -Recurse | Remove-Item -Force -Recurse
     Get-ChildItem -Path $env:TEMP *.* -Recurse | Remove-Item -Force -Recurse
 }
 Catch{
