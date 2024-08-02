@@ -35,6 +35,40 @@ function Set-Registry {
         Write-Warning $PSItem.Exception.StackTrace
     }
 }
+function Set-ScheduledTask {
+    <#
+    .EXAMPLE
+    Set-ScheduledTask -Name "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" -State "Disabled"
+    #>
+    param (
+        $Name,
+        $State
+    )
+
+    Try{
+        if($State -eq "Disabled"){
+            Write-Host "Disabling Scheduled Task $Name"
+            Disable-ScheduledTask -TaskName $Name -ErrorAction Stop
+        }
+        elseif($State -eq "Enabled"){
+            Write-Host "Enabling Scheduled Task $Name"
+            Enable-ScheduledTask -TaskName $Name -ErrorAction Stop
+        }
+    }
+    Catch [System.Exception]{
+        if($PSItem.Exception.Message -like "*The system cannot find the file specified*"){
+            Write-Warning "Scheduled Task $Name was not Found"
+        }
+        Else{
+            Write-Warning "Unable to set $Name due to unhandled exception"
+            Write-Warning $PSItem.Exception.Message
+        }
+    }
+    Catch{
+        Write-Warning "Unable to run script for $Name due to unhandled exception"
+        Write-Warning $PSItem.Exception.StackTrace
+    }
+}
 function Set-ServiceStartupType {
     <#
     .SYNOPSIS
@@ -284,9 +318,9 @@ Disable-Teredo
 Write-Host "`n================================================================"
 Disable-MicrosoftCopilot
 
+Write-Host "`n================================================================"
 # Source the variable definition script (List of Services Collection)
 . ".\ServicesCollection.ps1"
-Write-Host "`n================================================================"
 Write-Host $ServicesCollection.Description -ForegroundColor Green
 foreach($service in $ServicesCollection.service){
     Write-Host "`n================================================================"
@@ -294,4 +328,14 @@ foreach($service in $ServicesCollection.service){
 }
 
 Write-Host "`n================================================================"
-& .\DisableTelemetry.ps1
+# Source the variable definition script (List of reg,sch,and function)
+. ".\DisableTelemetry.ps1"
+Write-Host "`nDisable Telemetry" -ForegroundColor Green
+Write-Host "Disables Microsoft Telemetry. Note: This will lock many Edge Browser settings. Microsoft spies heavily on you when using the Edge browser.`n" -ForegroundColor Cyan
+foreach ($Entry in $RegistrySettingsTele) {
+    Set-Registry -Name $Entry.Name -Path $Entry.Path -Type $Entry.Type -Value $Entry.Value
+}
+foreach ($Entry in $ScheduledTaskSettings) {
+    Set-ScheduledTask -Name $Entry.Name -State $Entry.State
+}
+Disable-Telemetry
