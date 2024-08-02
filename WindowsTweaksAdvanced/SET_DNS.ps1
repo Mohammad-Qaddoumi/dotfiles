@@ -1,5 +1,4 @@
-
-
+# TODO: Emplement this
 $DNS = @{
     Google = {
         Primary =  "8.8.8.8"
@@ -50,7 +49,7 @@ $DNS = @{
         Secondary6 =  "2a10:50c0::bad2:ff"
     }
 }
-
+$DNS = $DNS
 function Set-WinUtilDNS {
     <#
 

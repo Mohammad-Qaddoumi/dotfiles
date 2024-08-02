@@ -1,3 +1,5 @@
+# TODO: Emplement this
+
 function Enable-LegacyF8BootRecovery{ # Enables Advanced Boot Options screen that lets you start Windows in advanced troubleshooting modes
     Write-Host "Enable Legacy F8 Boot Recovery (Advanced Boot Options screen)" -ForegroundColor Green
     $RegData = @{

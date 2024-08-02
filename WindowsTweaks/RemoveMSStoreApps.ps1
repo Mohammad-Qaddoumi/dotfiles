@@ -1,4 +1,4 @@
-
+# TODO: Emplement this
 function Remove-WinUtilAPPX {
   <#
 
@@ -149,7 +149,7 @@ $b = @{Content = "Remove ALL MS Store Apps - NOT RECOMMENDED"
       )
     }
 }
-
+$b = $b
 $sync.configs.tweaks.$CheckBox.appx | ForEach-Object {
   Write-Debug "UNDO $($psitem.Name)"
   Remove-WinUtilAPPX -Name $psitem
