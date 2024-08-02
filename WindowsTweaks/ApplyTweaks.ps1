@@ -186,18 +186,18 @@ function Enable-UltimatePerformance {
         $ultimatePlan = powercfg -list | Select-String -Pattern "Ultimate Performance"
         if($state -eq "Enable"){
             if ($ultimatePlan) {
-                Write-Host "Ultimate Performance plan is already installed."
+                Write-Host "Ultimate Performance plan is already installed." -ForegroundColor Green
             } else {
-                Write-Host "Installing Ultimate Performance plan..."
+                Write-Host "Installing Ultimate Performance plan..." -ForegroundColor Green
                 powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
-                Write-Host "> Ultimate Performance plan installed."
+                Write-Host "> Ultimate Performance plan installed." -ForegroundColor Cyan
             }
 
             # Set the Ultimate Performance plan as active
             $ultimatePlanGUID = (powercfg -list | Select-String -Pattern "Ultimate Performance").Line.Split()[3]
             powercfg -setactive $ultimatePlanGUID
 
-            Write-Host "Ultimate Performance plan is now active."
+            Write-Host "Ultimate Performance plan is now active." -ForegroundColor Cyan
         }
         elseif($state -eq "Disable"){
             if ($ultimatePlan) {
@@ -211,10 +211,10 @@ function Enable-UltimatePerformance {
                 # Delete the Ultimate Performance plan
                 powercfg -delete $ultimatePlanGUID
 
-                Write-Host "Ultimate Performance plan has been uninstalled."
-                Write-Host "> Balanced plan is now active."
+                Write-Host "Ultimate Performance plan has been uninstalled." -ForegroundColor Green
+                Write-Host "> Balanced plan is now active." -ForegroundColor Cyan
             } else {
-                Write-Host "Ultimate Performance plan is not installed."
+                Write-Host "Ultimate Performance plan is not installed." -ForegroundColor Yellow
             }
         }
     } Catch{
