@@ -28,7 +28,8 @@ function Install-Program {
             else {
                 Write-Host "Failed to install $program. Exit code: $($exitCode)"
             }
-        } catch {
+        } 
+        catch {
             Write-Output "An error occurred while attempting to install $program. Error: $_"
         }
     }

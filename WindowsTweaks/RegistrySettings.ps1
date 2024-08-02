@@ -458,139 +458,139 @@ $RegistrySettings = @(
             @{
                 Name = "LocaleName"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "en-CA"
             }
             @{
                 Name = "Locale" # English (Canada) Locale ID
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "00001009"
             }
             @{
                 Name = "sLanguage"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "ENU"
             }
             @{
                 Name = "sCountry"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "Canada"
             }
             @{
                 Name = "sShortDate"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "yyyy-MM-dd"
             }
             @{
                 Name = "sLongDate"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "dddd, MMMM dd, yyyy"
             }
             @{
                 Name = "sTimeFormat"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "HH:mm:ss"
             }
             @{
                 Name = "iCountry"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "1"
             }
             @{
                 Name = "iDate"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "2"
             }
             @{
                 Name = "iTime"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "24"
             }
             @{
                 Name = "sCurrency"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "`$"
             }
             @{
                 Name = "sMonDecimalSep"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "."
             }
             @{
                 Name = "sMonGrouping"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "3;0"
             }
             @{
                 Name = "sMonThousandSep"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = ","
             }
             @{
                 Name = "iMeasure"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "0"
             }
             @{
                 Name = "sDecimal"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "."
             }
             @{
                 Name = "sGrouping"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "3;0"
             }
             @{
                 Name = "sThousand"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = ","
             }
             @{
                 Name = "iNegNumber"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "1"
             }
             @{
                 Name = "iCurrDigits"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "2"
             }
             @{
                 Name = "iCurrency"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "0"
             }
             @{
                 Name = "iLZero"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "1"
             }
             @{
                 Name = "iDigits"
                 Type = "String"
-                Path = "HKU\.DEFAULT\Control Panel\International"
+                Path = "HKU:\.DEFAULT\Control Panel\International"
                 Value = "2"
             }
         )
@@ -874,7 +874,7 @@ $RegistrySettings = @(
             @{
                 Name = "FontSmoothing"
                 Type = "String"
-                Path = "HKEY_CURRENT_USER\Control Panel\Desktop"
+                Path = "HKCU:\Control Panel\Desktop"
                 Value = "0"
             }
         )
@@ -884,7 +884,7 @@ $RegistrySettings = @(
             @{
                 Name = "IconsOnly"
                 Type = "DWord"
-                Path = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
                 Value = "0"
             }
         )

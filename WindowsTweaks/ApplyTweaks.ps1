@@ -28,11 +28,11 @@ function Set-Registry {
         Write-Warning "Unable to set $Path\$Name to $Value due to a Security Exception"
     }
     Catch [System.Management.Automation.ItemNotFoundException] {
-        Write-Warning $psitem.Exception.ErrorRecord
+        Write-Warning $PSItem.Exception.ErrorRecord
     }
     Catch{
         Write-Warning "Unable to set $Name due to unhandled exception"
-        Write-Warning $psitem.Exception.StackTrace
+        Write-Warning $PSItem.Exception.StackTrace
     }
 }
 function Set-ServiceStartupType {
@@ -46,6 +46,19 @@ function Set-ServiceStartupType {
         $Name,
         $StartupType
     )
+    <# TODO: CHECKING if the service exists
+    try {
+        # Check if the service exists
+        $service = Get-Service -Name $PSItem.Name -ErrorAction Stop
+        if(!($service.StartType.ToString() -eq $PSItem.$($values.OriginalService))) {
+            Write-Debug "Service $($service.Name) was changed in the past to $($service.StartType.ToString()) from it's original type of $($PSItem.$($values.OriginalService)), will not change it to $($PSItem.$($values.service))"
+            $changeservice = $false
+        }
+    }
+    catch [System.ServiceProcess.ServiceNotFoundException] {
+        Write-Warning "Service $($PSItem.Name) was not found"
+    }
+    #>
     try {
         Write-Host "Setting Service $Name to $StartupType" -ForegroundColor Cyan
 
@@ -69,15 +82,21 @@ function Enable-LegacyF8BootRecovery{ # Enables Advanced Boot Options screen tha
         Name = "Enabled"
         Type = "DWord"
         Path = "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager\LastKnownGood"
-        Value = "0"
+        Value = "1"
     }
     Set-Registry -Name $RegData.Name -Path $RegData.Path -Type $RegData.Type -Value $RegData.Value
     Try{
-        Start-Process -FilePath cmd.exe -ArgumentList "/c bcdedit /Set {Current} BootMenuPolicy Standard" -Wait
+        Start-Process -FilePath cmd.exe -ArgumentList "/c bcdedit /Set {Current} BootMenuPolicy Legacy" -Wait
+        <#
+        UndoScript = 
+            $RegData.Value = 0
+            Set-Registry -Name $RegData.Name -Path $RegData.Path -Type $RegData.Type -Value $RegData.Value
+            Start-Process -FilePath cmd.exe -ArgumentList "/c bcdedit /Set {Current} BootMenuPolicy Standard" -Wait
+        #>
     }
     Catch{
         Write-Warning "Unable to set BootMenuPolicy due to unhandled exception"
-        Write-Warning $psitem.Exception.StackTrace
+        Write-Warning $PSItem.Exception.StackTrace
     }
 }
 function Disable-Teredo{ # Teredo network tunneling is a ipv6 feature that can cause additional latency
@@ -108,7 +127,7 @@ function Disable-Teredo{ # Teredo network tunneling is a ipv6 feature that can c
     }
     Catch{
         Write-Warning "Unable to disable teredo due to unhandled exception"
-        Write-Warning $psitem.Exception.StackTrace
+        Write-Warning $PSItem.Exception.StackTrace
     }
 }
 function Disable-MicrosoftCopilot {
@@ -150,7 +169,7 @@ function Disable-MicrosoftCopilot {
     }
     Catch{
         Write-Warning "Unable to Remove Copilot due to unhandled exception"
-        Write-Warning $psitem.Exception.StackTrace
+        Write-Warning $PSItem.Exception.StackTrace
     }
     
 }
@@ -199,7 +218,7 @@ function Enable-UltimatePerformance {
             }
         }
     } Catch{
-        Write-Warning $psitem.Exception.Message
+        Write-Warning $PSItem.Exception.Message
     }
 }
 function Show-IconsSysTray{
@@ -273,3 +292,6 @@ foreach($service in $ServicesCollection.service){
     Write-Host "`n================================================================"
     Set-ServiceStartupType -Name $service.Name -StartupType $service.StartupType
 }
+
+Write-Host "`n================================================================"
+& .\DisableTelemetry.ps1
