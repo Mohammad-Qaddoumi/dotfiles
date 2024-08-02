@@ -475,7 +475,7 @@ Try{
     If (Test-Path "$autoLoggerDir\AutoLogger-Diagtrack-Listener.etl") {
         Remove-Item "$autoLoggerDir\AutoLogger-Diagtrack-Listener.etl"
     }
-    icacls $autoLoggerDir /deny SYSTEM:(OI)(CI)F | Out-Null
+    icacls $autoLoggerDir /deny "SYSTEM:(OI)(CI)F" | Out-Null
 }
 Catch {
     Write-Warning "Failed to adjust access permissions on diagnostic logs"
