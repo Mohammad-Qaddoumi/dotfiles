@@ -140,13 +140,6 @@ $RegistrySettingsTele = @(
         Type          = "DWord"
     }
     @{
-        Path          = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-        OriginalValue = "1"
-        Name          = "ShowTaskViewButton"
-        Value         = "0"
-        Type          = "DWord"
-    }
-    @{
         Path          = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People"
         OriginalValue = "1"
         Name          = "PeopleBand"
