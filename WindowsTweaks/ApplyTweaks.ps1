@@ -193,7 +193,7 @@ if (!(Test-Path 'HKU:')) {
     New-PSDrive -PSProvider Registry -Name HKU -Root HKEY_USERS 
 }
 
-Write-Host "`n================================================================"
+Write-Host "`n================================================================" -NoNewline
 # Source the variable definition script (List of Registry Settings)
 . ".\RegistrySettings.ps1"
 foreach($Setting in $RegistrySettings){
