@@ -110,103 +110,6 @@ function Set-ServiceStartupType {
         Write-Warning $_.Exception.Message
     }
 }
-function Enable-LegacyF8BootRecovery{ # Enables Advanced Boot Options screen that lets you start Windows in advanced troubleshooting modes
-    Write-Host "Enable Legacy F8 Boot Recovery (Advanced Boot Options screen)" -ForegroundColor Green
-    $RegData = @{
-        Name = "Enabled"
-        Type = "DWord"
-        Path = "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager\LastKnownGood"
-        Value = "1"
-    }
-    Set-Registry -Name $RegData.Name -Path $RegData.Path -Type $RegData.Type -Value $RegData.Value
-    Try{
-        Start-Process -FilePath cmd.exe -ArgumentList "/c bcdedit /Set {Current} BootMenuPolicy Legacy" -Wait
-        <#
-        UndoScript = 
-            $RegData.Value = 0
-            Set-Registry -Name $RegData.Name -Path $RegData.Path -Type $RegData.Type -Value $RegData.Value
-            Start-Process -FilePath cmd.exe -ArgumentList "/c bcdedit /Set {Current} BootMenuPolicy Standard" -Wait
-        #>
-    }
-    Catch{
-        Write-Warning "Unable to set BootMenuPolicy due to unhandled exception"
-        Write-Warning $PSItem.Exception.StackTrace
-    }
-}
-function Disable-Teredo{ # Teredo network tunneling is a ipv6 feature that can cause additional latency
-    Write-Host "Disable Teredo (ipv6 feature that can cause additional latency)" -ForegroundColor Green
-    $RegData = @{
-        Name = "DisabledComponents"
-        Type = "DWord"
-        Path = "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"
-        Value = "1"
-        OriginalValue = "0"
-        <#
-            0x00: Default value; all IPv6 components are enabled.
-            0x01: Disable the creation of IPv6 global unique addresses.
-            0x02: Disable the IPv6 tunnel interfaces (6to4, ISATAP, etc.).
-            0x10: Disable native IPv6 over the Ethernet interfaces.
-            0x20: Prefer IPv4 over IPv6.
-            0xFF: Disable all IPv6 components.
-            For example, setting the value to 0x20 will prefer IPv4 over IPv6, while 0xFF will disable IPv6 entirely.
-        #>
-    }
-    Set-Registry -Name $RegData.Name -Path $RegData.Path -Type $RegData.Type -Value $RegData.Value
-    Try{
-        netsh interface teredo set state disabled
-        <#
-        UndoScript = 
-            netsh interface teredo set state default
-        #>
-    }
-    Catch{
-        Write-Warning "Unable to disable teredo due to unhandled exception"
-        Write-Warning $PSItem.Exception.StackTrace
-    }
-}
-function Disable-MicrosoftCopilot {
-    Write-Host "Disables MS Copilot AI built into Windows since 23H2" -ForegroundColor Green
-    $RegData = @(
-        @{
-            Name = "TurnOffWindowsCopilot"
-            Type = "DWord"
-            Path = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot"
-            Value = "1"
-            OriginalValue = "0"
-        }
-        @{
-            Name = "TurnOffWindowsCopilot"
-            Type = "DWord"
-            Path = "HKCU:\Software\Policies\Microsoft\Windows\WindowsCopilot"
-            Value = "1"
-            OriginalValue = "0"
-        }
-        @{
-            Name = "ShowCopilotButton"
-            Type = "DWord"
-            Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-            Value = "0"
-            OriginalValue = "1"
-        }
-    )
-    foreach($entry in $RegData){
-        Set-Registry -Name $entry.Name -Path $entry.Path -Type $entry.Type -Value $entry.Value
-    }
-    Try{
-        Write-Host "Remove Copilot" -ForegroundColor Gray
-        dism /online /remove-package /package-name:Microsoft.Windows.Copilot
-        <#
-        UndoScript = 
-            Write-Host "Install Copilot"
-            dism /online /add-package /package-name:Microsoft.Windows.Copilot
-        #>
-    }
-    Catch{
-        Write-Warning "Unable to Remove Copilot due to unhandled exception"
-        Write-Warning $PSItem.Exception.StackTrace
-    }
-    
-}
 function Enable-UltimatePerformance {
     <#
     .SYNOPSIS
@@ -309,15 +212,6 @@ Enable-UltimatePerformance
 
 Write-Host "`n================================================================"
 Disable-PowershellTelemetry
-
-Write-Host "`n================================================================"
-Enable-LegacyF8BootRecovery
-
-Write-Host "`n================================================================"
-Disable-Teredo
-
-Write-Host "`n================================================================"
-Disable-MicrosoftCopilot
 
 Write-Host "`n================================================================"
 # Source the variable definition script (List of Services Collection)

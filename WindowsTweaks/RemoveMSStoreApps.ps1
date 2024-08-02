@@ -125,8 +125,7 @@ $b = @{Content = "Remove ALL MS Store Apps - NOT RECOMMENDED"
         Write-Host "Uninstalling Teams from AppData\Microsoft\Teams"
         if ([System.IO.File]::Exists($TeamsUpdateExePath)) {
             # Uninstall app
-            $proc = Start-Process $TeamsUpdateExePath "-uninstall -s" -PassThru
-            $proc.WaitForExit()
+            $proc = Start-Process $TeamsUpdateExePath "-uninstall -s" -PassThru -NoNewWindow -Wait
         }
 
         Write-Host "Removing Teams AppxPackage..."
@@ -145,8 +144,7 @@ $b = @{Content = "Remove ALL MS Store Apps - NOT RECOMMENDED"
             $us = ($us.Replace("/I", "/uninstall ") + " /quiet").Replace("  ", " ")
             $FilePath = ($us.Substring(0, $us.IndexOf(".exe") + 4).Trim())
             $ProcessArgs = ($us.Substring($us.IndexOf(".exe") + 5).Trim().replace("  ", " "))
-            $proc = Start-Process -FilePath $FilePath -Args $ProcessArgs -PassThru
-            $proc.WaitForExit()
+            $proc = Start-Process -FilePath $FilePath -Args $ProcessArgs -PassThru -NoNewWindow -Wait
         }
       )
     }
