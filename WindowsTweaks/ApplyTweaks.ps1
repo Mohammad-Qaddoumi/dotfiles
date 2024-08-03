@@ -186,6 +186,33 @@ function Disable-PowershellTelemetry{
     # Undo
     # [Environment]::SetEnvironmentVariable("POWERSHELL_TELEMETRY_OPTOUT", "", "Machine")
 }
+function Remove-HomeGallery{
+    Write-Host "Remove Home and Gallery from explorer" -ForegroundColor Green
+    Write-Host "Removes the Home and Gallery from explorer and sets This PC as default" -ForegroundColor Cyan
+    # Delete the first registry key
+    Try {
+        Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force -Recurse -ErrorAction SilentlyContinue
+    }
+    Catch {
+        Write-Warning "Failed to remove the specified registry key"
+        Write-Warning $PSItem.Exception.Message
+    }
+    # Delete the second registry key
+    Try {
+        Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force -Recurse -ErrorAction SilentlyContinue
+    }
+    Catch {
+        Write-Warning "Failed to remove the specified registry key"
+        Write-Warning $PSItem.Exception.Message
+    }
+    <#
+    UndoScript =
+    # Add the first registry key with a default value
+    Set-Registry -Name "(Default)" -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Type "String" -Value "{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}"
+    # Add the second registry key with a default value
+    Set-Registry -Name "(Default)" -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Type "String" -Value "CLSID_MSGraphHomeFolder"
+    #>
+}
 
 # To Use "HKU:\" reg path instaed of "Registry::HKU\"
 if (!(Test-Path 'HKU:')) { 
@@ -212,6 +239,9 @@ Enable-UltimatePerformance
 
 Write-Host "`n================================================================"
 Disable-PowershellTelemetry
+
+Write-Host "`n================================================================"
+Remove-HomeGallery
 
 Write-Host "`n================================================================"
 # Source the variable definition script (List of Services Collection)

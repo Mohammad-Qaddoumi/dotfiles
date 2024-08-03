@@ -909,5 +909,48 @@ $RegistrySettings = @(
             }
         )
     }
+    @{ Message = "Unsupported Hardware Notification Cache" # Controls the display of notifications informing users about unsupported hardware
+        Data = @(
+            @{
+                Name = "UnsupportedHardwareNotificationCache"
+                Type = "DWord"
+                Path = "HKCU:\Control Panel"
+                Value = "0"
+            }
+        )
+    }
+    @{ Message = "Disable Background Apps" # Disables all Microsoft Store apps from running in the background, which has to be done individually since Win11
+        Data = @(
+            @{
+                Name = "GlobalUserDisabled"
+                Type = "DWord"
+                Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications"
+                Value = "1"
+                OriginalValue = "0"
+            }
+        )
+    }
+    @{ Message = "Disable Fullscreen Optimizations" # Disables FSO in all applications. NOTE: This will disable Color Management in Exclusive Fullscreen
+        Data = @(
+            @{
+                Name = "GameDVR_DXGIHonorFSEWindowsCompatible"
+                Type = "DWord"
+                Path = "HKCU:\System\GameConfigStore"
+                Value = "1"
+                OriginalValue = "0"
+            }
+        )
+    }
+    @{ Message = "Sets This PC as default"
+        Data = @(
+            @{
+                Name          = "LaunchTo"
+                Type          = "DWord"
+                Path          = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                Value         = "1" # This PC
+                OriginalValue = "0" # Quick Access
+            }
+        )
+    }
 )
 $RegistrySettings = $RegistrySettings

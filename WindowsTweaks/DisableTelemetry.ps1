@@ -147,13 +147,6 @@ $RegistrySettingsTele = @(
         Type          = "DWord"
     }
     @{
-        Path          = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-        OriginalValue = "1"
-        Name          = "LaunchTo"
-        Value         = "1"
-        Type          = "DWord"
-    }
-    @{
         Path          = "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem"
         OriginalValue = "0"
         Name          = "LongPathsEnabled"

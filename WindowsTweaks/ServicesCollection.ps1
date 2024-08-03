@@ -328,12 +328,12 @@ $ServicesCollection = @{ Description = "Set Services to Manual `nTurns a bunch o
             @{
                 Name = "HomeGroupListener" # Disables HomeGroup - HomeGroup is a password-protected home networking service that lets you share your stuff with other PCs that are currently running and connected to your network
                 StartupType = "Manual"
-                OriginalType = "Manual"
+                OriginalType = "Automatic"
             }
             @{
                 Name = "HomeGroupProvider"
                 StartupType = "Manual"
-                OriginalType = "Manual"
+                OriginalType = "Automatic"
             }
             @{
                 Name = "HvHost"
