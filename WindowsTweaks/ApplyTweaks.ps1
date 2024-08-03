@@ -105,9 +105,6 @@ function Set-ServiceStartupType {
             $service | Set-Service -StartupType $StartupType -ErrorAction Stop
         }
     }
-    catch [System.ServiceProcess.ServiceNotFoundException] {
-        Write-Warning "Service $Name was not found"
-    }
     catch [Microsoft.PowerShell.Commands.ServiceCommandException] {
         Write-Warning "Service '$Name' was not found."
     }
