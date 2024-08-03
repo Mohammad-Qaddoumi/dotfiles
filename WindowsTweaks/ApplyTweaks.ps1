@@ -81,11 +81,11 @@ function Set-ServiceStartupType {
         [string]$Name,
 
         [Parameter(Mandatory=$true)]
-        [ValidateSet("Automatic", "Manual", "Disabled")]
+        [ValidateSet("Automatic", "Manual", "Disabled", "AutomaticDelayedStart")]
         [string]$StartupType,
 
         [Parameter(Mandatory=$true)]
-        [ValidateSet("Automatic", "Manual", "Disabled")]
+        [ValidateSet("Automatic", "Manual", "Disabled", "AutomaticDelayedStart")]
         [string]$OriginalType
     )
     try {
