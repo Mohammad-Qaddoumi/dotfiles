@@ -1,19 +1,17 @@
-# TODO: Emplement this
 function Remove-APPX {
     <#
+    .SYNOPSIS
+        Removes all APPX packages that match the given name
 
-  .SYNOPSIS
-      Removes all APPX packages that match the given name
+    .PARAMETER Name
+        The name of the APPX package to remove
 
-  .PARAMETER Name
-      The name of the APPX package to remove
-
-  .EXAMPLE
-      Remove-APPX -Name "Microsoft.Microsoft3DViewer"
-
-  #>
+    .EXAMPLE
+        Remove-APPX -Name "Microsoft.Microsoft3DViewer"
+    #>
     param (
-        $Name
+        [Parameter(Mandatory=$true)]
+        [string]$Name
     )
 
     Try {
@@ -29,10 +27,6 @@ function Remove-APPX {
             Write-Warning "Unable to uninstall $Name due to unhandled exception"
             Write-Warning $PSItem.Exception.StackTrace
         }
-    }
-    Catch {
-        Write-Warning "Unable to uninstall $Name due to unhandled exception"
-        Write-Warning $PSItem.Exception.StackTrace
     }
 }
 
@@ -116,7 +110,7 @@ $Appx = @(
     "*Microsoft.Advertising.Xaml*"
 )
 $Appx | ForEach-Object {
-    Remove-WinUtilAPPX -Name $PSItem
+    Remove-APPX -Name $PSItem
 }
 
 Write-Host "Removing MS Teams" -ForegroundColor Blue

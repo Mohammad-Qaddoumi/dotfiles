@@ -1,4 +1,4 @@
-# TODO: Emplement this
+# TODO: Implement this
 $DNS = @{
     Google = {
         Primary =  "8.8.8.8"

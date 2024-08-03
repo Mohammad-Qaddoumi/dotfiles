@@ -1,4 +1,4 @@
-# TODO: Emplement this
+# TODO: Implement this
 function Update-WinUtilProgramWinget {
 
     <#

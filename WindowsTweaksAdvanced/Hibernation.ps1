@@ -1,4 +1,4 @@
-# TODO: Emplement this
+# TODO: Implement this
 $f = @(Content = "Set Hibernation as default (good for laptops)"
     Description = "Most modern laptops have connected stadby enabled which drains the battery, this sets hibernation as default which will not drain the battery. See issue https://github.com/ChrisTitusTech/winutil/issues/1399"
     registry = {

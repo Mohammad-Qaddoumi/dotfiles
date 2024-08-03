@@ -264,3 +264,6 @@ foreach ($Entry in $ScheduledTaskSettings) {
     Set-ScheduledTask -Name $Entry.Name -State $Entry.State
 }
 Disable-Telemetry
+
+Write-Host "`n================================================================"
+& .\RemoveMSStoreApps.ps1

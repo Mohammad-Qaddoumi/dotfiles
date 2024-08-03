@@ -1,4 +1,4 @@
-# TODO: Emplement this
+# TODO: Implement this
 function Disable-Teredo{ # Teredo network tunneling is a ipv6 feature that can cause additional latency
     Write-Host "Disable Teredo (ipv6 feature that can cause additional latency)" -ForegroundColor Green
     $RegData = @{
