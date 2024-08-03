@@ -90,12 +90,6 @@ function Set-ServiceStartupType {
     )
     try {
         $service = Get-Service -Name $Name -ErrorAction Stop
-        if($service.StartType.ToString() -eq "Disabled"){
-            return
-        }
-        if($service.StartType.ToString() -eq $StartupType){
-            return
-        }
         if(!($service.StartType.ToString() -eq $OriginalType)) {
             Write-Host "Service $($service.Name) was changed in the past to $($service.StartType.ToString()) from it's original type of $OriginalType, will not change it to $StartupType" -ForegroundColor Cyan
         }
