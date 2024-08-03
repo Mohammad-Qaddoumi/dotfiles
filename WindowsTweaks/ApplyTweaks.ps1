@@ -90,6 +90,12 @@ function Set-ServiceStartupType {
     )
     try {
         $service = Get-Service -Name $Name -ErrorAction Stop
+        # if($service.StartType.ToString() -eq "Disabled"){
+        #     return
+        # }
+        # if($service.StartType.ToString() -eq $StartupType){
+        #     return
+        # }
         if(!($service.StartType.ToString() -eq $OriginalType)) {
             Write-Host "Service $($service.Name) was changed in the past to $($service.StartType.ToString()) from it's original type of $OriginalType, will not change it to $StartupType" -ForegroundColor Cyan
         }
@@ -101,6 +107,9 @@ function Set-ServiceStartupType {
     }
     catch [System.ServiceProcess.ServiceNotFoundException] {
         Write-Warning "Service $Name was not found"
+    }
+    catch [Microsoft.PowerShell.Commands.ServiceCommandException] {
+        Write-Warning "Service '$Name' was not found."
     }
     catch {
         Write-Warning "Unable to set $Name due to unhandled exception"
