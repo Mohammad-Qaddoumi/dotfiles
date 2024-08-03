@@ -69,6 +69,7 @@ do {
         Write-Output "================================================================"
         
         Write-Host "`nRunning $scriptToRun...`n"
+        # TODO: $host.ui.RawUI.WindowTitle = """Winget Install"""
         Write-Output "================================================================"
         if ($scriptParameter) {
             $command = "& .\$(Split-Path -Leaf $scriptToRun) $scriptParameter"
