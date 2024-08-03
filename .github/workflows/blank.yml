@@ -1,0 +1,47 @@
+name: Build and Release PowerShell Binary
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up PowerShell
+      uses: PowerShell/PowerShell@v1
+
+    - name: Install PS2EXE
+      run: Install-Module -Name ps2exe -Force
+
+    - name: Run Tests
+      run: Invoke-Pester
+
+    - name: Build Binary
+      run: |
+        $version = $env:GITHUB_REF -replace 'refs/tags/v', ''
+        Invoke-PS2EXE .\YourScript.ps1 .\YourScript-$version.exe -version $version
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./YourScript-${{ github.ref_name }}.exe
+        asset_name: YourScript-${{ github.ref_name }}.exe
+        asset_content_type: application/octet-stream
