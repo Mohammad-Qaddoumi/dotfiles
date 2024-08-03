@@ -74,40 +74,37 @@ function Set-ServiceStartupType {
     .SYNOPSIS
         Changes the startup type of the given service
     .EXAMPLE
-        Set-WinUtilService -Name "HomeGroupListener" -StartupType "Manual"
+        Set-ServiceStartupType -Name "HomeGroupListener" -StartupType "Manual" -OriginalType "Automatic"
     #>
     param (
-        $Name,
-        $StartupType
+        [Parameter(Mandatory=$true)]
+        [string]$Name,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateSet("Automatic", "Manual", "Disabled")]
+        [string]$StartupType,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateSet("Automatic", "Manual", "Disabled")]
+        [string]$OriginalType
     )
-    <# TODO: CHECKING if the service exists
     try {
-        # Check if the service exists
-        $service = Get-Service -Name $PSItem.Name -ErrorAction Stop
-        if(!($service.StartType.ToString() -eq $PSItem.$($values.OriginalService))) {
-            Write-Debug "Service $($service.Name) was changed in the past to $($service.StartType.ToString()) from it's original type of $($PSItem.$($values.OriginalService)), will not change it to $($PSItem.$($values.service))"
-            $changeservice = $false
-        }
-    }
-    catch [System.ServiceProcess.ServiceNotFoundException] {
-        Write-Warning "Service $($PSItem.Name) was not found"
-    }
-    #>
-    try {
-        Write-Host "Setting Service $Name to $StartupType" -ForegroundColor Cyan
-
-        # Check if the service exists
         $service = Get-Service -Name $Name -ErrorAction Stop
-
-        # Service exists, proceed with changing properties
-        $service | Set-Service -StartupType $StartupType -ErrorAction Stop
+        if(!($service.StartType.ToString() -eq $OriginalType)) {
+            Write-Host "Service $($service.Name) was changed in the past to $($service.StartType.ToString()) from it's original type of $OriginalType, will not change it to $StartupType" -ForegroundColor Cyan
+        }
+        else{
+            Write-Host "$Name and state is $($service.StartType.ToString())" -ForegroundColor Cyan
+            # Service exists, proceed with changing properties
+            $service | Set-Service -StartupType $StartupType -ErrorAction Stop
+        }
     }
     catch [System.ServiceProcess.ServiceNotFoundException] {
         Write-Warning "Service $Name was not found"
     }
     catch {
         Write-Warning "Unable to set $Name due to unhandled exception"
-        Write-Warning $_.Exception.Message
+        Write-Warning $PSItem.Exception.Message
     }
 }
 function Enable-UltimatePerformance {
@@ -249,7 +246,7 @@ Write-Host "`n================================================================"
 Write-Host $ServicesCollection.Description -ForegroundColor Green
 foreach($service in $ServicesCollection.service){
     Write-Host "`n================================================================"
-    Set-ServiceStartupType -Name $service.Name -StartupType $service.StartupType
+    Set-ServiceStartupType -Name $service.Name -StartupType $service.StartupType -OriginalType $service.OriginalType
 }
 
 Write-Host "`n================================================================"
