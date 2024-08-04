@@ -55,3 +55,20 @@ Write-Host "===================================`n`n" -ForegroundColor Gray
 
 # # Pause to allow viewing of the script output
 # Pause
+
+
+# To Get AUMID to use in StartLayout
+<#
+$installedapps = Get-AppxPackage
+
+$aumidList = @()
+foreach ($app in $installedapps)
+{
+    foreach ($id in (Get-AppxPackageManifest $app).package.applications.application.id)
+    {
+        $aumidList += $app.packagefamilyname + "!" + $id
+    }
+}
+
+$aumidList
+#>

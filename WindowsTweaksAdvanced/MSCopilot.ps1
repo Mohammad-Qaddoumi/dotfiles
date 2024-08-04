@@ -43,3 +43,12 @@ function Disable-MicrosoftCopilot {
     }
     
 }
+:: Disables Windows Recall on Copilot+ PC - Credit Britec09
+reg.exe add "HKU\DefaultUser\Software\Policies\Microsoft\Windows\WindowsAI" /f
+reg.exe add "HKU\DefaultUser\Software\Policies\Microsoft\Windows\WindowsAI" /v "DisableAIDataAnalysis" /t REG_DWORD /d 1 /f
+reg.exe add "HKU\DefaultUser\Software\Policies\Microsoft\Windows\Windows AI" /v "TurnOffSavingSnapshots" /t REG_DWORD /d 1 /f
+
+:: Disables Windows Recall on Copilot+ PC - Credit Britec09
+reg.exe add "HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\WindowsAI" /f
+reg.exe add "HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\WindowsAI" /v "DisableAIDataAnalysis" /t REG_DWORD /d 1 /f
+reg.exe add "HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Windows AI" /v "TurnOffSavingSnapshots" /t REG_DWORD /d 1 /f

@@ -163,6 +163,12 @@ $RegistrySettings = @(
                 Path = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize"
                 Value = 0
             }
+            @{
+                Name = "Wallpaper"
+                Type = "String"
+                Path = "HKCU:\Control Panel\Desktop"
+                Value = "C:\Windows\web\wallpaper\Windows\img19.jpg"
+            }
         )
     }
     @{ Message = "Enable Bing Search in start menu"
