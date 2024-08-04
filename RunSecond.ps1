@@ -6,6 +6,7 @@ Write-Host "================================================================`n" 
 
 # TODO: make sure this script runs with pwsh not powershell
 # Check if running with admin rights
+#region RunAs Admin
 function Test-IsAdmin {
     $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
     $currentPrincipal = New-Object Security.Principal.WindowsPrincipal($currentUser)
