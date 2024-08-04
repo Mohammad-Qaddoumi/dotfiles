@@ -18,7 +18,8 @@ if (-not (Test-IsAdmin)) {
     exit
 }
 
-# Define the scripts and their descriptions(optional)
+#region Define the scripts
+#  and their descriptions
 $scripts = @(
     @{ Name = ".\PreRequisite\RunAllPreRequisite.ps1"; Description = "Install all pre requisite"; Parameter = ""; SleepTime = 0; MessageAfter = "You may need to restart if did not work"}
     @{ Name = ".\DownloadWindowsPrograms\InstallWinAppsWithWinget.ps1"; Description = "Bulk install windows progarm"; Parameter = ""; SleepTime = 0; MessageAfter = "" }
@@ -31,7 +32,8 @@ $scripts = @(
     # @{ Name = "Script6.ps1"; Description = "Description of Script 6" }
 )
 
-# Function to display the menu and get user choice
+#region Display Menu
+# and get user choice
 function Show-Menu {
     param (
         [string]$prompt = 'Select a script to run:'
@@ -50,6 +52,7 @@ function Show-Menu {
 }
 
 # Main logic
+#region Excute The Scripts
 do {
     $choice = Show-Menu
 
@@ -101,7 +104,7 @@ do {
         Write-Host "Invalid choice. Please try again."
     }
 } while ($true)
-
+#region Exit
 Write-Host " _____                       "
 Write-Host "(____ \                      "
 Write-Host " _   \ \ ___  ____   ____    "
