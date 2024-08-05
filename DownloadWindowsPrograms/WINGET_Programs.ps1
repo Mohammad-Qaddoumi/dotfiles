@@ -1,4 +1,4 @@
-$WINGET_PROGRAMS_ID = [System.Collections.ArrayList]@()
+﻿$WINGET_PROGRAMS_ID = [System.Collections.ArrayList]@()
 
 $WINGET_PROGRAMS_ID.Add("JanDeDobbeleer.OhMyPosh") > $null # powershell prompt
 $WINGET_PROGRAMS_ID.Add("GitHub.cli") > $null
@@ -18,17 +18,17 @@ $WINGET_PROGRAMS_ID.Add("Microsoft.VisualStudioCode") > $null
 # $WINGET_PROGRAMS_ID.Add("Mega.MEGASync") > $null
 # $WINGET_PROGRAMS_ID.Add("Gyan.FFmpeg") > $null
 # $WINGET_PROGRAMS_ID.Add("Brave.Brave") > $null
-# $WINGET_PROGRAMS_ID.Add("calibre.calibre") > $null # open book files like epub .. 
+# $WINGET_PROGRAMS_ID.Add("calibre.calibre") > $null # open book files like epub ..
 # $WINGET_PROGRAMS_ID.Add("HandBrake.HandBrake") > $null # Video conversion
 # $WINGET_PROGRAMS_ID.Add("KDE.Kdenlive") > $null # Video editor,production ..
 # $WINGET_PROGRAMS_ID.Add("ONLYOFFICE.DesktopEditors") > $null # PDF Editor
 # $WINGET_PROGRAMS_ID.Add("TheDocumentFoundation.LibreOffice") > $null # For Documents
 # $WINGET_PROGRAMS_ID.Add("Cyanfish.NAPS2") > $null # OCR and merge for pdf
-# $WINGET_PROGRAMS_ID.Add("OBSProject.OBSStudio") > $null # video stream and record 
-# $WINGET_PROGRAMS_ID.Add("Oracle.VirtualBox") > $null # don't forgt to install VB Extenctions 
+# $WINGET_PROGRAMS_ID.Add("OBSProject.OBSStudio") > $null # video stream and record
+# $WINGET_PROGRAMS_ID.Add("Oracle.VirtualBox") > $null # don't forgt to install VB Extenctions
 # $WINGET_PROGRAMS_ID.Add("Postman.Postman") > $null # for backend request tests
 # $WINGET_PROGRAMS_ID.Add("Python.Python.3.13") > $null  # Python change the version
-# $WINGET_PROGRAMS_ID.Add("RevoUninstaller.RevoUninstaller") > $null # fully uninstall windows programs 
+# $WINGET_PROGRAMS_ID.Add("RevoUninstaller.RevoUninstaller") > $null # fully uninstall windows programs
 # $WINGET_PROGRAMS_ID.Add("Telegram.TelegramDesktop") > $null
 # $WINGET_PROGRAMS_ID.Add("CodeSector.TeraCopy") > $null # file copy,paste
 # $WINGET_PROGRAMS_ID.Add("TorProject.TorBrowser") > $null
