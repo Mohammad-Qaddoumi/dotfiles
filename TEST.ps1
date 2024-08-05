@@ -8,7 +8,6 @@ Write-Host "===================================`n`n" -ForegroundColor Gray
 
 
 
-Import-StartLayout -LayoutPath .\LayoutModification.json -MountPath $env:SystemDrive\
 
 
 
@@ -57,18 +56,4 @@ Import-StartLayout -LayoutPath .\LayoutModification.json -MountPath $env:SystemD
 # Pause
 
 
-# To Get AUMID to use in StartLayout
-<#
-$installedapps = Get-AppxPackage
 
-$aumidList = @()
-foreach ($app in $installedapps)
-{
-    foreach ($id in (Get-AppxPackageManifest $app).package.applications.application.id)
-    {
-        $aumidList += $app.packagefamilyname + "!" + $id
-    }
-}
-
-$aumidList
-#>
