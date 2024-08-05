@@ -915,16 +915,16 @@ $RegistrySettings = @(
             }
         )
     }
-    @{ Message = "Unsupported Hardware Notification Cache" # Controls the display of notifications informing users about unsupported hardware
-        Data = @(
-            @{
-                Name = "UnsupportedHardwareNotificationCache"
-                Type = "DWord"
-                Path = "HKCU:\Control Panel"
-                Value = "0"
-            }
-        )
-    }
+    # @{ Message = "Unsupported Hardware Notification Cache" # Controls the display of notifications informing users about unsupported hardware
+    #     Data = @(
+    #         @{
+    #             Name = "UnsupportedHardwareNotificationCache"
+    #             Type = "DWord"
+    #             Path = "HKCU:\Control Panel"
+    #             Value = "0"
+    #         }
+    #     )
+    # }
     @{ Message = "Disable Background Apps" # Disables all Microsoft Store apps from running in the background, which has to be done individually since Win11
         Data = @(
             @{

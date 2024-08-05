@@ -8,7 +8,7 @@ Write-Host "===================================`n`n" -ForegroundColor Gray
 
 
 
-
+Import-StartLayout -LayoutPath .\LayoutModification.json -MountPath $env:SystemDrive\
 
 
 
