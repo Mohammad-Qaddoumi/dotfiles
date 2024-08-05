@@ -47,10 +47,10 @@ Write-Output "`n   === Start Installing Programs : ==="
 . ".\WINGET_Programs.ps1"
 
 # Installing each program
-for ($i = 0; $i -lt $WINGET_PROGRAMS_ID.Length; $i++) {
+for ($i = 0; $i -lt $WINGET_PROGRAMS_ID.Count; $i++) {
     $program = $WINGET_PROGRAMS_ID[$i]
     Write-Output "`n================================================================"
-    Write-Output "`n ($($i + 1)/$($WINGET_PROGRAMS_ID.Length)) - Processing program(ID) : $program"
+    Write-Output "`n ($($i + 1)/$($WINGET_PROGRAMS_ID.Count)) - Processing program(ID) : $program"
     Install-Program -program $program
 }
 
