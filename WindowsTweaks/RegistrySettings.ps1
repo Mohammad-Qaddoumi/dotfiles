@@ -1,4 +1,4 @@
-$RegistrySettings  = @( 
+$RegistrySettings  = @(
     @{ Message = "Display full path in the title bar"
         Data = @(
             @{
