@@ -309,7 +309,7 @@ $RegistrySettings  = @(
             }
         )
     }
-    @{ Message = "Start Pins And Config"
+    @{ Message = "Start Pins And Config" # Found it got the same data in %UserProfile%\AppData\Local\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState start2.bin
         Data = @(
             @{
                 Name = "Config"
