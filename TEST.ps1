@@ -3,10 +3,7 @@
 # $logFile = "$scriptDirectory\LogFile.txt"
 # Start-Transcript -Path $logFile -Append
 
-Write-Host "Start the script testing" -ForegroundColor Green
-Write-Host "===================================`n`n" -ForegroundColor Gray
-
-
+Write-Host "`n===================================`n" -ForegroundColor Green
 
 
 
