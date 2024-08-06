@@ -1,16 +1,16 @@
 # Download the files and Create WinConf shortcut on the desktop
 
 $desktopPath = "$($env:USERPROFILE)\Desktop"
-$url = "https://github.com/Qaddoumi/dotfiles/archive/refs/heads/master.zip";
+$url = "https://github.com/Qaddoumi/dotfiles/archive/refs/heads/master.zip"
 if (Test-Path -Path "$desktopPath\dotfiles-master"){
     Remove-Item -Recurse "$desktopPath\dotfiles-master" -Force
 }
-Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\temp.zip"; 
-Expand-Archive -Path "$env:TEMP\temp.zip" -DestinationPath $desktopPath -Force; 
-Remove-Item "$env:TEMP\temp.zip";
+Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\temp.zip"
+Expand-Archive -Path "$env:TEMP\temp.zip" -DestinationPath $desktopPath -Force
+Remove-Item "$env:TEMP\temp.zip"
 
 # Specify the target PowerShell command
-$command = "Set-Location `"$desktopPath\dotfiles-master`";& .\Install.bat"
+$command = "Set-Location `"$desktopPath\dotfiles-master`";& .\Install.ps1"
 # Specify the path for the shortcut
 $shortcutPath = Join-Path $desktopPath 'winconf.lnk'
 if (Test-Path -Path "$shortcutPath"){
