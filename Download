@@ -2,12 +2,31 @@
 
 $desktopPath = "$($env:USERPROFILE)\Desktop"
 $url = "https://github.com/Qaddoumi/dotfiles/archive/refs/heads/master.zip"
-if (Test-Path -Path "$desktopPath\dotfiles-master"){
-    Remove-Item -Recurse "$desktopPath\dotfiles-master" -Force
+try{
+    if (Test-Path -Path "$desktopPath\dotfiles-master"){
+        Remove-Item -Recurse "$desktopPath\dotfiles-master" -Force
+    }
+} catch {
+    Write-Error "An error occurred: $_"
 }
-Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\temp.zip"
-Expand-Archive -Path "$env:TEMP\temp.zip" -DestinationPath $desktopPath -Force
-Remove-Item "$env:TEMP\temp.zip"
+
+try {
+    Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\temp.zip"
+} catch {
+    Write-Error "An error occurred while downloading the file: $_"
+}
+
+try {
+    Expand-Archive -Path "$env:TEMP\temp.zip" -DestinationPath $desktopPath -Force
+} catch {
+    Write-Error "An error occurred while extracting the archive: $_"
+}
+
+try {
+    Remove-Item -Path "$env:TEMP\temp.zip" -Force
+} catch {
+    Write-Error "An error occurred while deleting the file: $_"
+}
 
 # Specify the target PowerShell command
 $command = "Set-Location `"$desktopPath\dotfiles-master`";& .\Install.ps1"
@@ -29,13 +48,7 @@ $shortcut = $shell.CreateShortcut($shortcutPath)
 # }
 
 # Set properties of the shortcut
-# # Use Powershell 7 if installed and fallback to PS5 if not
-if (Get-Command "pwsh" -ErrorAction SilentlyContinue){
-    $shortcut.TargetPath = "pwsh.exe"
-}
-else{
-    $shortcut.TargetPath = "powershell.exe"
-}
+$shortcut.TargetPath = "powershell.exe"
 $shortcut.Arguments = "-NoProfile -ExecutionPolicy Bypass -Command `"$command`""
 # Save the shortcut
 $shortcut.Save()

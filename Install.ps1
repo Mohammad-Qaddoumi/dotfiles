@@ -28,13 +28,13 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     try {
         if (Get-Command "wt" -ErrorAction SilentlyContinue) {
             Write-Host "Running in Windows Terminal"
-            Start-Sleep -Seconds 3
+            Start-Sleep -Seconds 1
             Start-Process "wt" -ArgumentList "$RunningPowerShell -NoExit -Command `"& '$PSCommandPath' -ScriptLocation '$(Get-Location)'`"" -Verb RunAs
         } else {
             Write-Host "Windows Terminal (wt.exe) not found in the environment."
             Write-Host "Running with $RunningPowerShell "
-            Start-Sleep -Seconds 3
-            Start-Process $RunningPowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"Set-Location `"$(Get-Location)`"; & `"$PSCommandPath`";`"" -ErrorAction Stop
+            Start-Sleep -Seconds 1
+            Start-Process "$RunningPowerShell" -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"Set-Location `"$(Get-Location)`"; & `"$PSCommandPath`";`"" -ErrorAction Stop
         }
     }
     catch {
@@ -44,28 +44,29 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     }
 
     Write-Host "Exiting ..."
-    Start-Sleep -Seconds 5
+    Start-Sleep -Seconds 3
     exit 0
 }
 
 #region Run in pwsh
-Write-Host "Checking if pwsh exist"
-Start-Sleep -Seconds 2
+#Write-Host "Checking if pwsh exist"
+Start-Sleep -Seconds 1
 # If not running with powershell7 and powershell7 is installed
 $pwshPath = Get-Command pwsh -ErrorAction SilentlyContinue
 $isBuiltInWindowsPowerShell = ($PSVersionTable.PSEdition -eq 'Desktop')
 if($pwshPath -and $isBuiltInWindowsPowerShell){
     if (Get-Command "wt" -ErrorAction SilentlyContinue) {
         Write-Host "Running in Windows Terminal And Powershell 7"
-        Start-Sleep -Seconds 3
+        Start-Sleep -Seconds 1
         Start-Process "wt" -ArgumentList "pwsh -NoExit -Command `"& '$PSCommandPath' -ScriptLocation '$(Get-Location)'`"" -Verb RunAs
     } else {
         Write-Host "Windows Terminal (wt.exe) not found in the environment."
-        Start-Sleep -Seconds 3
+        Write-Host "Running in Powershell 7"
+        Start-Sleep -Seconds 1
         Start-Process pwsh -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"Set-Location `"$(Get-Location)`"; & `"$PSCommandPath`";`"" -ErrorAction Stop
     }
     Write-Host "`nExiting ..."
-    Start-Sleep -Seconds 5
+    Start-Sleep -Seconds 3
     exit 0
 }
 
