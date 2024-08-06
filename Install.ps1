@@ -1,6 +1,4 @@
-﻿#region Run As Admin
-# Check for admin privileges
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param (
     [string]$ScriptLocation = ""
 )
@@ -8,6 +6,8 @@ if($ScriptLocation){
     Set-Location $ScriptLocation
     Write-Host "ScriptLocaion passed '$ScriptLocation'"
 }
+#region Run As Admin
+# Check for admin privileges
 
 if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
 {
