@@ -10,7 +10,7 @@ Expand-Archive -Path "$env:TEMP\temp.zip" -DestinationPath $desktopPath -Force;
 Remove-Item "$env:TEMP\temp.zip";
 
 # Specify the target PowerShell command
-$command = "Set-Location `"$desktopPath\dotfiles-master`";& .\RunFirst.bat"
+$command = "Set-Location `"$desktopPath\dotfiles-master`";& .\Install.bat"
 # Specify the path for the shortcut
 $shortcutPath = Join-Path $desktopPath 'winconf.lnk'
 if (Test-Path -Path "$shortcutPath"){
@@ -30,13 +30,12 @@ $shortcut = $shell.CreateShortcut($shortcutPath)
 
 # Set properties of the shortcut
 # # Use Powershell 7 if installed and fallback to PS5 if not
-# if (Get-Command "pwsh" -ErrorAction SilentlyContinue){
-#     $shortcut.TargetPath = "pwsh.exe"
-# }
-# else{
-#     $shortcut.TargetPath = "powershell.exe"
-# }
-$shortcut.TargetPath = "powershell.exe"
+if (Get-Command "pwsh" -ErrorAction SilentlyContinue){
+    $shortcut.TargetPath = "pwsh.exe"
+}
+else{
+    $shortcut.TargetPath = "powershell.exe"
+}
 $shortcut.Arguments = "-NoProfile -ExecutionPolicy Bypass -Command `"$command`""
 # Save the shortcut
 $shortcut.Save()
@@ -48,4 +47,3 @@ $bytes[0x15] = $bytes[0x15] -bor 0x20
 [System.IO.File]::WriteAllBytes($shortcutPath, $bytes)
 
 Write-Host "Shortcut created at: $shortcutPath"
-
