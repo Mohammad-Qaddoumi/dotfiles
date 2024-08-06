@@ -885,6 +885,7 @@ $RegistrySettings  = @(
             }
         )
     }
+    #TODO: Not working
     @{ Message = "Smooth edges of screen fonts"
         Data = @(
             @{
