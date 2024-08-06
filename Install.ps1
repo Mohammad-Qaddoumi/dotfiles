@@ -98,7 +98,8 @@ function Show-Menu {
     for ($i = 0; $i -lt $scripts.Count; $i++) {
         Write-Host "$($i + 1). $($scripts[$i].Description)"
     }
-    Write-Host "$($scripts.Count + 1). Exit"
+    Write-Host "$($scripts.Count + 1). Clear"
+    Write-Host "$($scripts.Count + 2). Exit"
 
     $choice = Read-Host "Enter the number of your choice"
     return [int]$choice
@@ -152,6 +153,8 @@ do {
             Write-Output "================================================================`n"
         }
     } elseif ($choice -eq $scripts.Count + 1) {
+        Clear-Host
+    } elseif ($choice -eq $scripts.Count + 2) {
         Write-Host "`nExiting..."
         break
     } else {

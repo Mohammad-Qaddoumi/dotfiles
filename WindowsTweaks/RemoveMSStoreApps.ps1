@@ -17,6 +17,7 @@ function Remove-APPX {
     Try {
         Write-Host "Removing $Name" -ForegroundColor Cyan
         Get-AppxPackage "*$Name*" | Remove-AppxPackage -ErrorAction SilentlyContinue
+        Start-Sleep -Milliseconds 100
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like "*$Name*" | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue
     }
     Catch [System.Exception] {
@@ -111,7 +112,7 @@ $Appx = @(
 )
 $Appx | ForEach-Object {
     Remove-APPX -Name $PSItem
-    Start-Sleep -Milliseconds 400
+    Start-Sleep -Milliseconds 100
 }
 
 Write-Host "Removing MS Teams" -ForegroundColor Blue
