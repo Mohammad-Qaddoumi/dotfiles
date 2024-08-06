@@ -4,7 +4,6 @@ param (
 )
 if($ScriptLocation){
     Set-Location $ScriptLocation
-    Write-Host "ScriptLocaion passed '$ScriptLocation'"
 }
 #region Run As Admin
 # Check for admin privileges
@@ -120,7 +119,7 @@ do {
         $originalDirectory = Get-Location
 
         if ($scriptDirectory -ne '') {
-            Write-Host "`nChanging directory to $scriptDirectory"
+            #Write-Host "`nChanging directory to $scriptDirectory"
             Set-Location $scriptDirectory
         }
 
@@ -128,9 +127,9 @@ do {
         Write-Output "================================================================"
         # TODO: Add Try Catch
 
-        Write-Host "`nRunning $scriptToRun...`n"
+        #Write-Host "`nRunning $scriptToRun...`n"
+        #Write-Output "================================================================"
         # TODO: $host.ui.RawUI.WindowTitle = """Winget Install"""
-        Write-Output "================================================================"
         if ($scriptParameter) {
             $command = "& .\$(Split-Path -Leaf $scriptToRun) $scriptParameter"
             Invoke-Expression $command
@@ -149,9 +148,9 @@ do {
         Write-Output "================================================================"
 
         if ($scriptDirectory -ne '') {
-            Write-Host "`nReturning to original directory $originalDirectory`n"
+            #Write-Host "`nReturning to original directory $originalDirectory`n"
             Set-Location $originalDirectory
-            Write-Output "================================================================`n"
+            #Write-Output "================================================================`n"
         }
     } elseif ($choice -eq $scripts.Count + 1) {
         Clear-Host
@@ -169,3 +168,11 @@ Write-Host " _   \ \ ___  ____   ____    "
 Write-Host "| |   | / _ \|  _ \ / _  )   "
 Write-Host "| |__/ / |_| | | | ( (/ /    "
 Write-Host "|_____/ \___/|_| |_|\____)   "
+Write-Host ""
+Write-Host "_                  _|                            "
+Write-Host "| |__  _   _  ___  _|_|_|    _|    _|    _|_|    "
+Write-Host "| '_ \| | | |/ _ \ _|    _|  _|    _|  _|_|_|_|  "
+Write-Host "| |_) | |_| |  __/ _|    _|  _|    _|  _|        "
+Write-Host "|_.__/ \__, |\___| _|_|_|      _|_|_|    _|_|_|  "
+Write-Host "       |___/                      _|             "
+Write-Host "                              _|_|               "
