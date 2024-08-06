@@ -5,7 +5,9 @@
         'Information'
     )
     ExcludeRules = @(
-        'PSUseDeclaredVarsMoreThanAssignments'
+        'PSUseDeclaredVarsMoreThanAssignments',
+        'PSAvoidUsingWriteHost',
+        'PSAvoidUsingInvokeExpression'
     )
 }
 # How to use : RUN

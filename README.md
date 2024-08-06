@@ -9,13 +9,13 @@
   - To Download and make a desktop shortcut in powershell
 
 ```powershell
-irm https://raw.githubusercontent.com/Qaddoumi/dotfiles/master/install | iex
+irm https://raw.githubusercontent.com/Qaddoumi/dotfiles/master/Download | iex
 ```
 
   - Or
 
 ```powershell
-Invoke-RestMethod https://raw.githubusercontent.com/Qaddoumi/dotfiles/master/install | Invoke-Expression
+Invoke-RestMethod https://raw.githubusercontent.com/Qaddoumi/dotfiles/master/Download | Invoke-Expression
 ```
 
 # Credit to :

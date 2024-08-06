@@ -1,28 +1,49 @@
-Write-Host "================================================================`n" -Foregroundcolor Red
-Write-Host "Run the script in any powershell with Admin rights`n" -Foregroundcolor Red
-Write-Host "Change Excution Policy by running : `n" -Foregroundcolor Red
-Write-Host "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine`n" -Foregroundcolor Red
-Write-Host "================================================================`n" -Foregroundcolor Red
+﻿# Check for admin privileges
+if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+{
+    Write-Output "================================================================`n" -Foregroundcolor Red
+    Write-Output "Run the script with Admin rights`n" -Foregroundcolor Red
+    Write-Output "Change Execution Policy by running : `n" -Foregroundcolor Red
+    Write-Output "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine`n" -Foregroundcolor Red
+    Write-Output "================================================================`n" -Foregroundcolor Red
 
-# TODO: make sure this script runs with pwsh not powershell
-# Check if running with admin rights
-#region RunAs Admin
-function Test-IsAdmin {
-    $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
-    $currentPrincipal = New-Object Security.Principal.WindowsPrincipal($currentUser)
-    return $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    $pwshPath = Get-Command pwsh -ErrorAction SilentlyContinue
+    $RunningPowerShell = "PowerShell"
+    if($pwshPath){
+        $RunningPowerShell = "pwsh"
+    }
+
+    # $PSCommandPath : Contains the full path and filename of the script that's being run
+    try {
+        Start-Process $RunningPowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"Set-Location `"$(Get-Location)`"; & `"$PSCommandPath`";`"" -ErrorAction Stop
+    }
+    catch {
+        Write-Error "Failed to start PowerShell with admin rights. Error: $_"
+        pause
+        exit 1
+    }
+
+    Write-Host "Exiting ..."
+    Start-Sleep -Seconds 5
+    exit 0
 }
 
-# Ensure the script runs with admin rights
-if (-not (Test-IsAdmin)) {
-    Write-Host "This script must be run as an administrator."
-    exit
+# If not running with powershell7 and powershell7 is installed
+$pwshPath = Get-Command pwsh -ErrorAction SilentlyContinue
+$isBuiltInWindowsPowerShell = ($PSVersionTable.PSEdition -eq 'Desktop')
+if($pwshPath -and -not $isBuiltInWindowsPowerShell){
+    Start-Process pwsh -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"Set-Location `"$(Get-Location)`"; & `"$PSCommandPath`";`"" -ErrorAction Stop
+    Write-Host "Opening with pwsh`nExiting ..."
+    Start-Sleep -Seconds 5
+    exit 0
 }
 
 #region Define the scripts
 #  and their descriptions
 $scripts = @(
-    @{ Name = ".\PreRequisite\RunAllPreRequisite.ps1"; Description = "Install all pre requisite"; Parameter = ""; SleepTime = 0; MessageAfter = "You may need to restart if did not work"}
+    @{ Name = ".\PreRequisite\Install_winget.ps1"; Description = "Install winget"; Parameter = ""; SleepTime = 0; MessageAfter = "You may need to restart if did not work"}
+    @{ Name = ".\PreRequisite\install_PS_WT_Git.ps1"; Description = "Install powershell 7, windows terminal, AND git"; Parameter = ""; SleepTime = 0; MessageAfter = ""}
+    @{ Name = ".\PreRequisite\SET_EP.ps1"; Description = "Set Execution Policy"; Parameter = ""; SleepTime = 0; MessageAfter = ""}
     @{ Name = ".\DownloadWindowsPrograms\InstallWinAppsWithWinget.ps1"; Description = "Bulk install windows progarm"; Parameter = ""; SleepTime = 0; MessageAfter = "" }
     @{ Name = ".\DownloadWindowsPrograms\UpdatePrograms.ps1"; Description = "Bulk Upgrade windows progarm"; Parameter = ""; SleepTime = 0; MessageAfter = "" }
     @{ Name = ".\WindowsConfigFiles\SetWT&PS_settings.ps1"; Description = "Set WindowsTerminal & PowerShell Settings"; Parameter = ""; SleepTime = 0; MessageAfter = "" }
@@ -72,7 +93,8 @@ do {
 
         Write-Output "`n================================================================"
         Write-Output "================================================================"
-        
+        # TODO: Add Try Catch
+
         Write-Host "`nRunning $scriptToRun...`n"
         # TODO: $host.ui.RawUI.WindowTitle = """Winget Install"""
         Write-Output "================================================================"

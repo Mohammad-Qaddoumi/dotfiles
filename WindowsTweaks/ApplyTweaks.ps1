@@ -264,3 +264,14 @@ Disable-Telemetry
 
 Write-Host "`n================================================================"
 & .\RemoveMSStoreApps.ps1
+
+
+do {
+    $userInput = Read-Host "`nDo you want to reboot (recommended)? (y/n)"
+    $userInput = $userInput.ToLower()
+} while ($userInput -notmatch '^(y|n|yes|no)$')
+
+if ($userInput -eq 'y' -or $userInput -eq 'yes') {
+    # Reboot the system
+    Restart-Computer -Force
+}
