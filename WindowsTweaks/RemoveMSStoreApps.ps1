@@ -111,6 +111,7 @@ $Appx = @(
 )
 $Appx | ForEach-Object {
     Remove-APPX -Name $PSItem
+    Start-Sleep -Milliseconds 400
 }
 
 Write-Host "Removing MS Teams" -ForegroundColor Blue

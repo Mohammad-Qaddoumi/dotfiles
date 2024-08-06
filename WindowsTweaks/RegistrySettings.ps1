@@ -968,4 +968,4 @@ $RegistrySettings  = @(
             }
         )
     }
-)  > $null
+)
