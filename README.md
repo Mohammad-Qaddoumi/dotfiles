@@ -2,7 +2,7 @@
 
  - Nothing here is ready yet , maybe after a year 😒...
  
- - For me change [push.ps1](https://github.com/Qaddoumi/dotfiles/blob/master/push.ps1) Location
+ -  
 
 # How to use
 
