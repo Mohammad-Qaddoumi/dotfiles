@@ -1,9 +1,8 @@
 adpyke.codesnap
 aeschli.vscode-css-formatter
 bmewburn.vscode-intelephense-client
-chadonsom.auto-view-readme
 christian-kohler.path-intellisense
-continue.continu
+continue.continue
 cweijan.vscode-mysql-client2
 dart-code.dart-code
 dart-code.flutter
@@ -39,7 +38,5 @@ pranaygp.vscode-css-peek
 qiaojie.binary-viewer
 rangav.vscode-thunder-client
 redhat.vscode-xml
-welltestedai.fluttergpt
 wix.vscode-import-cost
-zainchen.json
 zignd.html-css-class-completion
