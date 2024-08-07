@@ -10,7 +10,7 @@ function Remove-APPX {
         Remove-APPX -Name "Microsoft.Microsoft3DViewer"
     #>
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$Name
     )
 
@@ -67,11 +67,10 @@ $Appx = @(
     "microsoft.windowscommunicationsapps"
     "Microsoft.WindowsFeedbackHub"
     "Microsoft.WindowsMaps"
-    "Microsoft.WindowsPhone"
+    "Microsoft.YourPhone"
     "Microsoft.WindowsSoundRecorder"
     "Microsoft.XboxApp"
     "Microsoft.ConnectivityStore"
-    "Microsoft.CommsPhone"
     "Microsoft.ScreenSketch"
     "Microsoft.Xbox.TCUI"
     "Microsoft.XboxGameOverlay"

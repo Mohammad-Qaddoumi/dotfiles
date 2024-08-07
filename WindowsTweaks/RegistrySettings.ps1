@@ -171,13 +171,14 @@ $RegistrySettings  = @(
             }
         )
     }
-    @{ Message = "Enable Bing Search in start menu"
+    @{ Message = "Disable Bing Search in start menu"
         Data = @(
             @{
                 Name = "BingSearchEnabled"
                 Type = "DWord"
                 Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search"
-                Value = "1"
+                Value = "0"
+                OriginalValue = "1"
             }
         )
     }
