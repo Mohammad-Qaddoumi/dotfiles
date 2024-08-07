@@ -61,7 +61,7 @@
     "editor.guides.indentation": true,
     "telemetry.telemetryLevel": "off",
     "workbench.colorCustomizations": {
-        "editorLineNumber.foreground": "#00ff00",
+        "editorLineNumber.foreground": "#00ff00"
     },
     "editor.acceptSuggestionOnEnter": "off",
     "files.associations": {
@@ -87,6 +87,17 @@
         "default": "right",
         "jupyter-notebook": "left"
     },
+    "[markdown]": {
+        "editor.unicodeHighlight.ambiguousCharacters": true,
+        "editor.unicodeHighlight.invisibleCharacters": true,
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.wordWrap": "on",
+        "editor.quickSuggestions": {
+            "comments": "on",
+            "strings": "on",
+            "other": "on"
+        }
+    },
     "editor.bracketPairColorization.enabled": true,
     "editor.guides.bracketPairs": "active",
     "editor.fontFamily": "MesloLGL Nerd Font Mono",
@@ -106,5 +117,6 @@
     "editor.fontSize": 13,
     "debug.console.fontSize": 12,
     "scm.inputFontSize": 11,
-    "chat.editor.fontSize": 12
+    "chat.editor.fontSize": 12,
+    "extensions.closeExtensionDetailsOnViewChange": false,
 }
