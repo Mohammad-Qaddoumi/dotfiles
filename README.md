@@ -2,7 +2,7 @@
 
  - Nothing here is ready yet , maybe after a year 😒...
  
- -  
+![screen-install](./Images/Screenshot%202024-08-07.png)
 
 # How to use
 
