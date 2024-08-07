@@ -26,3 +26,4 @@ Invoke-RestMethod https://raw.githubusercontent.com/Qaddoumi/dotfiles/master/Dow
 # Credit to :
  - [winget-install](https://github.com/asheroto/winget-install)
  - [winutil](https://github.com/ChrisTitusTech/winutil)
+ - [Text to ASCII Art Generator](http://patorjk.com/software/taag/)
