@@ -30,8 +30,7 @@ Write-Host "Installing VSCode Extension`n" -ForegroundColor Green
 . ".\vscode-extensions.ps1"
 foreach ($extension in $VSCode_Extensions) {
     try{
-        Write-Host "Installing $extension" -ForegroundColor Green
-        $process = Start-Process code -ArgumentList "--install-extension $extension" -Wait -NoNewWindow
+        $process = Start-Process code -ArgumentList "--install-extension $extension" -Wait -NoNewWindow -PassThru
         if($process.ExitCode -eq 0){
             Write-Host "Installing $extension done successfully" -ForegroundColor Cyan
         }
@@ -41,6 +40,7 @@ foreach ($extension in $VSCode_Extensions) {
     }catch{
         Write-Warning "installing error Message : $PSItem"
     }
+    Write-Host ""
 }
 
 Write-Output "`n================================================================"
