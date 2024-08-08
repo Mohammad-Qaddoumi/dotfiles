@@ -1,5 +1,7 @@
-# TODO: Implement this
 
+. "..\Global\Set-Registry.ps1"
+
+# TODO: Implement this
 function Disable-MicrosoftCopilot {
     Write-Host "Disables MS Copilot AI built into Windows since 23H2" -ForegroundColor Green
     $RegData = @(

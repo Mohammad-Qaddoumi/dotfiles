@@ -1098,12 +1098,13 @@ try {
     ExitWithDelay 1
 }
 
-do {
-    $userInput = Read-Host "`nDo you want to reboot (recommended)? (y/n)"
-    $userInput = $userInput.ToLower()
-} while ($userInput -notmatch '^(y|n|yes|no)$')
+Write-Host "`n================================================================" -ForegroundColor DarkYellow
+. "..\Global\TimeoutInput.ps1"
+
+$userInput = TimeoutInput -Prompt "Do you want to reboot recommended? ``(y/N``) :" -TimeoutSeconds 5 -DefaultValue "N"
 
 if ($userInput -eq 'y' -or $userInput -eq 'yes') {
     # Reboot the system
+    Write-Host "choice is $userInput" -ForegroundColor Green
     Restart-Computer -Force
 }

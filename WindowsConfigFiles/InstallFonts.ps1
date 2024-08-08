@@ -20,9 +20,9 @@ function Test-FontInstalled {
 }
 
 function CheckIfTheUserWantToContinue {
-    $Prompt = " Do you want to reinstall it`? ``(y/n``) :" 
+    $Prompt = " Do you want to reinstall it`? ``(y/N``) :"
     $TimeoutSeconds = 7
-    $DefaultValue  = "n"
+    $DefaultValue  = "N"
     $userInput = $DefaultValue
     $OutputFile = "$env:TEMP\userinput.txt"
 
@@ -33,7 +33,7 @@ function CheckIfTheUserWantToContinue {
         return $defaultValue
     } -ArgumentList $TimeoutSeconds, $DefaultValue
 
-    $command = "Write-Host `"$Prompt `" -NoNewline;`$UserInput = Read-Host;if ([string]::IsNullOrWhiteSpace(`$UserInput)) {`$UserInput = `"$DefaultValue`"}`$UserInput = `$UserInput.ToLower();`$UserInput | Out-File -FilePath `"$OutputFile`" -NoNewline"
+    $command = "Write-Host `"$Prompt `" -NoNewline;`$UserInput = (Read-Host).Trim();if ([string]::IsNullOrWhiteSpace(`$UserInput)) {`$UserInput = `"$DefaultValue`"}`$UserInput = `$UserInput.ToLower();`$UserInput | Out-File -FilePath `"$OutputFile`" -NoNewline"
 
     # Start the process with the command
     $process = Start-Process pwsh -NoNewWindow -PassThru -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"$command`""
@@ -60,17 +60,20 @@ function CheckIfTheUserWantToContinue {
 
     # Clean up the temporary file
     if (Test-Path $OutputFile) {
-        Remove-Item $OutputFile
+        Remove-Item $OutputFile -Force
     }
 
     Start-Sleep -Seconds 2
-    return $userInput
+    return $userInput.ToLower()
 }
 
 # Check if the font is already installed
 if (Test-FontInstalled) {
     Write-Host "The Meslo LG Nerd Font is already installed." -NoNewline
-    $userInput = CheckIfTheUserWantToContinue
+    . "..\Global\TimeoutInput.ps1"
+
+    $userInput = TimeoutInput -Prompt " Do you want to reinstall it? ``(y/N``) :" -TimeoutSeconds 5 -DefaultValue "N"
+
     if ($userInput -ne "y") {
         Write-Output "Installation aborted."
         exit
