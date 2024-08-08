@@ -17,7 +17,6 @@ function Remove-APPX {
     Try {
         Write-Host "Removing $Name" -ForegroundColor Cyan
         Get-AppxPackage "*$Name*" | Remove-AppxPackage -ErrorAction SilentlyContinue
-        Start-Sleep -Milliseconds 100
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like "*$Name*" | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue
     }
     Catch [System.Exception] {
@@ -109,9 +108,9 @@ $Appx = @(
     "*HotspotShieldFreeVPN*"
     "*Microsoft.Advertising.Xaml*"
 )
-$Appx | ForEach-Object {
-    Remove-APPX -Name $PSItem
-    Start-Sleep -Milliseconds 100
+foreach($appx_item in $Appx)
+{
+    Remove-APPX -Name $appx_item
 }
 
 Write-Host "Removing MS Teams" -ForegroundColor Blue
