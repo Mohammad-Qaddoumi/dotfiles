@@ -68,6 +68,7 @@ if($pwshPath -and $isBuiltInWindowsPowerShell){
     Start-Sleep -Seconds 3
     exit 0
 }
+#TODO: If running in buildIn and not wt and wt installed run in wt buildIn
 
 # Font : Small Keyboard
 Write-Host "        ____ ____ ____ ____ ____ ____ ____ _________ ____ ____ "
@@ -86,7 +87,7 @@ Write-Host "                                                                    
 #region Define the scripts
 #  and their descriptions
 $scripts = @(
-    @{ Name = ".\PreRequisite\Install_winget.ps1"; Description = "Install winget"; Parameter = ""; SleepTime = 3; MessageAfter = "You may need to restart if did not work"}
+    @{ Name = ".\PreRequisite\Install_winget.ps1"; Description = "Install winget"; Parameter = "-Force"; SleepTime = 3; MessageAfter = "You may need to restart if did not work"}
     @{ Name = ".\PreRequisite\install_PS_WT_Git.ps1"; Description = "Install powershell 7, windows terminal, AND git"; Parameter = ""; SleepTime = 0; MessageAfter = ""}
     @{ Name = ".\PreRequisite\SET_EP.ps1"; Description = "Set Execution Policy"; Parameter = ""; SleepTime = 0; MessageAfter = ""}
     @{ Name = ".\DownloadWindowsPrograms\InstallWinAppsWithWinget.ps1"; Description = "Bulk install windows progarm"; Parameter = ""; SleepTime = 0; MessageAfter = "" }
