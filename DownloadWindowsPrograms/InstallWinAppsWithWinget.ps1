@@ -14,7 +14,7 @@ function Install-Program {
         Write-Output "$program is not installed."
         Write-Output "Attempting to install $program..."
         try {
-            $installArgs = "install --id $program --accept-package-agreements --accept-source-agreements"
+            $installArgs = "install --exact --id $program  --source winget --accept-package-agreements --accept-source-agreements"
             $process = Start-Process -FilePath "winget" -ArgumentList $installArgs -NoNewWindow -PassThru -Wait
             # always use -Wait instaed of $process.WaitForExit() because it did not work well in build in powershell
             # Check the exit code of the process

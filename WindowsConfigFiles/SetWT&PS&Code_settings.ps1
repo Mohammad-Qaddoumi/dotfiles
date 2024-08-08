@@ -26,6 +26,25 @@ Write-Output "`nInstalling Modules Finished"
 
 Write-Output "`n================================================================"
 
+Write-Host "Installing VSCode Extension`n" -ForegroundColor Green
+. ".\vscode-extensions.ps1"
+foreach ($extension in $VSCode_Extensions) {
+    try{
+        Write-Host "Installing $extension" -ForegroundColor Green
+        $process = Start-Process code -ArgumentList "--install-extension $extension" -Wait -NoNewWindow
+        if($process.ExitCode -eq 0){
+            Write-Host "Installing $extension done successfully" -ForegroundColor Cyan
+        }
+        else{
+            Write-Host "Failed installing $extension : ExitCode $($process.ExitCode)" -ForegroundColor Yellow
+        }
+    }catch{
+        Write-Warning "installing error Message : $PSItem"
+    }
+}
+
+Write-Output "`n================================================================"
+
 Write-Output "`nCoping Settings Files : `n"
 
 function Copy-ItemWithCheck {
@@ -63,3 +82,4 @@ function Copy-ItemWithCheck {
 
 Copy-ItemWithCheck -sourcePath ".\PowerShell" -destinationPath "$env:USERPROFILE\Documents"
 Copy-ItemWithCheck -sourcePath ".\WindowsTerminal\settings.json" -destinationPath "$env:USERPROFILE\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+Copy-ItemWithCheck -sourcePath ".\VSCode\settings.json" -destinationPath "$env:USERPROFILE\AppData\Roaming\Code\User"
