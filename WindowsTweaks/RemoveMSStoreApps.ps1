@@ -1,35 +1,3 @@
-function Remove-APPX {
-    <#
-    .SYNOPSIS
-        Removes all APPX packages that match the given name
-
-    .PARAMETER Name
-        The name of the APPX package to remove
-
-    .EXAMPLE
-        Remove-APPX -Name "Microsoft.Microsoft3DViewer"
-    #>
-    param (
-        [Parameter(Mandatory = $true)]
-        [string]$Name
-    )
-
-    Try {
-        Write-Host "Removing $Name" -ForegroundColor Cyan
-        Get-AppxPackage "*$Name*" | Remove-AppxPackage -ErrorAction SilentlyContinue
-        Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like "*$Name*" | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue
-    }
-    Catch [System.Exception] {
-        if ($PSItem.Exception.Message -like "*The requested operation requires elevation*") {
-            Write-Warning "Unable to uninstall $Name due to a Security Exception"
-        }
-        else {
-            Write-Warning "Unable to uninstall $Name due to unhandled exception"
-            Write-Warning $PSItem.Exception.StackTrace
-        }
-    }
-}
-
 Write-Host "Remove ALL MS Store Apps - NOT RECOMMENDED" -ForegroundColor Green
 Write-Host "USE WITH CAUTION!!!!! This will remove ALL Microsoft store apps other than the essentials to make winget work. Games installed by MS Store ARE INCLUDED!" -ForegroundColor DarkYellow
 
@@ -108,40 +76,38 @@ $Appx = @(
     "*HotspotShieldFreeVPN*"
     "*Microsoft.Advertising.Xaml*"
 )
-foreach($appx_item in $Appx)
-{
-    Remove-APPX -Name $appx_item
+# Create a new PowerShell session in Windows PowerShell
+$session = New-PSSession -UseWindowsPowerShell
+
+foreach ($appx_item in $Appx) {
+    # Run the Appx removal code in this session
+    Invoke-Command -Session $session -ArgumentList $appx_item -ScriptBlock {
+        param ($AppxName)
+        function Remove-APPX {
+            <#
+            .SYNOPSIS
+                Removes all APPX packages that match the given name
+            .PARAMETER Name
+                The name of the APPX package to remove
+            .EXAMPLE
+                Remove-APPX -Name "Microsoft.Microsoft3DViewer"
+            #>
+            param (
+                [Parameter(Mandatory = $true)]
+                [string]$Name
+            )
+            Try {
+                Write-Host "Removing $Name" -ForegroundColor Cyan
+                Get-AppxPackage "*$Name*" -allusers | Remove-AppxPackage -allusers -ErrorAction SilentlyContinue
+                Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like "*$Name*" | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue
+            }
+            Catch {
+                Write-Host "Failed to remove $Name" -ForegroundColor Red
+            }
+        }
+        # Call the function with the package name
+        Remove-APPX -Name $AppxName
+    }
 }
-
-Write-Host "Removing MS Teams" -ForegroundColor Blue
-
-$TeamsPath = [System.IO.Path]::Combine($env:LOCALAPPDATA, "Microsoft", "Teams")
-$TeamsUpdateExePath = [System.IO.Path]::Combine($TeamsPath, "Update.exe")
-
-Write-Host "Stopping Teams process..." -ForegroundColor Cyan
-Stop-Process -Name "*teams*" -Force -ErrorAction SilentlyContinue
-
-Write-Host "Uninstalling Teams from AppData\Microsoft\Teams" -ForegroundColor Cyan
-if ([System.IO.File]::Exists($TeamsUpdateExePath)) {
-    # Uninstall app
-    Start-Process $TeamsUpdateExePath "-uninstall -s" -NoNewWindow -Wait
-}
-
-Write-Host "Removing Teams AppxPackage..." -ForegroundColor Cyan
-Get-AppxPackage "*Teams*" | Remove-AppxPackage -ErrorAction SilentlyContinue
-Get-AppxPackage "*Teams*" -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
-
-Write-Host "Deleting Teams directory" -ForegroundColor Cyan
-if ([System.IO.Directory]::Exists($TeamsPath)) {
-    Remove-Item $TeamsPath -Force -Recurse -ErrorAction SilentlyContinue
-}
-
-Write-Host "Deleting Teams uninstall registry key" -ForegroundColor Cyan
-# Uninstall from Uninstall registry key UninstallString
-$us = (Get-ChildItem -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall, HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall | Get-ItemProperty | Where-Object { $_.DisplayName -like "*Teams*" }).UninstallString
-if ($us.Length -gt 0) {
-    $us = ($us.Replace("/I", "/uninstall ") + " /quiet").Replace("  ", " ")
-    $FilePath = ($us.Substring(0, $us.IndexOf(".exe") + 4).Trim())
-    $ProcessArgs = ($us.Substring($us.IndexOf(".exe") + 5).Trim().replace("  ", " "))
-    Start-Process -FilePath $FilePath -Args $ProcessArgs -NoNewWindow -Wait
-}
+# Remove the session
+$session | Remove-PSSession

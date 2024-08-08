@@ -8,7 +8,8 @@
         'PSUseDeclaredVarsMoreThanAssignments',
         'PSAvoidUsingWriteHost',
         'PSAvoidUsingInvokeExpression',
-        'PSUseShouldProcessForStateChangingFunctions'
+        'PSUseShouldProcessForStateChangingFunctions',
+        'PSUseUsingScopeModifierInNewRunspaces'
     )
 }
 # How to use : RUN

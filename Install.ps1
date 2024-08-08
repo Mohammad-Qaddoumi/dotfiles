@@ -94,6 +94,7 @@ $scripts = @(
     @{ Name = ".\WindowsConfigFiles\SetWT&PS&Code_settings.ps1"; Description = "Set WindowsTerminal, PowerShell & Code Settings"; Parameter = ""; SleepTime = 0; MessageAfter = "" }
     @{ Name = ".\WindowsTweaks\ApplyTweaks.ps1"; Description = "Apply Windows Tweaks"; Parameter = ""; SleepTime = 0; MessageAfter = "You may need to restart for some setting to change" }
     @{ Name = ".\WindowsTweaks\RemoveEdge.ps1"; Description = "Remove Microsoft Edge Browser"; Parameter = ""; SleepTime = 0; MessageAfter = "You may need to restart for some setting to change" }
+    @{ Name = ".\WindowsTweaks\RemoveTeams.ps1"; Description = "Remove Microsoft Teams"; Parameter = ""; SleepTime = 0; MessageAfter = "You may need to restart if some setting did not change" }
     @{ Name = ".\WindowsCleanupMaintenance\DeleteTempFiles.ps1"; Description = "Delete Temp files"; Parameter = ""; SleepTime = 0; MessageAfter = "" }
     @{ Name = ".\WindowsCleanupMaintenance\Maintenance.ps1"; Description = "Daily Registry Backup AND Create Restore Point"; Parameter = ""; SleepTime = 0; MessageAfter = "" }
     # @{ Name = "Script5.ps1"; Description = "Description of Script 5" },
