@@ -30,7 +30,7 @@ Write-Host "Installing VSCode Extension`n" -ForegroundColor Green
 . ".\vscode-extensions.ps1"
 foreach ($extension in $VSCode_Extensions) {
     try{
-        $process = Start-Process code -ArgumentList "--install-extension $extension" -Wait -NoNewWindow -PassThru
+        $process = Start-Process code -ArgumentList "--install-extension $extension --force" -Wait -NoNewWindow -PassThru
         if($process.ExitCode -eq 0){
             Write-Host "Installing $extension done successfully" -ForegroundColor Cyan
         }
