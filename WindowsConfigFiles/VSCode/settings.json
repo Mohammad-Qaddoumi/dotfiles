@@ -105,7 +105,6 @@
     "powershell.integratedConsole.showOnStartup": true,
     "terminal.integrated.hideOnStartup": "always",
     "powershell.enableProfileLoading": true,
-    "JSON-zain.json.autorefresh": true,
     "javascript.referencesCodeLens.showOnAllFunctions": true,
     "settingsSync.ignoredSettings": [],
     "settingsSync.ignoredExtensions": [],
@@ -119,4 +118,8 @@
     "scm.inputFontSize": 11,
     "chat.editor.fontSize": 12,
     "extensions.closeExtensionDetailsOnViewChange": false,
+    "editor.linkedEditing": true,
+    "typescript.suggest.paths": true,
+    "javascript.suggest.paths": true,
+    "markdown.suggest.paths.enabled": true
 }
