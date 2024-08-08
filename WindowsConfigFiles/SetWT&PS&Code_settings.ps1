@@ -25,7 +25,8 @@ Install-Module -Name z -AllowClobber -Force -Repository PSGallery
 Write-Output "`nInstalling Modules Finished"
 
 Write-Output "`n================================================================"
-
+# Run to get the extension:
+# code --list-extensions > vscode-extensions.txt
 Write-Host "Installing VSCode Extension`n" -ForegroundColor Green
 . ".\vscode-extensions.ps1"
 foreach ($extension in $VSCode_Extensions) {
