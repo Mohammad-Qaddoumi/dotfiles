@@ -215,16 +215,16 @@ foreach($service in $ServicesCollection.service){
 
 Write-Host "`n================================================================"
 # Source the variable definition script (List of reg,sch,and function)
-. ".\DisableTelemetry.ps1"
-Write-Host "`nDisable Telemetry" -ForegroundColor Green
-Write-Host "Disables Microsoft Telemetry. Note: This will lock many Edge Browser settings. Microsoft spies heavily on you when using the Edge browser.`n" -ForegroundColor Cyan
-foreach ($Entry in $RegistrySettingsTele) {
-    Set-Registry -Name $Entry.Name -Path $Entry.Path -Type $Entry.Type -Value $Entry.Value
-}
-foreach ($Entry in $ScheduledTaskSettings) {
-    Set-ScheduledTask -Name $Entry.Name -State $Entry.State
-}
-Disable-Telemetry
+# . ".\DisableTelemetry.ps1"
+# Write-Host "`nDisable Telemetry" -ForegroundColor Green
+# Write-Host "Disables Microsoft Telemetry. Note: This will lock many Edge Browser settings. Microsoft spies heavily on you when using the Edge browser.`n" -ForegroundColor Cyan
+# foreach ($Entry in $RegistrySettingsTele) {
+#     Set-Registry -Name $Entry.Name -Path $Entry.Path -Type $Entry.Type -Value $Entry.Value
+# }
+# foreach ($Entry in $ScheduledTaskSettings) {
+#     Set-ScheduledTask -Name $Entry.Name -State $Entry.State
+# }
+# Disable-Telemetry
 
 Write-Host "`n================================================================"
 & .\RemoveMSStoreApps.ps1
