@@ -10,7 +10,7 @@ $delegationTerminalValue = "{E12CFF52-A866-4C77-9A90-F570A7AA2C6B}"
 if (-not (Test-Path "Registry::$baseRegPath")) {
     Write-Output "The registry path does not exist, can't set default terminal"
     exit
-    # Create the registry path if it doesn't exist
+    #TODO: Create the registry path if it doesn't exist
     # New-Item -Path "Registry::HKU\$currentUserSID\Console" -Name "%%Startup" -Force | Out-Null
 }
 

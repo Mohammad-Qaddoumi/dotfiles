@@ -877,14 +877,25 @@ $RegistrySettings  = @(
             }
         )
     }
-    #TODO: Not working
-    @{ Message = "Smooth edges of screen fonts"
+    @{ Message = "Smooth edges of screen fonts" # needs restart
         Data = @(
             @{
-                Name = "FontSmoothing"
-                Type = "String"
-                Path = "HKCU:\Control Panel\Desktop"
-                Value = "0"
+                Name  = "FontSmoothing"
+                Type  = "String"
+                Path  = "HKCU:\Control Panel\Desktop"
+                Value = "2" # value 2 (for ClearType) or 1 (for standard smoothing).
+            }
+            @{
+                Name  = "FontSmoothingType"
+                Type  = "DWord"
+                Path  = "HKCU:\Control Panel\Desktop"
+                Value = "2" # value 2 (for ClearType) or 1 (for standard smoothing).
+            }
+            @{
+                Name  = "FontSmoothingOrientation"
+                Type  = "DWord"
+                Path  = "HKCU:\Control Panel\Desktop"
+                Value = "1" # value 1 for horizontal RGB stripes, or 2 for BGR(rotated portrait mode display).
             }
         )
     }

@@ -1,7 +1,10 @@
 $PROGRAMS_ID = @(
-    "Microsoft.PowerShell"
+    "Microsoft.PowerShell" # powershell 7
     "Microsoft.WindowsTerminal"
     "Git.Git"
+    "JanDeDobbeleer.OhMyPosh" # powershell prompt
+    "Microsoft.VisualStudioCode"
+    "GitHub.cli"
 )
 
 foreach($program in $PROGRAMS_ID){
@@ -12,4 +15,4 @@ foreach($program in $PROGRAMS_ID){
 
 Write-Output "`n================================================================"
 Write-Output "`n   === Refresh Environment Variabels : ===`n"
-& .\DownloadWindowsPrograms\RefreshEnvironmentVariabels.ps1
+& ..\DownloadWindowsPrograms\RefreshEnvironmentVariabels.ps1

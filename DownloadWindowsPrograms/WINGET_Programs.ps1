@@ -1,9 +1,6 @@
 ﻿$WINGET_PROGRAMS_ID = [System.Collections.ArrayList]@()
 
-$WINGET_PROGRAMS_ID.Add("JanDeDobbeleer.OhMyPosh") > $null # powershell prompt
-$WINGET_PROGRAMS_ID.Add("GitHub.cli") > $null
 $WINGET_PROGRAMS_ID.Add("Microsoft.Sysinternals.ProcessMonitor") > $null # log real-time file system, registry, and process/thread activity
-$WINGET_PROGRAMS_ID.Add("Microsoft.VisualStudioCode") > $null
 # TODO: Add VisualStudio tools like Microsoft.VisualStudio.2022.BuildTools,
 #         Microsoft.DotNet.AspNetCore.8, Microsoft.DotNet.DesktopRuntime.8,
 #         Microsoft.DotNet.Runtime.8, Microsoft.DotNet.SDK.8,

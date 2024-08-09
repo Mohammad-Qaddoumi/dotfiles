@@ -119,13 +119,6 @@ $RegistrySettingsTele = @(
         Type          = "DWord"
     }
     @{
-        Path          = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"
-        OriginalValue = "1"
-        Name          = "DODownloadMode"
-        Value         = "1"
-        Type          = "DWord"
-    }
-    @{
         Path          = "HKLM:\SYSTEM\CurrentControlSet\Control\Remote Assistance"
         OriginalValue = "1"
         Name          = "fAllowToGetHelp"
@@ -245,8 +238,14 @@ $RegistrySettingsTele = @(
         Value         = "0"
         Type          = "DWord"
     }
+    @{
+        Path          = "HKCU:\Environment"
+        OriginalValue = "true"
+        Name          = "DOTNET_CLI_TELEMETRY_OPTOUT"
+        Value         = "false"
+        Type          = "String"
+    }
 )
-$RegistrySettingsTele=$RegistrySettingsTele
 
 $ScheduledTaskSettings = @(
     @{ 
@@ -315,7 +314,6 @@ $ScheduledTaskSettings = @(
         OriginalState = "Enabled"
     }
 )
-$ScheduledTaskSettings=$ScheduledTaskSettings
 
 function Disable-Telemetry {
     <#

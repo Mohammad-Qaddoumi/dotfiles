@@ -83,4 +83,4 @@ function Copy-ItemWithCheck {
 
 Copy-ItemWithCheck -sourcePath ".\PowerShell" -destinationPath "$env:USERPROFILE\Documents"
 Copy-ItemWithCheck -sourcePath ".\WindowsTerminal\settings.json" -destinationPath "$env:USERPROFILE\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-Copy-ItemWithCheck -sourcePath ".\VSCode\settings.json" -destinationPath "$env:USERPROFILE\AppData\Roaming\Code\User"
+Copy-ItemWithCheck -sourcePath ".\VSCode\settings.json" -destinationPath "$env:USERPROFILE\AppData\Roaming\Code\User\settings.json"
